@@ -11,7 +11,7 @@ public class TennisCourt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
+    private Long id;
     @Column(unique = true)
     private String name;
     @Column
