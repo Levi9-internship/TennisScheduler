@@ -19,12 +19,23 @@ public class TennisCourt {
     @Column
     private String description;
     @Column
-    private String img;
+    private String image;
     @OneToMany(mappedBy = "tennisCourt", fetch = FetchType.LAZY,cascade =  CascadeType.MERGE)
     private Set<Timeslot> timeslot;
     @OneToOne
     private Address address;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public Set<Timeslot> getTimeslot() {
         return timeslot;
@@ -34,13 +45,6 @@ public class TennisCourt {
         this.timeslot = timeslot;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -72,13 +76,5 @@ public class TennisCourt {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
     }
 }

@@ -22,4 +22,53 @@ public class Timeslot {
     @ManyToOne
     @JoinColumn(name="tennis_court_id")
     private TennisCourt tennisCourt;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public TennisCourt getTennisCourt() {
+        return tennisCourt;
+    }
+
+    public void setTennisCourt(TennisCourt tennisCourt) {
+        this.tennisCourt = tennisCourt;
+    }
 }
