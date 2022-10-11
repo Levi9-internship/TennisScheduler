@@ -14,7 +14,7 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column
-    private Long id;
+    private long id;
     @Column
     private String firstName;
     @Column
@@ -27,7 +27,7 @@ public class Person {
     private String phoneNumber;
     @Column
     private Date birthday;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.MERGE)
     private Address address;
 
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.MERGE)
@@ -43,12 +43,20 @@ public class Person {
     }
 
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public Set<Timeslot> getTimeslot() {
+        return timeslot;
+    }
+
+    public void setTimeslot(Set<Timeslot> timeslot) {
+        this.timeslot = timeslot;
     }
 
     public String getFirstName() {
