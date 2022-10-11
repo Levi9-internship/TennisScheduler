@@ -23,6 +23,17 @@ public class Timeslot {
     @JoinColumn(name="tennis_court_id")
     private TennisCourt tennisCourt;
 
+    public Timeslot() {
+    }
+
+    public Timeslot(Long id, Date startDate, Date endDate, int duration, Person person, TennisCourt tennisCourt) {
+        this.id = id;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.duration = duration;
+        this.person = person;
+        this.tennisCourt = tennisCourt;
+    }
 
     public Long getId() {
         return id;
