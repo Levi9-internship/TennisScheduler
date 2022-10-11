@@ -46,7 +46,7 @@ public class TimeslotService {
     }
 
     public Timeslot saveDto(TimeslotNewDto timeslotNew) {
-        //izmeniti
+   
         return this.timeslotRepository.save(new Timeslot(timeslotNew.id, timeslotNew.dateStart, timeslotNew.dateEnd, timeslotNew.duration, personService.findById(timeslotNew.personId), null));
     }
 }
