@@ -7,13 +7,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PersonService {
-
     @Autowired
     private PersonRepository personRepository;
 
     public Person findById(long id){
         return personRepository.findById(id);
     }
-
-
 }

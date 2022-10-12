@@ -22,24 +22,33 @@ public class TimeslotController {
     @GetMapping
     public ResponseEntity<List<TimeslotDto>> getAll(){
         List<TimeslotDto> ret = new ArrayList<>();
-
         for (Timeslot timeslot: timeslotService.getAll()) {
             ret.add(new TimeslotDto(timeslot.getId(), timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getDuration()));
         }
-
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<TimeslotDto> getById(@PathVariable long id){
+        Timeslot timeslot = this.timeslotService.getById(id);
+        return new ResponseEntity<>(new TimeslotDto(timeslot.getId(), timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getDuration()), HttpStatus.OK);
+    }
+
     @PostMapping
-    public ResponseEntity<TimeslotDto> save(@RequestBody Timeslot timeslotNew){
+    public ResponseEntity<TimeslotDto> save(@RequestBody TimeslotNewDto timeslotNew){
         Timeslot timeslot = this.timeslotService.save(timeslotNew);
         return new ResponseEntity<>(new TimeslotDto(timeslot.getId(), timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getDuration()), HttpStatus.CREATED);
     }
 
-    @PostMapping
-    public ResponseEntity<TimeslotNewDto> saveDto(@RequestBody TimeslotNewDto timeslotNew){
-        Timeslot timeslot = this.timeslotService.saveDto(timeslotNew);
-        return new ResponseEntity<>(new TimeslotNewDto(timeslot.getId(), timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getDuration(), timeslot.getPerson().getId(), timeslot.getTennisCourt().getId()), HttpStatus.CREATED);
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<TimeslotDto> update(@PathVariable long id, @RequestBody TimeslotNewDto timeslotUpdate){
+        Timeslot timeslot = this.timeslotService.update(id,timeslotUpdate);
+        return new ResponseEntity<>(new TimeslotDto(timeslot.getId(), timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getDuration()), HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<HttpStatus> deleteById(@PathVariable long id){
+        this.timeslotService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

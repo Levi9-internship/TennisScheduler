@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TimeslotRepository extends JpaRepository<Timeslot,Long> {
-    @Query(value = "select t from Timeslot t join fetch t.person p join fetch t.tennisCourt c where t.id = ?1")
-    Timeslot getFullTimeslotById(Long id);
+    Timeslot findById(long id);
 }
