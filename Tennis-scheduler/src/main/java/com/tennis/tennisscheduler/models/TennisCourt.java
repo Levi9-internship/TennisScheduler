@@ -11,7 +11,7 @@ public class TennisCourt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    private long id;
     @Column(unique = true)
     private String name;
     @Column
@@ -22,10 +22,10 @@ public class TennisCourt {
     private String image;
     @OneToMany(mappedBy = "tennisCourt", fetch = FetchType.LAZY,cascade =  CascadeType.MERGE)
     private Set<Timeslot> timeslot;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Address address;
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -68,6 +68,10 @@ public class TennisCourt {
 
     public void setSurfaceType(SurfaceType surfaceType) {
         this.surfaceType = surfaceType;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getDescription() {

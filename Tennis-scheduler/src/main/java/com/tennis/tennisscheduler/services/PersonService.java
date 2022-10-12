@@ -7,5 +7,4 @@ import org.springframework.stereotype.Service;
 public class PersonService {
 
     private PersonRepository personRepository;
-
 }
