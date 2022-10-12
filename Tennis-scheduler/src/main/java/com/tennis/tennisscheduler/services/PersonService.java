@@ -1,6 +1,5 @@
 package com.tennis.tennisscheduler.services;
 
-import com.tennis.tennisscheduler.models.Address;
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.repositories.AddressRepository;
 import com.tennis.tennisscheduler.repositories.PersonRepository;
@@ -8,15 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class PersonService {
 
     @Autowired
     private PersonRepository personRepository;
-    private List<Person> persons;
     @Autowired
     private AddressRepository addressRepository;
 
@@ -29,9 +25,6 @@ public class PersonService {
     public Person savePerson(Person person) {
         this.addressRepository.save(person.getAddress());
         return personRepository.save(person);
-    }
-    public void deletePerson(Person person){
-        personRepository.delete(person);
     }
     public void deletePersonById(long id){
         Person person = personRepository.findById(id);
