@@ -25,12 +25,12 @@ public class TimeslotController {
 
     @GetMapping
     public ResponseEntity<List<TimeslotDto>> getAll(){
-        List<TimeslotDto> ret = new ArrayList<>();
+        List<TimeslotDto> timeslots = new ArrayList<>();
         for (Timeslot timeslot: timeslotService.getAll()) {
-            ret.add(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot));
+            timeslots.add(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot));
         }
 
-        return new ResponseEntity<>(ret, HttpStatus.OK);
+        return new ResponseEntity<>(timeslots, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
