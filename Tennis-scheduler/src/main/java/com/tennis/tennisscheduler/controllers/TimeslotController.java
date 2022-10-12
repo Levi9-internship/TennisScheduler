@@ -29,29 +29,45 @@ public class TimeslotController {
         for (Timeslot timeslot: timeslotService.getAll()) {
             ret.add(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot));
         }
+
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<TimeslotDto> getById(@PathVariable long id){
         Timeslot timeslot = this.timeslotService.getById(id);
+        if (timeslot == null) {
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+        }
+
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<TimeslotDto> save(@RequestBody TimeslotNewDto timeslotNew){
         Timeslot timeslot = this.timeslotService.save(timeslotDtoMapper.fromTimeslotNewDtoToTimeslot(timeslotNew), timeslotNew.personId, timeslotNew.courtId);
+
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<TimeslotDto> update(@PathVariable long id, @RequestBody TimeslotNewDto timeslotUpdate){
+        Timeslot timeslotExisting = this.timeslotService.getById(id);
+        if (timeslotExisting == null) {
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+        }
+
         Timeslot timeslot = this.timeslotService.update(id, timeslotDtoMapper.fromTimeslotNewDtoToTimeslot(timeslotUpdate), timeslotUpdate.personId, timeslotUpdate.courtId);
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<HttpStatus> deleteById(@PathVariable long id){
+        Timeslot timeslotExisting = this.timeslotService.getById(id);
+        if (timeslotExisting == null) {
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+        }
+
         this.timeslotService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
