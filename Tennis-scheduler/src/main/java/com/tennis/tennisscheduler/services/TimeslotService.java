@@ -1,6 +1,5 @@
 package com.tennis.tennisscheduler.services;
 
-import com.tennis.tennisscheduler.dtos.TimeslotNewDto;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.repositories.TimeslotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +14,14 @@ public class TimeslotService {
     @Autowired
     private PersonService personService;
 
-    public Timeslot update(long id, TimeslotNewDto timeslot){
+    public Timeslot update(long id, Timeslot timeslot, long personId, long courtId){
         Timeslot existingTimeslot = this.timeslotRepository.findById(id);
 
-        existingTimeslot.setDuration(timeslot.duration);
-        existingTimeslot.setStartDate(timeslot.dateStart);
-        existingTimeslot.setEndDate(timeslot.dateEnd);
-        existingTimeslot.setPerson(this.personService.findById(timeslot.personId));
-        existingTimeslot.setTennisCourt(null); //add tennis court
+        existingTimeslot.setDuration(timeslot.getDuration());
+        existingTimeslot.setStartDate(timeslot.getStartDate());
+        existingTimeslot.setEndDate(timeslot.getEndDate());
+        existingTimeslot.setPerson(this.personService.findById(personId));
+        //set tennis court
         return timeslotRepository.save(existingTimeslot);
     }
 
@@ -38,8 +37,9 @@ public class TimeslotService {
         this.timeslotRepository.deleteById(id);
     }
 
-    public Timeslot save(TimeslotNewDto timeslotNew) {
-        //add tennis court
-        return this.timeslotRepository.save(new Timeslot(timeslotNew.dateStart, timeslotNew.dateEnd, timeslotNew.duration, personService.findById(timeslotNew.personId), null));
+    public Timeslot save(Timeslot timeslotNew, long personId, long courtId) {
+        //set tennis court
+        timeslotNew.setPerson(personService.findById(personId));
+        return this.timeslotRepository.save(timeslotNew);
     }
 }

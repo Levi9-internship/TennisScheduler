@@ -2,6 +2,7 @@ package com.tennis.tennisscheduler.controllers;
 
 import com.tennis.tennisscheduler.dtos.TimeslotDto;
 import com.tennis.tennisscheduler.dtos.TimeslotNewDto;
+import com.tennis.tennisscheduler.mappers.TimeslotDtoMapper;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.services.TimeslotService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,14 @@ public class TimeslotController {
     @Autowired
     private TimeslotService timeslotService;
 
+    @Autowired
+    private TimeslotDtoMapper timeslotDtoMapper;
+
     @GetMapping
     public ResponseEntity<List<TimeslotDto>> getAll(){
         List<TimeslotDto> ret = new ArrayList<>();
         for (Timeslot timeslot: timeslotService.getAll()) {
-            ret.add(new TimeslotDto(timeslot.getId(), timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getDuration()));
+            ret.add(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot));
         }
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
@@ -31,19 +35,19 @@ public class TimeslotController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<TimeslotDto> getById(@PathVariable long id){
         Timeslot timeslot = this.timeslotService.getById(id);
-        return new ResponseEntity<>(new TimeslotDto(timeslot.getId(), timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getDuration()), HttpStatus.OK);
+        return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<TimeslotDto> save(@RequestBody TimeslotNewDto timeslotNew){
-        Timeslot timeslot = this.timeslotService.save(timeslotNew);
-        return new ResponseEntity<>(new TimeslotDto(timeslot.getId(), timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getDuration()), HttpStatus.CREATED);
+        Timeslot timeslot = this.timeslotService.save(timeslotDtoMapper.fromTimeslotNewDtoToTimeslot(timeslotNew), timeslotNew.personId, timeslotNew.courtId);
+        return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<TimeslotDto> update(@PathVariable long id, @RequestBody TimeslotNewDto timeslotUpdate){
-        Timeslot timeslot = this.timeslotService.update(id,timeslotUpdate);
-        return new ResponseEntity<>(new TimeslotDto(timeslot.getId(), timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getDuration()), HttpStatus.OK);
+        Timeslot timeslot = this.timeslotService.update(id, timeslotDtoMapper.fromTimeslotNewDtoToTimeslot(timeslotUpdate), timeslotUpdate.personId, timeslotUpdate.courtId);
+        return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
