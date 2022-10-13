@@ -2,22 +2,23 @@ package com.tennis.tennisscheduler.controllers;
 
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.services.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/persons")
 public class PersonController {
-    @Autowired
+
     private PersonService personService;
 
-    @GetMapping("/all")
+    public PersonController(PersonService personService) {
+        this.personService = personService;
+    }
+
+    @GetMapping("/")
     public ResponseEntity<List<Person>>getAllPersons(){
         return new ResponseEntity<>(personService.getAllPersons(), HttpStatus.OK);
     }
@@ -34,7 +35,7 @@ public class PersonController {
     public ResponseEntity<Person> getPersonById(@PathVariable long id){
         return new ResponseEntity<>(personService.getPersonsById(id),HttpStatus.OK);
     }
-    @PutMapping("/updatePerson/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable long id,@RequestBody Person person){
         return new ResponseEntity<>(personService.updatePerson(id,person),HttpStatus.OK);
     }

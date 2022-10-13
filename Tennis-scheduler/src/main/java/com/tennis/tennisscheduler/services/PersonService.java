@@ -3,7 +3,6 @@ package com.tennis.tennisscheduler.services;
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.repositories.AddressRepository;
 import com.tennis.tennisscheduler.repositories.PersonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,10 +10,13 @@ import java.util.List;
 @Service
 public class PersonService {
 
-    @Autowired
     private PersonRepository personRepository;
-    @Autowired
     private AddressRepository addressRepository;
+
+    public PersonService(PersonRepository personRepository, AddressRepository addressRepository) {
+        this.personRepository = personRepository;
+        this.addressRepository = addressRepository;
+    }
 
     public List<Person> getAllPersons(){
         return personRepository.findAll();
