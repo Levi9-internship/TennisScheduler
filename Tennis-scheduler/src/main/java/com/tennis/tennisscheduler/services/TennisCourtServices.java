@@ -11,11 +11,12 @@ import java.util.List;
 
 @Service
 public class TennisCourtServices {
-
-    @Autowired
     private TennisCourtRepository tennisCourtRepository;
-    @Autowired
     private AddressRepository addressRepository;
+    public TennisCourtServices(TennisCourtRepository tennisCourtRepository, AddressRepository addressRepository) {
+        this.tennisCourtRepository = tennisCourtRepository;
+        this.addressRepository = addressRepository;
+    }
 
     public List<TennisCourt> getAllTennisCourts(){
 
