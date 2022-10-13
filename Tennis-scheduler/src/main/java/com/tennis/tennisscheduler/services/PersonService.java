@@ -3,7 +3,6 @@ package com.tennis.tennisscheduler.services;
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.repositories.AddressRepository;
 import com.tennis.tennisscheduler.repositories.PersonRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
