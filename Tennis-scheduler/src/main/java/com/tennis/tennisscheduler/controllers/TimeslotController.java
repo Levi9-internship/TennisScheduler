@@ -16,12 +16,12 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "timeslot")
 public class TimeslotController {
-
-    @Autowired
     private TimeslotService timeslotService;
-
-    @Autowired
     private TimeslotDtoMapper timeslotDtoMapper;
+    public TimeslotController(TimeslotService timeslotService, TimeslotDtoMapper timeslotDtoMapper){
+        this.timeslotService = timeslotService;
+        this.timeslotDtoMapper = timeslotDtoMapper;
+    }
 
     @GetMapping
     public ResponseEntity<List<TimeslotDto>> getAll(){
@@ -35,7 +35,7 @@ public class TimeslotController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<TimeslotDto> getById(@PathVariable long id){
-        Timeslot timeslot = this.timeslotService.getById(id);
+        Timeslot timeslot = timeslotService.getById(id);
         if (timeslot == null) {
             return new ResponseEntity<>( HttpStatus.NOT_FOUND);
         }
@@ -45,30 +45,30 @@ public class TimeslotController {
 
     @PostMapping
     public ResponseEntity<TimeslotDto> save(@RequestBody TimeslotNewDto timeslotNew){
-        Timeslot timeslot = this.timeslotService.save(timeslotDtoMapper.fromTimeslotNewDtoToTimeslot(timeslotNew), timeslotNew.personId, timeslotNew.courtId);
+        Timeslot timeslot = timeslotService.save(timeslotDtoMapper.fromTimeslotNewDtoToTimeslot(timeslotNew), timeslotNew.personId, timeslotNew.courtId);
 
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<TimeslotDto> update(@PathVariable long id, @RequestBody TimeslotNewDto timeslotUpdate){
-        Timeslot timeslotExisting = this.timeslotService.getById(id);
+        Timeslot timeslotExisting = timeslotService.getById(id);
         if (timeslotExisting == null) {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
 
-        Timeslot timeslot = this.timeslotService.update(id, timeslotDtoMapper.fromTimeslotNewDtoToTimeslot(timeslotUpdate), timeslotUpdate.personId, timeslotUpdate.courtId);
+        Timeslot timeslot = timeslotService.update(id, timeslotDtoMapper.fromTimeslotNewDtoToTimeslot(timeslotUpdate), timeslotUpdate.personId, timeslotUpdate.courtId);
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<HttpStatus> deleteById(@PathVariable long id){
-        Timeslot timeslotExisting = this.timeslotService.getById(id);
+        Timeslot timeslotExisting = timeslotService.getById(id);
         if (timeslotExisting == null) {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
 
-        this.timeslotService.deleteById(id);
+        timeslotService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

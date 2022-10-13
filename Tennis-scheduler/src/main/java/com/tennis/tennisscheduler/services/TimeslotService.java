@@ -9,13 +9,16 @@ import java.util.List;
 
 @Service
 public class TimeslotService {
-    @Autowired
     private TimeslotRepository timeslotRepository;
-    @Autowired
     private PersonService personService;
 
+    public TimeslotService(TimeslotRepository timeslotRepository, PersonService personService){
+        this.timeslotRepository = timeslotRepository;
+        this.personService = personService;
+    }
+
     public Timeslot update(long id, Timeslot timeslot, long personId, long courtId){
-        Timeslot existingTimeslot = this.timeslotRepository.findById(id);
+        Timeslot existingTimeslot = timeslotRepository.findById(id);
 
         existingTimeslot.setDuration(timeslot.getDuration());
         existingTimeslot.setStartDate(timeslot.getStartDate());
@@ -26,20 +29,20 @@ public class TimeslotService {
     }
 
     public List<Timeslot> getAll(){
-        return this.timeslotRepository.findAll();
+        return timeslotRepository.findAll();
     }
 
     public Timeslot getById(long id){
-        return this.timeslotRepository.findById(id);
+        return timeslotRepository.findById(id);
     }
 
     public void deleteById(long id){
-        this.timeslotRepository.deleteById(id);
+        timeslotRepository.deleteById(id);
     }
 
     public Timeslot save(Timeslot timeslotNew, long personId, long courtId) {
         //set tennis court
         timeslotNew.setPerson(personService.findById(personId));
-        return this.timeslotRepository.save(timeslotNew);
+        return timeslotRepository.save(timeslotNew);
     }
 }
