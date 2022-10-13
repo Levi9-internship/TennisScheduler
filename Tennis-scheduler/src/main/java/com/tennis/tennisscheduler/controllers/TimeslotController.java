@@ -1,11 +1,9 @@
 package com.tennis.tennisscheduler.controllers;
 
 import com.tennis.tennisscheduler.dtos.TimeslotDto;
-import com.tennis.tennisscheduler.dtos.TimeslotNewDto;
 import com.tennis.tennisscheduler.mappers.TimeslotDtoMapper;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.services.TimeslotService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +16,7 @@ import java.util.List;
 public class TimeslotController {
     private TimeslotService timeslotService;
     private TimeslotDtoMapper timeslotDtoMapper;
+
     public TimeslotController(TimeslotService timeslotService, TimeslotDtoMapper timeslotDtoMapper){
         this.timeslotService = timeslotService;
         this.timeslotDtoMapper = timeslotDtoMapper;
@@ -43,20 +42,21 @@ public class TimeslotController {
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 
-    public ResponseEntity<TimeslotDto> save(@RequestBody TimeslotNewDto timeslotNew){
-        Timeslot timeslot = timeslotService.save(timeslotDtoMapper.fromTimeslotNewDtoToTimeslot(timeslotNew), timeslotNew.personId, timeslotNew.courtId);
+    @PostMapping(value = "/")
+    public ResponseEntity<TimeslotDto> save(@RequestBody TimeslotDto timeslotNew){
+        Timeslot timeslot = timeslotService.save(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew), timeslotNew.personId, timeslotNew.courtId);
 
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<TimeslotDto> update(@PathVariable long id, @RequestBody TimeslotNewDto timeslotUpdate){
+    public ResponseEntity<TimeslotDto> update(@PathVariable long id, @RequestBody TimeslotDto timeslotUpdate){
         Timeslot timeslotExisting = timeslotService.getById(id);
         if (timeslotExisting == null) {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
 
-        Timeslot timeslot = timeslotService.update(id, timeslotDtoMapper.fromTimeslotNewDtoToTimeslot(timeslotUpdate), timeslotUpdate.personId, timeslotUpdate.courtId);
+        Timeslot timeslot = timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate), timeslotUpdate.personId, timeslotUpdate.courtId);
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 
