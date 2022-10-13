@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/persons")
 public class PersonController {
-    @Autowired
     private PersonService personService;
 
-    @GetMapping("/all")
+    public PersonController(PersonService personService) {
+        this.personService = personService;
+    }
+
+    @GetMapping("/")
     public ResponseEntity<List<Person>>getAllPersons(){
         return new ResponseEntity<>(personService.getAllPersons(), HttpStatus.OK);
     }
@@ -32,7 +35,7 @@ public class PersonController {
     public ResponseEntity<Person> getPersonById(@PathVariable long id){
         return new ResponseEntity<>(personService.getPersonsById(id),HttpStatus.OK);
     }
-    @PutMapping("/updatePerson/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable long id,@RequestBody Person person){
         return new ResponseEntity<>(personService.updatePerson(id,person),HttpStatus.OK);
     }

@@ -1,5 +1,6 @@
 package com.tennis.tennisscheduler.models;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.tennis.tennisscheduler.models.enumes.Gender;
 
 import javax.persistence.*;
