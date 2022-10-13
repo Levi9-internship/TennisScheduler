@@ -24,7 +24,7 @@ public class TennisCourtController {
         this.tennisCourtDtoMapper=tennisCourtDtoMapper;
     }
 
-    @GetMapping("/tennis-courts")
+    @GetMapping("/")
     public ResponseEntity<List<TennisCourtDto>>getAllTennisCourts(){
         List<TennisCourtDto> tennisCourts = new ArrayList<>();
         for (TennisCourt tennisCourt : tennisCourtServices.getAllTennisCourts()){
@@ -33,7 +33,7 @@ public class TennisCourtController {
         return new ResponseEntity<>(tennisCourts, HttpStatus.OK);
     }
 
-    @PostMapping("/tennis-court")
+    @PostMapping("/")
     public ResponseEntity<TennisCourtDto> SaveTennisCourt(@RequestBody TennisCourtDto tennisCourtDto){
         TennisCourt tennisCourt = tennisCourtServices.saveTennisCourts(tennisCourtDtoMapper.fromTennisCourtDtoToTennisCourt(tennisCourtDto));
 
@@ -61,7 +61,7 @@ public class TennisCourtController {
         return new ResponseEntity<>(tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt),HttpStatus.OK);
     }
 
-    @PutMapping("/tennis-court/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<TennisCourtDto> updateTennisCourt(@PathVariable long id, @RequestBody TennisCourtDto tennisCourtDto){
         TennisCourt tennisCourtExisting = tennisCourtServices.getTennisCourtById(id);
         if (tennisCourtExisting == null){

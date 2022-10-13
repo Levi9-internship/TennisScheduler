@@ -29,7 +29,7 @@ public class TennisCourtServices {
     }
 
     public TennisCourt saveTennisCourts(TennisCourt tennisCourt){
-        this.addressRepository.save(tennisCourt.getAddress());
+        addressRepository.save(tennisCourt.getAddress());
         return tennisCourtRepository.save(tennisCourt);
     }
 
