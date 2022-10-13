@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "timeslot")
+@RequestMapping(value = "timeslots")
 public class TimeslotController {
     private TimeslotService timeslotService;
     private TimeslotDtoMapper timeslotDtoMapper;
@@ -23,7 +23,7 @@ public class TimeslotController {
         this.timeslotDtoMapper = timeslotDtoMapper;
     }
 
-    @GetMapping
+    @GetMapping(value = "/")
     public ResponseEntity<List<TimeslotDto>> getAll(){
         List<TimeslotDto> timeslots = new ArrayList<>();
         for (Timeslot timeslot: timeslotService.getAll()) {
@@ -43,7 +43,6 @@ public class TimeslotController {
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 
-    @PostMapping
     public ResponseEntity<TimeslotDto> save(@RequestBody TimeslotNewDto timeslotNew){
         Timeslot timeslot = timeslotService.save(timeslotDtoMapper.fromTimeslotNewDtoToTimeslot(timeslotNew), timeslotNew.personId, timeslotNew.courtId);
 
