@@ -8,14 +8,14 @@ import java.util.Date;
 public class Timeslot {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "timeslotSeqGen", sequenceName = "timeslotSeqGen", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "timeslotSeqGen")
+    @Column(name="id", unique=true, nullable=false)
     private Long id;
     @Column
     private Date startDate;
     @Column
     private Date endDate;
-    @Column
-    private int duration;
     @ManyToOne
     @JoinColumn(name="person_id")
     private Person person;
@@ -46,14 +46,6 @@ public class Timeslot {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
     }
 
     public Person getPerson() {

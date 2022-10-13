@@ -5,9 +5,97 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-        <changeSet  author="danilo"  id="1" dbms="postgres">
-            <insert schemaName="TennisScheduler" tableName="person">
-                <column  name="email"  value="department@gmail.com"/>
-            </insert>
-        </changeSet>
+    <changeSet id="2" author="danilo">
+        <createTable tableName="person">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="character varying(255)">
+                <constraints/>
+            </column>
+            <column name="last_name" type="character varying(255)">
+                <constraints/>
+            </column>
+            <column name="email" type="character varying(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="gender" type="integer">
+                <constraints/>
+            </column>
+            <column name="phoneNumber" type="character varying(255)">
+                <constraints/>
+            </column>
+            <column name="birthday" type="timestamp">
+                <constraints/>
+            </column>
+            <column name="address_id" type="bigint">
+                <constraints/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="3" author="danilo">
+        <createTable tableName="timeslot">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="start_date" type="timestamp">
+                <constraints/>
+            </column>
+            <column name="end_date" type="timestamp">
+                <constraints/>
+            </column>
+            <column name="person_id" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="tennis_court_id" type="bigint">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="danilo">
+        <createTable tableName="address">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="city" type="character varying(255)">
+                <constraints/>
+            </column>
+            <column name="country" type="character varying(255)">
+                <constraints/>
+            </column>
+            <column name="number" type="integer">
+                <constraints/>
+            </column>
+            <column name="street" type="character varying(255)">
+                <constraints/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="danilo">
+        <createTable tableName="tennis_court">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="description" type="character varying(255)">
+                <constraints/>
+            </column>
+            <column name="image" type="character varying(255)">
+                <constraints/>
+            </column>
+            <column name="name" type="character varying(255)">
+                <constraints/>
+            </column>
+            <column name="surface_type" type="integer">
+                <constraints/>
+            </column>
+            <column name="address_id" type="bigint">
+                <constraints/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

@@ -1,0 +1,3 @@
+--INSERT INTO address(id, city,country, number,street, longitude, latitude ) VALUES
+--(nextval('address_seq_gen'),'Novi Sad', 'Srbija', '11','Bulevar Kralja Petra I', 0,0)
+--();
