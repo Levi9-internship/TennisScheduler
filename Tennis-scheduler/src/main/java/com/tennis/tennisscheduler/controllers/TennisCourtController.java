@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "tenniscourt")
+@RequestMapping(value = "tennis-courts")
 public class TennisCourtController {
 
     private TennisCourtServices tennisCourtServices;
