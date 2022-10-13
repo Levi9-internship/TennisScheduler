@@ -36,8 +36,8 @@ public class TennisCourtServices {
         tennisCourtRepository.deleteById(id);
     }
 
-    public TennisCourt updateTennisCourt(long id,TennisCourt tennisCourt){
-        TennisCourt existingTennisCourt = this.tennisCourtRepository.findById(id);
+    public TennisCourt updateTennisCourt(TennisCourt tennisCourt){
+        TennisCourt existingTennisCourt = this.tennisCourtRepository.findById(tennisCourt.getId());
         existingTennisCourt.setName(tennisCourt.getName());
         existingTennisCourt.setDescription(tennisCourt.getDescription());
         existingTennisCourt.setImage(tennisCourt.getImage());
