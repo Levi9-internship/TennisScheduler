@@ -1,5 +1,6 @@
 package com.tennis.tennisscheduler.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.tennis.tennisscheduler.models.enumes.Gender;
 
@@ -34,7 +35,6 @@ public class Person {
 
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.MERGE)
     private Set<Timeslot> timeslot;
-
 
     public Address getAddress() {
         return address;
@@ -107,5 +107,20 @@ public class Person {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", gender=" + gender +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", birthday=" + birthday +
+                ", address=" + address +
+                '}';
     }
 }

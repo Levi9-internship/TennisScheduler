@@ -1,5 +1,7 @@
 package com.tennis.tennisscheduler.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -18,9 +20,11 @@ public class Timeslot {
     private Date endDate;
     @ManyToOne
     @JoinColumn(name="person_id")
+    @JsonIgnore
     private Person person;
     @ManyToOne
     @JoinColumn(name="tennis_court_id")
+    @JsonIgnore
     private TennisCourt tennisCourt;
 
 
@@ -62,5 +66,15 @@ public class Timeslot {
 
     public void setTennisCourt(TennisCourt tennisCourt) {
         this.tennisCourt = tennisCourt;
+    }
+
+    @Override
+    public String toString() {
+        return "Timeslot{" +
+                "id=" + id +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", tennisCourt=" + tennisCourt +
+                '}';
     }
 }

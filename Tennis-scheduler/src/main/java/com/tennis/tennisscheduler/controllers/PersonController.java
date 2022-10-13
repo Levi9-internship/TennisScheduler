@@ -2,15 +2,15 @@ package com.tennis.tennisscheduler.controllers;
 
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.services.PersonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/persons")
+@RequestMapping("persons")
 public class PersonController {
     private PersonService personService;
 
