@@ -33,7 +33,7 @@ public class PersonController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<Person> getPersonById(@PathVariable long id){
-        return new ResponseEntity<>(personService.getPersonsById(id),HttpStatus.OK);
+        return new ResponseEntity<>(personService.findById(id),HttpStatus.OK);
     }
     @PutMapping("/{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable long id,@RequestBody Person person){
