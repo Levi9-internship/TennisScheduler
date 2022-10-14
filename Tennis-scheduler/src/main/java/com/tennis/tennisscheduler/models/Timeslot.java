@@ -9,7 +9,7 @@ public class Timeslot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    private long id;
     @Column
     private Date startDate;
     @Column
@@ -23,12 +23,22 @@ public class Timeslot {
     @JoinColumn(name="tennis_court_id")
     private TennisCourt tennisCourt;
 
+    public Timeslot() {
+    }
 
-    public Long getId() {
+    public Timeslot(Date startDate, Date endDate, int duration, Person person, TennisCourt tennisCourt) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.duration = duration;
+        this.person = person;
+        this.tennisCourt = tennisCourt;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
