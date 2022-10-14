@@ -1,6 +1,5 @@
 package com.tennis.tennisscheduler.controllers;
 
-
 import com.tennis.tennisscheduler.dtos.TennisCourtDto;
 import com.tennis.tennisscheduler.mappers.TennisCourtDtoMapper;
 import com.tennis.tennisscheduler.models.TennisCourt;
@@ -12,14 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @RestController
 @RequestMapping(value = "tennis-courts")
 public class TennisCourtController {
 
-    private final TennisCourtServices tennisCourtServices;
-    private final TennisCourtDtoMapper tennisCourtDtoMapper;
-    public TennisCourtController(TennisCourtServices tennisCourtServices,TennisCourtDtoMapper tennisCourtDtoMapper){
+    public final  TennisCourtServices tennisCourtServices;
+    public final TennisCourtDtoMapper tennisCourtDtoMapper;
+
+    public TennisCourtController(TennisCourtServices tennisCourtServices, TennisCourtDtoMapper tennisCourtDtoMapper){
         this.tennisCourtServices=tennisCourtServices;
         this.tennisCourtDtoMapper=tennisCourtDtoMapper;
     }

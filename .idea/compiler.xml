@@ -7,13 +7,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/unknown/mapstruct-processor-unknown.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.2.Final/mapstruct-processor-1.5.2.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.2.Final/mapstruct-1.5.2.Final.jar" />
         </processorPath>
         <module name="Tennis-scheduler" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Tennis-scheduler" target="1.8" />
+      <module name="Tennis-scheduler" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

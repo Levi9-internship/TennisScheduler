@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "timeslots")
 public class TimeslotController {
+
     private final TimeslotService timeslotService;
     private final TimeslotDtoMapper timeslotDtoMapper;
 
@@ -66,7 +67,6 @@ public class TimeslotController {
         if (timeslotExisting == null) {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
-
         timeslotService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
