@@ -17,11 +17,9 @@ import java.util.List;
 @RequestMapping(value = "tennis-courts")
 public class TennisCourtController {
 
-    private  TennisCourtServices tennisCourtServices;
-    private  TennisCourtDtoMapper tennisCourtDtoMapper;
+    private final TennisCourtServices tennisCourtServices;
+    private final TennisCourtDtoMapper tennisCourtDtoMapper;
 
-    public TennisCourtController() {
-    }
 
     public TennisCourtController(TennisCourtServices tennisCourtServices, TennisCourtDtoMapper tennisCourtDtoMapper){
         this.tennisCourtServices=tennisCourtServices;
