@@ -9,8 +9,8 @@ import java.util.List;
 
 @Service
 public class TimeslotService {
-    private TimeslotRepository timeslotRepository;
-    private PersonService personService;
+    private final TimeslotRepository timeslotRepository;
+    private final PersonService personService;
 
     public TimeslotService(TimeslotRepository timeslotRepository, PersonService personService){
         this.timeslotRepository = timeslotRepository;

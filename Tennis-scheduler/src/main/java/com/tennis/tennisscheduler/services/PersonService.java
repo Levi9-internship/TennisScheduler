@@ -11,9 +11,9 @@ import java.util.List;
 
 @Service
 public class PersonService {
-    @Autowired
-    private PersonRepository personRepository;
-    private AddressRepository addressRepository;
+
+    private final PersonRepository personRepository;
+    private final AddressRepository addressRepository;
 
     public PersonService(PersonRepository personRepository, AddressRepository addressRepository) {
         this.personRepository = personRepository;

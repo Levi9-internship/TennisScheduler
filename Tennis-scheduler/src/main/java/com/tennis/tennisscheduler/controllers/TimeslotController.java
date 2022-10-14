@@ -14,8 +14,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "timeslots")
 public class TimeslotController {
-    private TimeslotService timeslotService;
-    private TimeslotDtoMapper timeslotDtoMapper;
+    private final TimeslotService timeslotService;
+    private final TimeslotDtoMapper timeslotDtoMapper;
 
     public TimeslotController(TimeslotService timeslotService, TimeslotDtoMapper timeslotDtoMapper){
         this.timeslotService = timeslotService;
