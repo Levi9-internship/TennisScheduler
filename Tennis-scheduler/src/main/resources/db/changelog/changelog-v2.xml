@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+
+    <changeSet author="danilo" id="insert-1">
+        <insert tableName="address">
+            <column name="city" value="Belgrade"/>
+            <column name="country" value="Serbia"/>
+            <column name="number" value="25"/>
+            <column name="street" value="Bulevar Kneza Lazara"/>
+        </insert>
+    </changeSet>
+    <changeSet author="danilo" id="insert-2">
+        <insert tableName="address">
+            <column name="city" value="Nis"/>
+            <column name="country" value="Serbia"/>
+            <column name="number" value="55"/>
+            <column name="street" value="Nikola Tesla"/>
+        </insert>
+    </changeSet>
+    <changeSet author="danilo" id="insert-7">
+        <insert tableName="address">
+            <column name="city" value="Novi Sad"/>
+            <column name="country" value="Serbia"/>
+            <column name="number" value="77"/>
+            <column name="street" value="Bulevar Evrope"/>
+        </insert>
+    </changeSet>
+    <changeSet author="danilo" id="insert-8">
+        <insert tableName="address">
+            <column name="city" value="Kragujevac"/>
+            <column name="country" value="Serbia"/>
+            <column name="number" value="12"/>
+            <column name="street" value="Mirka Stulica"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="danilo" id="insert-3">
+        <insert tableName="person">
+            <column name="birthday" value="2000-09-24"/>
+            <column name="email" value="danilo@gmail.com"/>
+            <column name="first_name" value="Danilo"/>
+            <column name="gender" value="0"/>
+            <column name="last_name" value="Rapaic"/>
+            <column name="phone_number" value="0631231232"/>
+            <column name="address_id" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="danilo" id="insert-4">
+        <insert tableName="person">
+            <column name="birthday" value="1999-05-01"/>
+            <column name="email" value="milica@gmail.com"/>
+            <column name="first_name" value="Milica"/>
+            <column name="gender" value="1"/>
+            <column name="last_name" value="Samardzija"/>
+            <column name="phone_number" value="0639876543"/>
+            <column name="address_id" value="2"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="danilo" id="insert-5">
+        <insert tableName="tennis_court">
+            <column name="description" value="Jako lep teren u Novom Sadu"/>
+            <column name="image" value="https://www.mojaekipa.com/wp-content/uploads/2017/04/niste2-768x499.gif"/>
+            <column name="name" value="Teren u Novom Sadu"/>
+            <column name="surface_type" value="1"/>
+            <column name="address_id" value="3"/>
+        </insert>
+    </changeSet>
+    <changeSet author="danilo" id="insert-6">
+        <insert tableName="tennis_court">
+            <column name="description" value="Jako lep teren u Kragujevcu"/>
+            <column name="image" value="https://grawebonusklub.rs/wp-content/uploads/2019/01/puma-teniski-klub-cofus-osiguran-popust-foto.jpg"/>
+            <column name="name" value="Teren u Kragujevcu"/>
+            <column name="surface_type" value="1"/>
+            <column name="address_id" value="4"/>
+        </insert>
+    </changeSet>
+    <changeSet author="danilo" id="insert-9">
+        <insert tableName="timeslot">
+            <column name="start_date" value="2022-10-23 20:00:00"/>
+            <column name="end_date" value="2022-10-23 21:00:00"/>
+            <column name="person_id" value="1"/>
+            <column name="tennis_court_id" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="danilo" id="insert-10">
+        <insert tableName="timeslot">
+            <column name="start_date" value="2022-10-24 19:00:00"/>
+            <column name="end_date" value="2022-10-24 20:15:00"/>
+            <column name="person_id" value="2"/>
+            <column name="tennis_court_id" value="2"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
