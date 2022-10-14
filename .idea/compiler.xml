@@ -13,7 +13,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Tennis-scheduler" target="1.8" />
+      <module name="Tennis-scheduler" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
