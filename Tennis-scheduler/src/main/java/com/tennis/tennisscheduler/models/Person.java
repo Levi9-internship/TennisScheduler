@@ -1,5 +1,7 @@
 package com.tennis.tennisscheduler.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.tennis.tennisscheduler.models.enumes.Gender;
 
 import javax.persistence.*;
@@ -12,8 +14,9 @@ import java.util.Set;
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column
+    @SequenceGenerator(name = "personSeqGen", sequenceName = "personSeqGen", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personSeqGen")
+    @Column(name="id", unique=true, nullable=false)
     private long id;
     @Column
     private String firstName;
@@ -32,7 +35,6 @@ public class Person {
 
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.PERSIST)
     private Set<Timeslot> timeslot;
-
 
     public Address getAddress() {
         return address;
@@ -105,5 +107,20 @@ public class Person {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", gender=" + gender +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", birthday=" + birthday +
+                ", address=" + address +
+                '}';
     }
 }
