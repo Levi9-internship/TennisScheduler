@@ -10,7 +10,10 @@ import java.util.Set;
 public class TennisCourt {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+
+    @SequenceGenerator(name = "tennisCourtSeqGen", sequenceName = "tennisCourtSeqGen", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tennisCourtSeqGen")
+    @Column(name="id", unique=true, nullable=false)
     private Long id;
     @Column(unique = true)
     private String name;
@@ -22,10 +25,10 @@ public class TennisCourt {
     private String image;
     @OneToMany(mappedBy = "tennisCourt", fetch = FetchType.LAZY,cascade =  CascadeType.MERGE)
     private Set<Timeslot> timeslot;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.PERSIST)
     private Address address;
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -68,6 +71,10 @@ public class TennisCourt {
 
     public void setSurfaceType(SurfaceType surfaceType) {
         this.surfaceType = surfaceType;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getDescription() {
