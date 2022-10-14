@@ -33,7 +33,6 @@ public class Timeslot {
     public Timeslot(Date startDate, Date endDate, int duration, Person person, TennisCourt tennisCourt) {
         this.startDate = startDate;
         this.endDate = endDate;
-        this.duration = duration;
         this.person = person;
         this.tennisCourt = tennisCourt;
     }

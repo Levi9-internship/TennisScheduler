@@ -19,12 +19,9 @@ public class TimeslotService {
 
     public Timeslot update(long id, Timeslot timeslot, long personId, long courtId){
         Timeslot existingTimeslot = timeslotRepository.findById(id);
-
-        existingTimeslot.setDuration(timeslot.getDuration());
         existingTimeslot.setStartDate(timeslot.getStartDate());
         existingTimeslot.setEndDate(timeslot.getEndDate());
         existingTimeslot.setPerson(this.personService.findById(personId));
-        //set tennis court
         return timeslotRepository.save(existingTimeslot);
     }
 

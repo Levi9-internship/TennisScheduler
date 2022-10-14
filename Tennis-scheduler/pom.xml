@@ -15,6 +15,8 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
+		<org.liquibase.version>4.16.1</org.liquibase.version>
+		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 	</properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
@@ -46,12 +48,10 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-			<version>4.16.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-maven-plugin</artifactId>
-			<version>4.16.1</version>
 			<type>maven-plugin</type>
 		</dependency>
 
@@ -90,6 +90,7 @@
 				<configuration>
 					<propertyFile>src/main/resources/application.properties</propertyFile>
 					<propertyFileWillOverride>true</propertyFileWillOverride>
+				</configuration>
       </plugin>
       <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -102,7 +103,6 @@
 						<path>
 							<groupId>org.mapstruct</groupId>
 							<artifactId>mapstruct-processor</artifactId>
-							<version>1.4.2.Final</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
