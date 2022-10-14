@@ -27,12 +27,22 @@ public class Timeslot {
     @JsonIgnore
     private TennisCourt tennisCourt;
 
+    public Timeslot() {
+    }
 
-    public Long getId() {
+    public Timeslot(Date startDate, Date endDate, int duration, Person person, TennisCourt tennisCourt) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.duration = duration;
+        this.person = person;
+        this.tennisCourt = tennisCourt;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

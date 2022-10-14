@@ -30,10 +30,10 @@ public class Person {
     private String phoneNumber;
     @Column
     private Date birthday;
-    @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.MERGE)
+    @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.PERSIST)
     private Address address;
 
-    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.MERGE)
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.PERSIST)
     private Set<Timeslot> timeslot;
 
     public Address getAddress() {
