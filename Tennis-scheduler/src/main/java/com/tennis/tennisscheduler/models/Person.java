@@ -1,5 +1,7 @@
 package com.tennis.tennisscheduler.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.tennis.tennisscheduler.models.enumes.Gender;
 
 import javax.persistence.*;
@@ -12,9 +14,10 @@ import java.util.Set;
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column
-    private Long id;
+    @SequenceGenerator(name = "personSeqGen", sequenceName = "personSeqGen", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personSeqGen")
+    @Column(name="id", unique=true, nullable=false)
+    private long id;
     @Column
     private String firstName;
     @Column
@@ -27,12 +30,11 @@ public class Person {
     private String phoneNumber;
     @Column
     private Date birthday;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.PERSIST)
     private Address address;
 
-    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.MERGE)
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.PERSIST)
     private Set<Timeslot> timeslot;
-
 
     public Address getAddress() {
         return address;
@@ -43,12 +45,20 @@ public class Person {
     }
 
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public Set<Timeslot> getTimeslot() {
+        return timeslot;
+    }
+
+    public void setTimeslot(Set<Timeslot> timeslot) {
+        this.timeslot = timeslot;
     }
 
     public String getFirstName() {
@@ -97,5 +107,20 @@ public class Person {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", gender=" + gender +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", birthday=" + birthday +
+                ", address=" + address +
+                '}';
     }
 }

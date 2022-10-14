@@ -10,8 +10,11 @@ import java.util.Set;
 public class TennisCourt {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
+
+    @SequenceGenerator(name = "tennisCourtSeqGen", sequenceName = "tennisCourtSeqGen", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tennisCourtSeqGen")
+    @Column(name="id", unique=true, nullable=false)
+    private Long id;
     @Column(unique = true)
     private String name;
     @Column
