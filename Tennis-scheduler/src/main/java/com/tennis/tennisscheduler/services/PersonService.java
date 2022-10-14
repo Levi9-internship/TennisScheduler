@@ -25,17 +25,16 @@ public class PersonService {
         return personRepository.findById(id);
     }
     public Person savePerson(Person person) {
-        this.addressRepository.save(person.getAddress());
         return personRepository.save(person);
     }
     public void deletePersonById(long id){
         Person person = personRepository.findById(id);
         personRepository.deleteById(id);
-        this.addressRepository.delete(person.getAddress());
+        addressRepository.delete(person.getAddress());
     }
 
     public Person updatePerson(long id,Person person){
-        Person existingPerson = this.personRepository.findById(id);
+        Person existingPerson = personRepository.findById(id);
         existingPerson.setFirstName(person.getFirstName());
         existingPerson.setLastName(person.getLastName());
         existingPerson.setBirthday(person.getBirthday());
