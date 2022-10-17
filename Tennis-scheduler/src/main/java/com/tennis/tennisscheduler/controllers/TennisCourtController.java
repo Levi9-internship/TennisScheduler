@@ -4,6 +4,7 @@ import com.tennis.tennisscheduler.dtos.TennisCourtDto;
 import com.tennis.tennisscheduler.mappers.TennisCourtDtoMapper;
 import com.tennis.tennisscheduler.models.TennisCourt;
 import com.tennis.tennisscheduler.services.TennisCourtServices;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,16 +14,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "tennis-courts")
+@AllArgsConstructor
 public class TennisCourtController {
 
 
     public final  TennisCourtServices tennisCourtServices;
     public final TennisCourtDtoMapper tennisCourtDtoMapper;
-
-    public TennisCourtController(TennisCourtServices tennisCourtServices, TennisCourtDtoMapper tennisCourtDtoMapper){
-        this.tennisCourtServices=tennisCourtServices;
-        this.tennisCourtDtoMapper=tennisCourtDtoMapper;
-    }
 
     @GetMapping("/")
     public ResponseEntity<List<TennisCourtDto>>getAllTennisCourts(){
