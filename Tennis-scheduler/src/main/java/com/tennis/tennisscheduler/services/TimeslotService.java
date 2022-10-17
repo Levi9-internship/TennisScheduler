@@ -2,6 +2,7 @@ package com.tennis.tennisscheduler.services;
 
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.repositories.TimeslotRepository;
+import com.tennis.tennisscheduler.response.TimeslotResponse;
 import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -23,7 +24,7 @@ public class TimeslotService {
         this.tennisCourtService = tennisCourtService;
     }
 
-    public String update(long id, Timeslot timeslot){
+    public TimeslotResponse update(long id, Timeslot timeslot){
         Timeslot existingTimeslot = timeslotRepository.findById(id);
         existingTimeslot.setStartDate(timeslot.getStartDate());
         existingTimeslot.setEndDate(timeslot.getEndDate());
@@ -50,38 +51,35 @@ public class TimeslotService {
         return timeslotRepository.save(timeslot);
     }
 
-    public String reserveTimeslot(Timeslot timeslot) {
+    public TimeslotResponse reserveTimeslot(Timeslot timeslot) {
+        TimeslotResponse timeslotResponse = new TimeslotResponse();
         if(checkValidationDate(timeslot)){
             if(checkDate(timeslot)){
                 if(checkDuration(timeslot)){
                     if(checkWorkingDay(new DateTime(timeslot.getStartDate()), new DateTime(timeslot.getEndDate()))){
                         if (checkIfTimeslotIsAlreadyReserved(timeslot)){
-                            if (checkIfTennisCourtIsAvailable(timeslot)){
-                                save(timeslot);
-                                return "You successfully reserved timeslot!";
+                            if (checkOverlappingTimeslots(timeslot)){
+                                timeslotResponse.timeslot =  save(timeslot);
+                                timeslotResponse.message = "You successfully reserved timeslot!";
+                                return timeslotResponse;
                             }
-                            return "Selected court is not available for selected time.";
+                           timeslotResponse.message = "Selected court is not available for selected time.";
+                            return timeslotResponse;
                         }
-                        return "You can only reserve one timeslot for current day.";
+                        timeslotResponse.message = "You can only reserve one timeslot for current day.";
+                        return timeslotResponse;
                     }
-                    return "Working time isn't valid!";
+                    timeslotResponse.message = "Working time isn't valid!";
+                    return timeslotResponse;
                 }
-                return "Duration must be between 30 and 120 minutes!";
+                timeslotResponse.message = "Duration must be between 30 and 120 minutes!";
+                return timeslotResponse;
             }
-            return  "Selected dates must be in future!";
+            timeslotResponse.message = "Selected dates must be in future!";
+            return timeslotResponse;
         }
-        return "Selected date must be at same day, and start has to be before end!";
-    }
-
-    private boolean checkIfTennisCourtIsAvailable(Timeslot timeslot) {
-        List<Timeslot> existingTimeslots = timeslotRepository.checkIfTennisCourtIsAvailable(timeslot.getTennisCourt().getId(), timeslot.getStartDate());
-        if (existingTimeslots.size() > 0) {
-            for (Timeslot existingTimeslot: existingTimeslots) {
-                if(!checkOverlappingTimeslots(existingTimeslot))
-                    return false;
-            }
-        }
-        return true;
+        timeslotResponse.message = "Selected date must be at same day, and start has to be before end!";
+        return  timeslotResponse;
     }
 
     private boolean checkDate(Timeslot timeslot){
@@ -120,6 +118,7 @@ public class TimeslotService {
     }
 
     private boolean checkOverlappingTimeslots(Timeslot timeslot) {
+        List<Timeslot> ret = timeslotRepository.overlappingWithStartOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getTennisCourt().getId());
         if (timeslotRepository.overlappingWithStartOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getTennisCourt().getId()).size() > 0)
             return false;
         else if (timeslotRepository.overlappingWithEndOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getTennisCourt().getId()).size() > 0)

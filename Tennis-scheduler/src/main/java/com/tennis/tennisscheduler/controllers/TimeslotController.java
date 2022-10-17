@@ -1,7 +1,9 @@
 package com.tennis.tennisscheduler.controllers;
 
 import com.tennis.tennisscheduler.dtos.TimeslotDto;
+import com.tennis.tennisscheduler.dtos.TimeslotResponseDto;
 import com.tennis.tennisscheduler.mappers.TimeslotDtoMapper;
+import com.tennis.tennisscheduler.mappers.TimeslotResponseDtoMapper;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.services.TimeslotService;
 import org.springframework.http.HttpStatus;
@@ -17,10 +19,12 @@ public class TimeslotController {
 
     private final TimeslotService timeslotService;
     private final TimeslotDtoMapper timeslotDtoMapper;
+    private final TimeslotResponseDtoMapper timeslotResponseDtoMapper;
 
-    public TimeslotController(TimeslotService timeslotService, TimeslotDtoMapper timeslotDtoMapper) {
+    public TimeslotController(TimeslotService timeslotService, TimeslotDtoMapper timeslotDtoMapper, TimeslotResponseDtoMapper timeslotResponseDtoMapper) {
         this.timeslotService = timeslotService;
         this.timeslotDtoMapper = timeslotDtoMapper;
+        this.timeslotResponseDtoMapper = timeslotResponseDtoMapper;
     }
 
     @GetMapping(value = "/")
@@ -44,23 +48,26 @@ public class TimeslotController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<String> save(@RequestBody TimeslotDto timeslotNew){
-        String responseMessage = timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew));
-        if (responseMessage.equals("You successfully reserved timeslot!"))
-            return new ResponseEntity<>(responseMessage, HttpStatus.CREATED);
+    public ResponseEntity<TimeslotResponseDto> save(@RequestBody TimeslotDto timeslotNew){
+        TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.fromTimeslotResponseToTimeslotResponseDto(timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew)));
+        if (timeslotResponse.timeslot != null)
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.CREATED);
         else
-            return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<String> update(@PathVariable long id, @RequestBody TimeslotDto timeslotUpdate){
+    public ResponseEntity<TimeslotResponseDto> update(@PathVariable long id, @RequestBody TimeslotDto timeslotUpdate){
         Timeslot timeslotExisting = timeslotService.getById(id);
         if (timeslotExisting == null) {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
 
-        String responseMessage = timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate));
-        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+        TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.fromTimeslotResponseToTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
+        if(timeslotResponse.timeslot != null)
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping(value = "/{id}")
