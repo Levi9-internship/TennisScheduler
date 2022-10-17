@@ -29,10 +29,8 @@ public class PersonService {
     public Person savePerson(Person person) {
         return personRepository.save(person);
     }
-    public void deletePersonById(long id){
-        Person person = personRepository.findById(id);
+    public void deletePersonById(Long id){
         personRepository.deleteById(id);
-        addressRepository.delete(person.getAddress());
     }
     public Person updatePerson(long id,Person person){
         Person existingPerson = personRepository.findById(id);

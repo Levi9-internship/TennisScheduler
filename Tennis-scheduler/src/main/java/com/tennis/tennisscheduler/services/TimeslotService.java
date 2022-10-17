@@ -23,13 +23,13 @@ public class TimeslotService {
         this.tennisCourtService = tennisCourtService;
     }
 
-    public Timeslot update(long id, Timeslot timeslot){
+    public String update(long id, Timeslot timeslot){
         Timeslot existingTimeslot = timeslotRepository.findById(id);
         existingTimeslot.setStartDate(timeslot.getStartDate());
         existingTimeslot.setEndDate(timeslot.getEndDate());
         existingTimeslot.setPerson(personService.findById(timeslot.getPerson().getId()));
         existingTimeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()));
-        return timeslotRepository.save(existingTimeslot);
+        return reserveTimeslot(existingTimeslot);
     }
 
     public List<Timeslot> getAll(){

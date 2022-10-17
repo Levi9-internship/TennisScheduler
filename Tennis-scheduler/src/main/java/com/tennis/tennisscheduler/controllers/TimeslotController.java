@@ -53,14 +53,14 @@ public class TimeslotController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<TimeslotDto> update(@PathVariable long id, @RequestBody TimeslotDto timeslotUpdate){
+    public ResponseEntity<String> update(@PathVariable long id, @RequestBody TimeslotDto timeslotUpdate){
         Timeslot timeslotExisting = timeslotService.getById(id);
         if (timeslotExisting == null) {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
 
-        Timeslot timeslot = timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate));
-        return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
+        String responseMessage = timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate));
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
