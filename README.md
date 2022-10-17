@@ -1,6 +1,6 @@
 # TennisScheduler
 
-Web application for reservation of tennis courts.
+Web application for reservation tennis courts.
 
 ### Developers
 - Filip Kišgeci
