@@ -55,8 +55,8 @@ public class TimeslotService {
             if(checkDate(timeslot)){
                 if(checkDuration(timeslot)){
                     if(checkWorkingDay(new DateTime(timeslot.getStartDate()), new DateTime(timeslot.getEndDate()))){
-                        if (checkIfTennisCourtIsAvailable(timeslot)){
-                            if (checkIfTimeslotIsAlreadyReserved(timeslot)){
+                        if (checkIfTimeslotIsAlreadyReserved(timeslot)){
+                            if (checkIfTennisCourtIsAvailable(timeslot)){
                                 if (checkOverlappingTimeslots(timeslot)){
                                     save(timeslot);
                                     return "You successfully reserved timeslot!";
@@ -123,13 +123,13 @@ public class TimeslotService {
     }
 
     private boolean checkOverlappingTimeslots(Timeslot timeslot) {
-        if (timeslotRepository.overlappingWithStartOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate()).size() > 0)
+        if (timeslotRepository.overlappingWithStartOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getTennisCourt().getId()).size() > 0)
             return false;
-        else if (timeslotRepository.overlappingWithEndOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate()).size() > 0)
+        else if (timeslotRepository.overlappingWithEndOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getTennisCourt().getId()).size() > 0)
             return false;
-        else if (timeslotRepository.overlappingWithStartAndEndOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate()).size() > 0)
+        else if (timeslotRepository.overlappingWithStartAndEndOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getTennisCourt().getId()).size() > 0)
             return false;
-        else if (timeslotRepository.overlappingWithMiddleOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate()).size() > 0)
+        else if (timeslotRepository.overlappingWithMiddleOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getTennisCourt().getId()).size() > 0)
             return false;
         else
             return true;
