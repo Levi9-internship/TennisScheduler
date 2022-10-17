@@ -57,11 +57,8 @@ public class TimeslotService {
                     if(checkWorkingDay(new DateTime(timeslot.getStartDate()), new DateTime(timeslot.getEndDate()))){
                         if (checkIfTimeslotIsAlreadyReserved(timeslot)){
                             if (checkIfTennisCourtIsAvailable(timeslot)){
-                                if (checkOverlappingTimeslots(timeslot)){
-                                    save(timeslot);
-                                    return "You successfully reserved timeslot!";
-                                }
-                                return "We have overlapping timeslots!Please, choose another dates.";
+                                save(timeslot);
+                                return "You successfully reserved timeslot!";
                             }
                             return "Selected court is not available for selected time.";
                         }
@@ -111,11 +108,11 @@ public class TimeslotService {
 
     private boolean checkWorkingDay(DateTime dateStart, DateTime dateEnd){
         if(dateStart.dayOfWeek().get() == DateTimeConstants.SATURDAY || dateStart.dayOfWeek().get() == DateTimeConstants.SUNDAY){
-            if(dateStart.getHourOfDay() < 17 || dateEnd.getHourOfDay() > 22){
+            if(dateStart.getHourOfDay() < 17 || dateEnd.getHourOfDay() >= 22){
                 return false;
             }
         } else {
-            if(dateStart.getHourOfDay() < 18 || dateEnd.getHourOfDay() > 23){
+            if(dateStart.getHourOfDay() < 18 || dateEnd.getHourOfDay() >= 23){
                 return false;
             }
         }
