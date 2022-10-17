@@ -43,11 +43,13 @@ public class TimeslotController {
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/")
-    public ResponseEntity<TimeslotDto> save(@RequestBody TimeslotDto timeslotNew){
-        Timeslot timeslot = timeslotService.save(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew), timeslotNew.personId, timeslotNew.courtId);
-
-        return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.CREATED);
+    @PostMapping("/")
+    public ResponseEntity<String> save(@RequestBody TimeslotDto timeslotNew){
+        String responseMessage = timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew));
+        if (responseMessage.equals("You successfully reserved timeslot!"))
+            return new ResponseEntity<>(responseMessage, HttpStatus.CREATED);
+        else
+            return new ResponseEntity<>(responseMessage, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping(value = "/{id}")
@@ -57,7 +59,7 @@ public class TimeslotController {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
 
-        Timeslot timeslot = timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate), timeslotUpdate.personId, timeslotUpdate.courtId);
+        Timeslot timeslot = timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate));
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 

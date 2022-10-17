@@ -12,7 +12,7 @@ public class Timeslot {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name="id", unique=true, nullable=false)
-    private Long id;
+    private long id;
     @Column
     private Date startDate;
     @Column
@@ -29,7 +29,7 @@ public class Timeslot {
     public Timeslot() {
     }
 
-    public Timeslot(Date startDate, Date endDate, int duration, Person person, TennisCourt tennisCourt) {
+    public Timeslot(Date startDate, Date endDate, Person person, TennisCourt tennisCourt) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.person = person;

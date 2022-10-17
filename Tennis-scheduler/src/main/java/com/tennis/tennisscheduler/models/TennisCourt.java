@@ -10,11 +10,9 @@ import java.util.Set;
 public class TennisCourt {
 
     @Id
-
-
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name="id", unique=true, nullable=false)
-    private Long id;
+    private long id;
     @Column(unique = true)
     private String name;
     @Column
@@ -47,7 +45,6 @@ public class TennisCourt {
     public void setTimeslot(Set<Timeslot> timeslot) {
         this.timeslot = timeslot;
     }
-
 
     public String getName() {
         return name;
