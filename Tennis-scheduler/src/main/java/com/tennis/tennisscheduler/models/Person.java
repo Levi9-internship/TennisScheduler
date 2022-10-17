@@ -14,8 +14,7 @@ import java.util.Set;
 public class Person {
 
     @Id
-    @SequenceGenerator(name = "personSeqGen", sequenceName = "personSeqGen", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personSeqGen")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name="id", unique=true, nullable=false)
     private long id;
     @Column
@@ -30,7 +29,7 @@ public class Person {
     private String phoneNumber;
     @Column
     private Date birthday;
-    @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
     private Address address;
 
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.PERSIST)

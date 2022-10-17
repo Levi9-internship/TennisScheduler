@@ -10,8 +10,7 @@ import java.util.Date;
 public class Timeslot {
 
     @Id
-    @SequenceGenerator(name = "timeslotSeqGen", sequenceName = "timeslotSeqGen", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "timeslotSeqGen")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name="id", unique=true, nullable=false)
     private Long id;
     @Column

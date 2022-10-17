@@ -18,7 +18,7 @@ public class TimeslotController {
     private final TimeslotService timeslotService;
     private final TimeslotDtoMapper timeslotDtoMapper;
 
-    public TimeslotController(TimeslotService timeslotService, TimeslotDtoMapper timeslotDtoMapper){
+    public TimeslotController(TimeslotService timeslotService, TimeslotDtoMapper timeslotDtoMapper) {
         this.timeslotService = timeslotService;
         this.timeslotDtoMapper = timeslotDtoMapper;
     }
