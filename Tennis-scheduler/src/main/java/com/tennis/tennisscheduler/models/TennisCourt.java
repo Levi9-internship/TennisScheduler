@@ -11,8 +11,8 @@ public class TennisCourt {
 
     @Id
 
-    @SequenceGenerator(name = "tennisCourtSeqGen", sequenceName = "tennisCourtSeqGen", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tennisCourtSeqGen")
+
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name="id", unique=true, nullable=false)
     private Long id;
     @Column(unique = true)
