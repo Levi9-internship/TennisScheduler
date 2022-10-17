@@ -6,7 +6,6 @@ import java.util.Date;
 
 public class PersonDto {
 
-
     public long id;
     public String firstName;
     public String lastName;
