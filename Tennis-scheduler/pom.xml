@@ -23,27 +23,23 @@
 		<maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
 		<joda-time.version>2.11.1</joda-time.version>
 		<commons.version>3.12.0</commons.version>
+		<spring-boot-starter-data-jpa.version>2.7.4</spring-boot-starter-data-jpa.version>
+		<postgresql.version>42.5.0</postgresql.version>
+		<spring-boot-starter-web.version>2.7.4</spring-boot-starter-web.version>
+		<springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
+		<spring-boot-starter-test.version>2.7.4</spring-boot-starter-test.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-			<version>2.7.4</version>
+			<version>${spring-boot-starter-data-jpa.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>2.7.4</version>
+			<version>${spring-boot-starter-web.version}</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<version>2.7.4</version>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
@@ -59,7 +55,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.5.0</version>
+			<version>${postgresql.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -80,13 +76,13 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.6.11</version>
+			<version>${springdoc-openapi-ui.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<version>2.7.4</version>
+			<version>${spring-boot-starter-test.version}</version>
 			<scope>test</scope>
 		</dependency>
 
