@@ -22,12 +22,6 @@ public class TimeslotService {
     private final PersonService personService;
     private final TennisCourtServices tennisCourtService;
 
-    public TimeslotService(TimeslotRepository timeslotRepository, PersonService personService, TennisCourtServices tennisCourtService){
-        this.timeslotRepository = timeslotRepository;
-        this.personService = personService;
-        this.tennisCourtService = tennisCourtService;
-    }
-
     public TimeslotResponse update(long id, Timeslot timeslot){
         Timeslot existingTimeslot = timeslotRepository.findById(id);
         existingTimeslot.setStartDate(timeslot.getStartDate());
