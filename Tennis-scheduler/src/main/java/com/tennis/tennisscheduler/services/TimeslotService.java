@@ -1,6 +1,7 @@
 package com.tennis.tennisscheduler.services;
 
 import com.tennis.tennisscheduler.models.Timeslot;
+import com.tennis.tennisscheduler.models.enumes.WorkingHours;
 import com.tennis.tennisscheduler.repositories.TimeslotRepository;
 import com.tennis.tennisscheduler.response.TimeslotResponse;
 import org.apache.commons.lang3.time.DateUtils;
@@ -8,8 +9,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.Minutes;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -104,11 +103,11 @@ public class TimeslotService {
 
     private boolean checkWorkingDay(DateTime dateStart, DateTime dateEnd){
         if(dateStart.dayOfWeek().get() == DateTimeConstants.SATURDAY || dateStart.dayOfWeek().get() == DateTimeConstants.SUNDAY){
-            if(dateStart.getHourOfDay() < 17 || dateEnd.getHourOfDay() >= 22){
+            if(dateStart.getHourOfDay() < WorkingHours.WEEKEND.startHours || dateEnd.getHourOfDay() >= WorkingHours.WEEKEND.endHours){
                 return false;
             }
         } else {
-            if(dateStart.getHourOfDay() < 18 || dateEnd.getHourOfDay() >= 23){
+            if(dateStart.getHourOfDay() < WorkingHours.WORKING_DAYS.startHours || dateEnd.getHourOfDay() >= WorkingHours.WEEKEND.endHours){
                 return false;
             }
         }
@@ -116,7 +115,6 @@ public class TimeslotService {
     }
 
     private boolean checkOverlappingTimeslots(Timeslot timeslot) {
-        List<Timeslot> ret = timeslotRepository.overlappingWithStartOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getTennisCourt().getId());
         if (timeslotRepository.overlappingWithStartOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getTennisCourt().getId()).size() > 0)
             return false;
         else if (timeslotRepository.overlappingWithEndOfExistingTimeslot(timeslot.getStartDate(), timeslot.getEndDate(), timeslot.getTennisCourt().getId()).size() > 0)

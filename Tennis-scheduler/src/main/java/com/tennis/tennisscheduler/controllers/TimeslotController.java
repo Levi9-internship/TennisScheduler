@@ -45,7 +45,7 @@ public class TimeslotController {
 
     @PostMapping("/")
     public ResponseEntity<TimeslotResponseDto> save(@RequestBody TimeslotDto timeslotNew){
-        TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.fromTimeslotResponseToTimeslotResponseDto(timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew)));
+        TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew)));
         if (timeslotResponse.timeslot != null)
             return new ResponseEntity<>(timeslotResponse, HttpStatus.CREATED);
         else
@@ -59,7 +59,7 @@ public class TimeslotController {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
 
-        TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.fromTimeslotResponseToTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
+        TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
         if(timeslotResponse.timeslot != null)
             return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
         else
