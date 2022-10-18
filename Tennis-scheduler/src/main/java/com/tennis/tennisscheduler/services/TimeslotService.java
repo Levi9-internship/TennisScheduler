@@ -50,33 +50,23 @@ public class TimeslotService {
 
     public TimeslotResponse reserveTimeslot(Timeslot timeslot) {
         TimeslotResponse timeslotResponse = new TimeslotResponse();
-        if(checkValidationDate(timeslot)){
-            if(checkDate(timeslot)){
-                if(checkDuration(timeslot)){
-                    if(checkWorkingDay(new DateTime(timeslot.getStartDate()), new DateTime(timeslot.getEndDate()))){
-                        if (checkIfTimeslotIsAlreadyReserved(timeslot)){
-                            if (checkOverlappingTimeslots(timeslot)){
-                                timeslotResponse.timeslot =  save(timeslot);
-                                timeslotResponse.message = "You successfully reserved timeslot!";
-                                return timeslotResponse;
-                            }
-                           timeslotResponse.message = "Selected court is not available for selected time.";
-                            return timeslotResponse;
-                        }
-                        timeslotResponse.message = "You can only reserve one timeslot for current day.";
-                        return timeslotResponse;
-                    }
-                    timeslotResponse.message = "Working time isn't valid!";
-                    return timeslotResponse;
-                }
-                timeslotResponse.message = "Duration must be between 30 and 120 minutes!";
-                return timeslotResponse;
-            }
+        if(!checkValidationDate(timeslot))
+            timeslotResponse.message = "Selected date must be at same day, and start has to be before end!";
+        else if(!checkDate(timeslot))
             timeslotResponse.message = "Selected dates must be in future!";
-            return timeslotResponse;
+        else if(!checkDuration(timeslot))
+            timeslotResponse.message = "Duration must be between 30 and 120 minutes!";
+        else if(!checkWorkingDay(new DateTime(timeslot.getStartDate()), new DateTime(timeslot.getEndDate())))
+            timeslotResponse.message = "Working time isn't valid!";
+        else if(!checkIfTimeslotIsAlreadyReserved(timeslot))
+            timeslotResponse.message = "You can only reserve one timeslot for current day.";
+        else if (!checkOverlappingTimeslots(timeslot))
+            timeslotResponse.message = "Selected court is not available for selected time.";
+        else {
+            timeslotResponse.timeslot = save(timeslot);
+            timeslotResponse.message = "You successfully reserved timeslot!";
         }
-        timeslotResponse.message = "Selected date must be at same day, and start has to be before end!";
-        return  timeslotResponse;
+        return timeslotResponse;
     }
 
     private boolean checkDate(Timeslot timeslot){
