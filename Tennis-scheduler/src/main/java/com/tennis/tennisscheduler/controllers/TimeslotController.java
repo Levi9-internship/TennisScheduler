@@ -6,6 +6,7 @@ import com.tennis.tennisscheduler.mappers.TimeslotDtoMapper;
 import com.tennis.tennisscheduler.mappers.TimeslotResponseDtoMapper;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.services.TimeslotService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,17 +16,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "timeslots")
+@AllArgsConstructor
 public class TimeslotController {
 
     private final TimeslotService timeslotService;
     private final TimeslotDtoMapper timeslotDtoMapper;
     private final TimeslotResponseDtoMapper timeslotResponseDtoMapper;
-
-    public TimeslotController(TimeslotService timeslotService, TimeslotDtoMapper timeslotDtoMapper, TimeslotResponseDtoMapper timeslotResponseDtoMapper) {
-        this.timeslotService = timeslotService;
-        this.timeslotDtoMapper = timeslotDtoMapper;
-        this.timeslotResponseDtoMapper = timeslotResponseDtoMapper;
-    }
 
     @GetMapping(value = "/")
     public ResponseEntity<List<TimeslotDto>> getAll(){

@@ -2,6 +2,8 @@ package com.tennis.tennisscheduler.dtos;
 
 import com.tennis.tennisscheduler.models.Address;
 import com.tennis.tennisscheduler.models.enumes.Gender;
+import lombok.Data;
+
 import java.util.Date;
 
 public class PersonDto {

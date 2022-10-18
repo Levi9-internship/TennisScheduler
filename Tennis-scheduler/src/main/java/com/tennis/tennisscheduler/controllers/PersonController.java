@@ -4,6 +4,7 @@ import com.tennis.tennisscheduler.dtos.PersonDto;
 import com.tennis.tennisscheduler.mappers.PersonDtoMapper;
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.services.PersonService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +14,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/persons")
+@AllArgsConstructor
 public class PersonController {
 
     private final PersonService personService;
     private final PersonDtoMapper personDtoMapper;
-
-    public PersonController(PersonService personService, PersonDtoMapper personDtoMapper) {
-        this.personService = personService;
-        this.personDtoMapper = personDtoMapper;
-    }
 
     @GetMapping("/")
     public ResponseEntity<List<PersonDto>>getAllPersons(){

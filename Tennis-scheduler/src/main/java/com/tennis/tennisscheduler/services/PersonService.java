@@ -4,21 +4,19 @@ import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.repositories.AddressRepository;
 
 import com.tennis.tennisscheduler.repositories.PersonRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class PersonService {
 
     private final PersonRepository personRepository;
     private final AddressRepository addressRepository;
 
-    public PersonService(PersonRepository personRepository, AddressRepository addressRepository) {
-        this.personRepository = personRepository;
-        this.addressRepository = addressRepository;
-    }
 
     public List<Person> getAllPersons(){
         return personRepository.findAll();

@@ -1,17 +1,21 @@
 package com.tennis.tennisscheduler.models;
 
 import com.tennis.tennisscheduler.models.enumes.SurfaceType;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Setter
+@Getter
 @Table
 public class TennisCourt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name="id", unique=true, nullable=false)
+    @Column
     private long id;
     @Column(unique = true)
     private String name;
@@ -25,60 +29,4 @@ public class TennisCourt {
     private Set<Timeslot> timeslot;
     @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
     private Address address;
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public Set<Timeslot> getTimeslot() {
-        return timeslot;
-    }
-
-    public void setTimeslot(Set<Timeslot> timeslot) {
-        this.timeslot = timeslot;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public SurfaceType getSurfaceType() {
-        return surfaceType;
-    }
-
-    public void setSurfaceType(SurfaceType surfaceType) {
-        this.surfaceType = surfaceType;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

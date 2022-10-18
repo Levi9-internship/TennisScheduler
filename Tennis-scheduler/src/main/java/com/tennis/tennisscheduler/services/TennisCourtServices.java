@@ -3,18 +3,17 @@ package com.tennis.tennisscheduler.services;
 import com.tennis.tennisscheduler.models.TennisCourt;
 import com.tennis.tennisscheduler.repositories.AddressRepository;
 import com.tennis.tennisscheduler.repositories.TennisCourtRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TennisCourtServices {
     private final TennisCourtRepository tennisCourtRepository;
     private final AddressRepository addressRepository;
-    public TennisCourtServices(TennisCourtRepository tennisCourtRepository, AddressRepository addressRepository) {
-        this.tennisCourtRepository = tennisCourtRepository;
-        this.addressRepository = addressRepository;
-    }
+
 
     public List<TennisCourt> getAllTennisCourts(){
 
