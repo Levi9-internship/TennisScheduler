@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="milica" id="alert-2">
+        <addColumn tableName="person" >
+            <column name="enabled"
+                    type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="milica" id="insert-11">
+        <insert tableName="role">
+            <column name="role_name" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="milica" id="insert-12">
+        <insert tableName="role">
+            <column name="role_name" value="0"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="milica" id="insert-13">
+        <insert tableName="address">
+            <column name="city" value="Sabac"/>
+            <column name="country" value="Srbija"/>
+            <column name="number" value="8"/>
+            <column name="street" value="Masarikova"/>
+        </insert>
+    </changeSet>
+    <changeSet author="milica" id="insert-14">
+        <insert tableName="person">
+            <column name="birthday" value="1999-07-11"/>
+            <column name="email" value="admin@gmail.com"/>
+            <column name="first_name" value="Nevena"/>
+            <column name="gender" value="1"/>
+            <column name="last_name" value="Atic"/>
+            <column name="phone_number" value="0641258963"/>
+            <column name="address_id" value="5"/>
+            <column name="role_id" value="2"/>
+            <column name="enabled" value="true"/>
+            <!--password = levi9-->
+            <column name="password" value="$2a$10$qfcE4JjLKzsMnt/Ntn725.6JhHe6ul/l9Ni9K2/YZ8hbnD3UsBkWm"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="milica" id="update-1">
+        <update tableName="person">
+            <column name="role_id" value="1" />
+            <column name="enabled" value="true"/>
+            <column name="password" value="$2a$10$qfcE4JjLKzsMnt/Ntn725.6JhHe6ul/l9Ni9K2/YZ8hbnD3UsBkWm"/>
+            <where>id = '1'</where>
+        </update>
+    </changeSet>
+    <changeSet author="milica" id="update-2">
+        <update tableName="person">
+            <column name="role_id" value="1" />
+            <column name="enabled" value="true"/>
+            <column name="password" value="$2a$10$qfcE4JjLKzsMnt/Ntn725.6JhHe6ul/l9Ni9K2/YZ8hbnD3UsBkWm"/>
+            <where>id = '2'</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>
