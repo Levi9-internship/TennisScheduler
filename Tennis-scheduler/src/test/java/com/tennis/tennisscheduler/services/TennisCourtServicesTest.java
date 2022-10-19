@@ -142,6 +142,9 @@ class TennisCourtServicesTest {
 
         TennisCourt updatedTennisCourt = new TennisCourt();
         updatedTennisCourt.setName("Teren u Kacu");
+        updatedTennisCourt.setImage("novaSlika");
+        updatedTennisCourt.setDescription("Jako lep teren u Kacu");
+        updatedTennisCourt.setSurfaceType(SurfaceType.GRASS);
         underTest.updateTennisCourt(id,updatedTennisCourt);
         verify(tennisCourtRepository).save(tennisCourtArgumentCaptor.capture());
 
@@ -149,5 +152,17 @@ class TennisCourtServicesTest {
                 .getValue()
                 .getName())
                 .isEqualTo("Teren u Kacu");
+        assertThat(tennisCourtArgumentCaptor
+                .getValue()
+                .getImage())
+                .isEqualTo("novaSlika");
+        assertThat(tennisCourtArgumentCaptor
+                .getValue()
+                .getDescription())
+                .isEqualTo("Jako lep teren u Kacu");
+        assertThat(tennisCourtArgumentCaptor
+                .getValue()
+                .getSurfaceType())
+                .isEqualTo(SurfaceType.GRASS);
     }
 }
