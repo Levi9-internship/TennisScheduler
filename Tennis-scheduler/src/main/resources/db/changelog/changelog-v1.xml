@@ -95,10 +95,10 @@
                 <constraints/>
             </column>
             <column name="person_id" type="bigint">
-                <constraints nullable="false" unique="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="tennis_court_id" type="bigint">
-                <constraints unique="false" nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>
