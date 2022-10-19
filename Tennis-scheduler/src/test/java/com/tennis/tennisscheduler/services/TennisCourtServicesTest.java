@@ -1,57 +1,153 @@
 package com.tennis.tennisscheduler.services;
 
+import com.tennis.tennisscheduler.models.TennisCourt;
+import com.tennis.tennisscheduler.models.enumes.SurfaceType;
 import com.tennis.tennisscheduler.repositories.TennisCourtRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import static org.mockito.Mockito.verify;
-//https://youtu.be/Geq60OVyBPg?t=3105
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
 class TennisCourtServicesTest {
 
     @Mock
     private TennisCourtRepository tennisCourtRepository;
-    private AutoCloseable autoCloseable;
     private TennisCourtServices underTest;
 
     @BeforeEach
     void setUp() {
-        autoCloseable = MockitoAnnotations.openMocks(this);
         underTest = new TennisCourtServices(tennisCourtRepository);
-    }
-
-    @AfterEach
-    void tearDown() throws Exception {
-        autoCloseable.close();
     }
 
     @Test
     void canGetAllTennisCourts() {
+        TennisCourt tennisCourt1 = new TennisCourt(
+                0,
+                "Teren u Kacu",
+                SurfaceType.CLAY,
+                "Jako lep teren u Kacu",
+                "slikaZaTerenUKacu",
+                null,
+                null
+        );
+        TennisCourt tennisCourt2 = new TennisCourt(
+                1,
+                "Teren u Prigrevici",
+                SurfaceType.CLAY,
+                "Jako lep teren u Prigrevici",
+                "slikaZaTerenUPrigrevici",
+                null,
+                null
+        );
+        List<TennisCourt> tennisCourtList = new ArrayList<>();
+        tennisCourtList.add(tennisCourt1);
+        tennisCourtList.add(tennisCourt2);
+        doReturn(tennisCourtList).when(tennisCourtRepository).findAll();
+
+        List<TennisCourt> list2 = underTest.getAllTennisCourts();
+
+        assertEquals(tennisCourtList,list2);
+    }
+    @Test
+    void canSaveTennisCourt() {
+        //given
+        TennisCourt tennisCourt = new TennisCourt(
+                0,
+                "Teren u Prigrevici",
+                SurfaceType.CLAY,
+                "Jako lep teren u Prigrevici",
+                "slikaZaTerenUPrigrevici",
+                null,
+                null
+        );
         //when
-        underTest.getAllTennisCourts();
+        underTest.saveTennisCourt(tennisCourt);
         //then
-        verify(tennisCourtRepository).findAll();
-    }
+        ArgumentCaptor<TennisCourt> tennisCourtArgumentCaptor =
+                ArgumentCaptor.forClass(TennisCourt.class);
+        verify(tennisCourtRepository).save(tennisCourtArgumentCaptor.capture());
 
+        assertThat(tennisCourtArgumentCaptor.getValue()).isEqualTo(tennisCourt);
+    }
     @Test
-    @Disabled
     void getTennisCourtById() {
+        TennisCourt e1ForMock = new TennisCourt(
+                0,
+                "Teren u Prigrevici",
+                SurfaceType.CLAY,
+                "Jako lep teren u Prigrevici",
+                "slikaZaTerenUPrigrevici",
+                null,
+                null
+        );
+        doReturn(e1ForMock).when(tennisCourtRepository).findById(0);
+        // Make the service call
+        TennisCourt e1ByService = underTest.getTennisCourtById(0);
+        // Assert the response
+        assertNotNull(e1ByService,"TennisCourt with this id: "+e1ForMock.getId()+" not found");
+        assertEquals(e1ForMock.getId(),e1ByService.getId());
+        assertEquals(e1ForMock.getName(), e1ByService.getName());
+        assertEquals(e1ForMock.getSurfaceType(), e1ByService.getSurfaceType());
+        assertEquals(e1ForMock.getDescription(), e1ByService.getDescription());
+        assertEquals(e1ForMock.getImage(), e1ByService.getImage());
+        assertEquals(e1ForMock.getTimeslot(), e1ByService.getTimeslot());
+        assertEquals(e1ForMock.getAddress(), e1ByService.getAddress());
     }
-
     @Test
-    @Disabled
-    void saveTennisCourt() {
-    }
-
-    @Test
-    @Disabled
     void deleteTennisCourtById() {
-    }
+        TennisCourt e1ForMock = new TennisCourt(
+                0,
+                "Teren u Prigrevici",
+                SurfaceType.CLAY,
+                "Jako lep teren u Prigrevici",
+                "slikaZaTerenUPrigrevici",
+                null,
+                null
+        );
+        underTest.deleteTennisCourtById(e1ForMock.getId());
 
+        verify(tennisCourtRepository).deleteById(e1ForMock.getId());
+    }
     @Test
-    @Disabled
     void updateTennisCourt() {
+
+        long id = 0L;
+
+        TennisCourt existingTennisCourt = new TennisCourt(
+                id,
+                "Teren u Prigrevici",
+                SurfaceType.CLAY,
+                "Jako lep teren u Prigrevici",
+                "slikaZaTerenUPrigrevici",
+                null,
+                null
+        );
+
+        when(tennisCourtRepository.findById(id))
+                .thenReturn(existingTennisCourt);
+
+        ArgumentCaptor<TennisCourt> tennisCourtArgumentCaptor =
+                ArgumentCaptor.forClass(TennisCourt.class);
+
+        TennisCourt updatedTennisCourt = new TennisCourt();
+        updatedTennisCourt.setName("Teren u Kacu");
+        underTest.updateTennisCourt(id,updatedTennisCourt);
+        verify(tennisCourtRepository).save(tennisCourtArgumentCaptor.capture());
+
+        assertThat(tennisCourtArgumentCaptor
+                .getValue()
+                .getName())
+                .isEqualTo("Teren u Kacu");
     }
 }
