@@ -16,11 +16,4 @@ public interface TimeslotResponseDtoMapper {
     @Mapping(source = "timeslot.tennisCourt.id", target = "timeslot.courtId")
     TimeslotResponseDto toTimeslotResponseDto(TimeslotResponse timeslot);
 
-    @Mapping(source = "message", target = "message")
-    @Mapping(source = "timeslot.id", target = "timeslot.id")
-    @Mapping(source = "timeslot.dateStart", target = "timeslot.startDate")
-    @Mapping(source = "timeslot.dateEnd", target = "timeslot.endDate")
-    @Mapping(source = "timeslot.personId", target = "timeslot.person.id")
-    @Mapping(source = "timeslot.courtId", target = "timeslot.tennisCourt.id")
-    TimeslotResponse toTimeslotResponse(TimeslotResponseDto timeslot);
 }

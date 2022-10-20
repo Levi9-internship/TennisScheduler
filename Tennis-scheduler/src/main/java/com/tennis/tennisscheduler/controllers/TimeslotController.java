@@ -9,8 +9,10 @@ import com.tennis.tennisscheduler.services.TimeslotService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,12 +46,16 @@ public class TimeslotController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<TimeslotResponseDto> save(@RequestBody TimeslotDto timeslotNew){
-        TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew)));
-        if (timeslotResponse.timeslot != null)
+    public ResponseEntity<TimeslotResponseDto> save(@RequestBody @Valid TimeslotDto timeslotNew, BindingResult result){
+        TimeslotResponseDto timeslotResponse = new TimeslotResponseDto();
+        if (!result.hasErrors()){
+            timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew)));
             return new ResponseEntity<>(timeslotResponse, HttpStatus.CREATED);
-        else
+        }
+        else {
+            timeslotResponse.message = result.getAllErrors();
             return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping(value = "/{id}")
@@ -63,7 +69,7 @@ public class TimeslotController {
         if(timeslotResponse.timeslot != null)
             return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
         else
-            return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(value = "/{id}")
