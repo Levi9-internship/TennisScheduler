@@ -1,6 +1,7 @@
 package com.tennis.tennisscheduler.services;
 
 import com.tennis.tennisscheduler.models.Timeslot;
+import com.tennis.tennisscheduler.models.TimeslotMessage;
 import com.tennis.tennisscheduler.models.enumes.WorkingHours;
 import com.tennis.tennisscheduler.repositories.TimeslotRepository;
 import com.tennis.tennisscheduler.response.TimeslotResponse;
@@ -51,20 +52,20 @@ public class TimeslotService {
     public TimeslotResponse reserveTimeslot(Timeslot timeslot) {
         TimeslotResponse timeslotResponse = new TimeslotResponse();
         if(!checkValidationDate(timeslot))
-            timeslotResponse.message = "Selected date must be at same day, and start has to be before end!";
+            timeslotResponse.message = TimeslotMessage.sameDateMessage;
         else if(!checkDate(timeslot))
-            timeslotResponse.message = "Selected dates must be in future!";
+            timeslotResponse.message = TimeslotMessage.futureDateMessage;
         else if(!checkDuration(timeslot))
-            timeslotResponse.message = "Duration must be between 30 and 120 minutes!";
+            timeslotResponse.message = TimeslotMessage.durationMessage;
         else if(!checkWorkingDay(new DateTime(timeslot.getStartDate()), new DateTime(timeslot.getEndDate())))
-            timeslotResponse.message = "Working time isn't valid!";
+            timeslotResponse.message = TimeslotMessage.workingTimeMessage;
         else if(!checkIfTimeslotIsAlreadyReserved(timeslot))
-            timeslotResponse.message = "You can only reserve one timeslot for current day.";
+            timeslotResponse.message = TimeslotMessage.alreadyReservedMessage;
         else if (!checkOverlappingTimeslots(timeslot))
-            timeslotResponse.message = "Selected court is not available for selected time.";
+            timeslotResponse.message = TimeslotMessage.overlappingMessage;
         else {
             timeslotResponse.timeslot = save(timeslot);
-            timeslotResponse.message = "You successfully reserved timeslot!";
+            timeslotResponse.message = TimeslotMessage.successfullyMessage;
         }
         return timeslotResponse;
     }
