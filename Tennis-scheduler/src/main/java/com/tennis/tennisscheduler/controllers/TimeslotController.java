@@ -4,6 +4,7 @@ import com.tennis.tennisscheduler.dtos.TimeslotDto;
 import com.tennis.tennisscheduler.mappers.TimeslotDtoMapper;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.services.TimeslotService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "timeslots")
 @AllArgsConstructor
+@SecurityRequirement(name = "javainuseapi")
 public class TimeslotController {
 
     private final TimeslotService timeslotService;

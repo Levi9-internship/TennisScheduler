@@ -4,6 +4,9 @@ import com.tennis.tennisscheduler.dtos.TennisCourtDto;
 import com.tennis.tennisscheduler.mappers.TennisCourtDtoMapper;
 import com.tennis.tennisscheduler.models.TennisCourt;
 import com.tennis.tennisscheduler.services.TennisCourtServices;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +18,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "tennis-courts")
 @AllArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class TennisCourtController {
-
-
     public final  TennisCourtServices tennisCourtServices;
     public final TennisCourtDtoMapper tennisCourtDtoMapper;
-
     @GetMapping("/")
     public ResponseEntity<List<TennisCourtDto>>getAllTennisCourts(){
         List<TennisCourtDto> tennisCourts = new ArrayList<>();

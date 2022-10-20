@@ -3,8 +3,11 @@ package com.tennis.tennisscheduler.models;
 import com.tennis.tennisscheduler.models.enumes.Gender;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
@@ -12,7 +15,7 @@ import java.util.Set;
 @Setter
 @Getter
 @Table
-public class Person {
+public class Person implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -27,6 +30,8 @@ public class Person {
     @Column
     private String password;
     @Column
+    private boolean enabled;
+    @Column
     private Gender gender;
     @Column
     private String phoneNumber;
@@ -36,7 +41,36 @@ public class Person {
     private Address address;
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.PERSIST)
     private Set<Timeslot> timeslot;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
     private Role role;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
 }
