@@ -62,14 +62,14 @@ public class TimeslotController {
     public ResponseEntity<TimeslotResponseDto> update(@PathVariable long id, @RequestBody TimeslotDto timeslotUpdate){
         Timeslot timeslotExisting = timeslotService.getById(id);
         if (timeslotExisting == null) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
         }
 
         TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
         if(timeslotResponse.timeslot != null)
             return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
         else
-            return new ResponseEntity<>(timeslotResponse, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping(value = "/{id}")
