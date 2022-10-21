@@ -61,19 +61,6 @@ public class TokenUtils {
         return email;
     }
 
-    public Date getIssuedAtDateFromToken(String token) {
-        Date issueAt;
-        try {
-            final Claims claims = this.getAllClaimsFromToken(token);
-            issueAt = claims.getIssuedAt();
-        } catch (ExpiredJwtException ex) {
-            throw ex;
-        } catch (Exception e) {
-            issueAt = null;
-        }
-        return issueAt;
-    }
-
     private Claims getAllClaimsFromToken(String token) {
         Claims claims;
         try {
