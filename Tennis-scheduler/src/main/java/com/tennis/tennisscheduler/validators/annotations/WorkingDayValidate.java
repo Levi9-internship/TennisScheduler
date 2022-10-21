@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface WorkingDayValidate {
-    String message() default TimeslotMessage.workingTimeMessage;
+    String message() default TimeslotMessage.WORKING_TIME_MESSAGE;
 
     Class<?>[] groups() default {};
 

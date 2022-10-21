@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IsReservedValidate {
-    String message() default TimeslotMessage.alreadyReservedMessage;
+    String message() default TimeslotMessage.ALREADY_RESERVED_MESSAGE;
 
     Class<?>[] groups() default {};
 

@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DurationValidate {
-    String message() default TimeslotMessage.durationMessage;
+    String message() default TimeslotMessage.DURATION_MESSAGE;
 
     Class<?>[] groups() default {};
 

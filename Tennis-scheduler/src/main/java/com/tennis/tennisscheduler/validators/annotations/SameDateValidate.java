@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SameDateValidate {
-    String message() default TimeslotMessage.sameDateMessage;
+    String message() default TimeslotMessage.SAME_DATE_MESSAGE;
 
     Class<?>[] groups() default {};
 

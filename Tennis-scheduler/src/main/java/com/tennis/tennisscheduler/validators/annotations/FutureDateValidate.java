@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FutureDateValidate {
-    String message() default TimeslotMessage.futureDateMessage;
+    String message() default TimeslotMessage.FUTURE_DATE_MESSAGE;
 
     Class<?>[] groups() default {};
 

@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OverlappingTimeslotsValidate {
-    String message() default TimeslotMessage.overlappingMessage;
+    String message() default TimeslotMessage.OVERLAPPING_MESSAGE;
 
     Class<?>[] groups() default {};
 
