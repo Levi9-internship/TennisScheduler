@@ -38,7 +38,7 @@ public class Person {
     @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
     private Address address;
 
-    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.PERSIST)
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
     private Set<Timeslot> timeslot;
 
 }

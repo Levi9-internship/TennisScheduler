@@ -27,7 +27,7 @@ public class TennisCourt {
     private String description;
     @Column
     private String image;
-    @OneToMany(mappedBy = "tennisCourt", fetch = FetchType.LAZY,cascade =  CascadeType.MERGE)
+    @OneToMany(mappedBy = "tennisCourt", fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
     private Set<Timeslot> timeslot;
     @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
     private Address address;

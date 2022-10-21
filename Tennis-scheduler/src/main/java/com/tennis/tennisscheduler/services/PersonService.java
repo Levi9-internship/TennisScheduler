@@ -15,7 +15,6 @@ import java.util.List;
 public class PersonService {
 
     private final PersonRepository personRepository;
-    private final AddressRepository addressRepository;
 
 
     public List<Person> getAllPersons(){
@@ -28,9 +27,7 @@ public class PersonService {
         return personRepository.save(person);
     }
     public void deletePersonById(long id){
-        Person person = personRepository.findById(id);
         personRepository.deleteById(id);
-        addressRepository.delete(person.getAddress());
     }
     public Person updatePerson(long id,Person person){
         Person existingPerson = personRepository.findById(id);
