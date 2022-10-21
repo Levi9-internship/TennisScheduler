@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,12 +17,12 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "timeslots")
 @AllArgsConstructor
-@SecurityRequirement(name = "javainuseapi")
+@SecurityRequirement(name = "Authorization")
 public class TimeslotController {
-
     private final TimeslotService timeslotService;
     private final TimeslotDtoMapper timeslotDtoMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/")
     public ResponseEntity<List<TimeslotDto>> getAll(){
         List<TimeslotDto> timeslots = new ArrayList<>();
@@ -32,6 +33,7 @@ public class TimeslotController {
         return new ResponseEntity<>(timeslots, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<TimeslotDto> getById(@PathVariable long id){
         Timeslot timeslot = timeslotService.getById(id);
@@ -42,6 +44,7 @@ public class TimeslotController {
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     @PostMapping(value = "/")
     public ResponseEntity<TimeslotDto> save(@RequestBody TimeslotDto timeslotNew){
         Timeslot timeslot = timeslotService.save(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew), timeslotNew.personId, timeslotNew.courtId);
@@ -49,6 +52,7 @@ public class TimeslotController {
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<TimeslotDto> update(@PathVariable long id, @RequestBody TimeslotDto timeslotUpdate){
         Timeslot timeslotExisting = timeslotService.getById(id);
@@ -60,6 +64,7 @@ public class TimeslotController {
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<HttpStatus> deleteById(@PathVariable long id){
         Timeslot timeslotExisting = timeslotService.getById(id);

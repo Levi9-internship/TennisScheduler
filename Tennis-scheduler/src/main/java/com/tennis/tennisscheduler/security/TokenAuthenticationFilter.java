@@ -3,6 +3,7 @@ package com.tennis.tennisscheduler.security;
 import com.tennis.tennisscheduler.services.CustomUserDetailsService;
 import com.tennis.tennisscheduler.utils.TokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.AllArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,50 +16,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@AllArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-    private TokenUtils tokenUtils;
-
-    private CustomUserDetailsService userDetailsService;
-
-    protected final Log LOGGER = LogFactory.getLog(getClass());
-
-    public TokenAuthenticationFilter(TokenUtils tokenHelper, CustomUserDetailsService userDetailsService) {
-        this.tokenUtils = tokenHelper;
-        this.userDetailsService = userDetailsService;
-    }
+    private final TokenUtils tokenUtils;
+    private final CustomUserDetailsService userDetailsService;
 
     @Override
-    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
-
+    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String email;
-
         String authToken = tokenUtils.getToken(request);
 
-        try {
-
-            if (authToken != null) {
-
-                email = tokenUtils.getEmailFromToken(authToken);
-
-                if (email != null) {
-
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-
-                    if (tokenUtils.validateToken(authToken, userDetails)) {
-
-                        TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
-                        authentication.setToken(authToken);
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }
+        if (authToken != null) {
+            email = tokenUtils.getEmailFromToken(authToken);
+            if (email != null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                if (tokenUtils.validateToken(authToken, userDetails)) {
+                    TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
+                    authentication.setToken(authToken);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-
-        } catch (ExpiredJwtException ex) {
-            LOGGER.debug("Token expired!");
         }
-
         chain.doFilter(request, response);
     }
 

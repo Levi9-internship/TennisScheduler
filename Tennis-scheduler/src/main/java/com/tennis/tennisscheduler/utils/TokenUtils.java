@@ -1,6 +1,5 @@
 package com.tennis.tennisscheduler.utils;
 
-import com.tennis.tennisscheduler.models.Person;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -14,7 +13,7 @@ import java.util.Date;
 
 @Component
 public class TokenUtils {
-    @Value("demo")
+    @Value("TennisScheduler")
     private String APP_NAME;
 
     @Value("somesecret")
@@ -26,23 +25,15 @@ public class TokenUtils {
     @Value("Authorization")
     private String AUTH_HEADER;
 
-    private static final String AUDIENCE_WEB = "web";
-
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
-
 
     public String generateToken(String email) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(email)
-                .setAudience(generateAudience())
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate())
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
-    }
-
-    private String generateAudience() {
-        return AUDIENCE_WEB;
     }
 
     private Date generateExpirationDate() {
@@ -54,13 +45,11 @@ public class TokenUtils {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             return authHeader.substring(7);
         }
-
         return null;
     }
 
     public String getEmailFromToken(String token) {
         String email;
-
         try {
             final Claims claims = this.getAllClaimsFromToken(token);
             email = claims.getSubject();
@@ -69,7 +58,6 @@ public class TokenUtils {
         } catch (Exception e) {
             email = null;
         }
-
         return email;
     }
 
@@ -84,33 +72,6 @@ public class TokenUtils {
             issueAt = null;
         }
         return issueAt;
-    }
-
-    public String getAudienceFromToken(String token) {
-        String audience;
-        try {
-            final Claims claims = this.getAllClaimsFromToken(token);
-            audience = claims.getAudience();
-        } catch (ExpiredJwtException ex) {
-            throw ex;
-        } catch (Exception e) {
-            audience = null;
-        }
-        return audience;
-    }
-
-    public Date getExpirationDateFromToken(String token) {
-        Date expiration;
-        try {
-            final Claims claims = this.getAllClaimsFromToken(token);
-            expiration = claims.getExpiration();
-        } catch (ExpiredJwtException ex) {
-            throw ex;
-        } catch (Exception e) {
-            expiration = null;
-        }
-
-        return expiration;
     }
 
     private Claims getAllClaimsFromToken(String token) {
@@ -129,19 +90,9 @@ public class TokenUtils {
         return claims;
     }
 
-
     public Boolean validateToken(String token, UserDetails userDetails) {
-        Person user = (Person) userDetails;
-        final String username = getEmailFromToken(token);
-        final Date created = getIssuedAtDateFromToken(token);
-
-        // Token je validan kada:
-        return (username != null // korisnicko ime nije null
-                && username.equals(userDetails.getUsername()));
-    }
-
-    public int getExpiredIn() {
-        return EXPIRES_IN;
+        String username = getEmailFromToken(token);
+        return (username != null  && username.equals(userDetails.getUsername()));
     }
 
     public String getAuthHeaderFromHeader(HttpServletRequest request) {

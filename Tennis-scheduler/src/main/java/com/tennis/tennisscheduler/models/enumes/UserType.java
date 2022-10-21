@@ -1,6 +1,6 @@
 package com.tennis.tennisscheduler.models.enumes;
 
 public enum UserType {
-    ADMIN,
-    TENNIS_PLAYER
+    ROLE_ADMIN,
+    ROLE_TENNIS_PLAYER
 }

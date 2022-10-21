@@ -1,7 +1,7 @@
 package com.tennis.tennisscheduler.controllers;
 
-import com.tennis.tennisscheduler.dtos.JwtAuthenticationRequest;
-import com.tennis.tennisscheduler.dtos.UserTokenState;
+import com.tennis.tennisscheduler.dtos.AuthenticationRequestDto;
+import com.tennis.tennisscheduler.dtos.UserTokenStateDto;
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.utils.TokenUtils;
 import lombok.AllArgsConstructor;
@@ -16,31 +16,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/authentication")
 @AllArgsConstructor
-public class AuthController {
+public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final TokenUtils tokenUtils;
 
     @PostMapping("/login")
-    public ResponseEntity<UserTokenState> createAuthenticationToken(
-            @RequestBody JwtAuthenticationRequest authenticationRequest) throws Exception {
+    public ResponseEntity<UserTokenStateDto> login(@RequestBody AuthenticationRequestDto authenticationRequest) {
 
-        Authentication authentication = null;
-
-        authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authenticationRequest.email, authenticationRequest.password));
-
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Person user = (Person) authentication.getPrincipal();
+        Person user = (Person)authentication.getPrincipal();
         String jwt = tokenUtils.generateToken(user.getEmail());
-        int expiresIn = tokenUtils.getExpiredIn();
-        if (!user.isEnabled()) {
-            return ResponseEntity.ok(new UserTokenState(jwt,user.getRole().getRoleName().toString(), user.isEnabled(), user.getId()));
-        }
 
-        return ResponseEntity.ok(new UserTokenState(jwt, user.getRole().getRoleName().toString(), user.isEnabled(), user.getId()));
+        return ResponseEntity.ok(new UserTokenStateDto(jwt, user.getRole().getRoleName()));
     }
 }

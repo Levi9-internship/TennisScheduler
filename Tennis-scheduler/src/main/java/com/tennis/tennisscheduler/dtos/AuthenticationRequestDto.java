@@ -1,6 +1,6 @@
 package com.tennis.tennisscheduler.dtos;
 
-public class JwtAuthenticationRequest {
+public class AuthenticationRequestDto {
     public String email;
     public String password;
 }
