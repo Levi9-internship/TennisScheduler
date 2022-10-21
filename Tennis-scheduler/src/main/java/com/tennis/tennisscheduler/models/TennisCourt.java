@@ -1,8 +1,7 @@
 package com.tennis.tennisscheduler.models;
 
 import com.tennis.tennisscheduler.models.enumes.SurfaceType;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -10,6 +9,9 @@ import java.util.Set;
 @Entity
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table
 public class TennisCourt {
 
@@ -25,7 +27,7 @@ public class TennisCourt {
     private String description;
     @Column
     private String image;
-    @OneToMany(mappedBy = "tennisCourt", fetch = FetchType.LAZY,cascade =  CascadeType.MERGE)
+    @OneToMany(mappedBy = "tennisCourt", fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
     private Set<Timeslot> timeslot;
     @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
     private Address address;

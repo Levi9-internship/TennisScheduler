@@ -1,10 +1,9 @@
 package com.tennis.tennisscheduler.models;
 
 import com.tennis.tennisscheduler.models.enumes.Gender;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.*;
@@ -12,6 +11,9 @@ import java.util.*;
 @Entity
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table
 public class Person implements UserDetails {
 
@@ -37,7 +39,7 @@ public class Person implements UserDetails {
     private Date birthday;
     @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
     private Address address;
-    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.PERSIST)
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
     private Set<Timeslot> timeslot;
     @ManyToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
     private Role role;

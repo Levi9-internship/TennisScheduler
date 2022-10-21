@@ -12,8 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 public class TennisCourtServices {
     private final TennisCourtRepository tennisCourtRepository;
-    private final AddressRepository addressRepository;
-
 
     public List<TennisCourt> getAllTennisCourts(){
 

@@ -34,9 +34,7 @@ public class PersonService {
         return personRepository.save(person);
     }
     public void deletePersonById(long id){
-        Person person = personRepository.findById(id);
         personRepository.deleteById(id);
-        addressRepository.delete(person.getAddress());
     }
     public Person updatePerson(long id,Person person){
         Person existingPerson = personRepository.findById(id);
