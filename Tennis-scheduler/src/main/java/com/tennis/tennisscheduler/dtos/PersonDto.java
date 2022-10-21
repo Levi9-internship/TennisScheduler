@@ -16,4 +16,5 @@ public class PersonDto {
     public String phoneNumber;
     public Date birthday;
     public Address address;
+    public String password;
 }
