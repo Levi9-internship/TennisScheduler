@@ -1,10 +1,7 @@
 package com.tennis.tennisscheduler.models;
 
 import com.tennis.tennisscheduler.models.enumes.SurfaceType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -14,6 +11,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table
 public class TennisCourt {
 

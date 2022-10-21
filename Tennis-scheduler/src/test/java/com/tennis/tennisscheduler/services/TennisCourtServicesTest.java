@@ -9,8 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -23,56 +21,56 @@ class TennisCourtServicesTest {
 
     @Mock
     private TennisCourtRepository tennisCourtRepository;
-    private TennisCourtServices underTest;
+    private TennisCourtServices tennisCourtServices;
 
     @BeforeEach
     void setUp() {
-        underTest = new TennisCourtServices(tennisCourtRepository);
+        tennisCourtServices = new TennisCourtServices(tennisCourtRepository);
     }
 
     @Test
     void canGetAllTennisCourts() {
-        TennisCourt tennisCourt1 = new TennisCourt(
-                0,
-                "Teren u Kacu",
-                SurfaceType.CLAY,
-                "Jako lep teren u Kacu",
-                "slikaZaTerenUKacu",
-                null,
-                null
-        );
-        TennisCourt tennisCourt2 = new TennisCourt(
-                1,
-                "Teren u Prigrevici",
-                SurfaceType.CLAY,
-                "Jako lep teren u Prigrevici",
-                "slikaZaTerenUPrigrevici",
-                null,
-                null
-        );
-        List<TennisCourt> tennisCourtList = new ArrayList<>();
-        tennisCourtList.add(tennisCourt1);
-        tennisCourtList.add(tennisCourt2);
-        doReturn(tennisCourtList).when(tennisCourtRepository).findAll();
 
-        List<TennisCourt> list2 = underTest.getAllTennisCourts();
+        TennisCourt tennisCourt1 = TennisCourt.builder()
+                .id(0)
+                .name("Teren u Prigrevici")
+                .surfaceType(SurfaceType.CLAY)
+                .description("Jako lep teren u Prigrevici")
+                .image("slikaZaTerenUPrigrevici")
+                .timeslot(null)
+                .address(null)
+                .build();
+
+        TennisCourt tennisCourt2 = TennisCourt.builder()
+                .id(0)
+                .name("Teren u Kacu")
+                .surfaceType(SurfaceType.CLAY)
+                .description("Jako lep teren u Kacu")
+                .image("slikaZaTerenUKacu")
+                .timeslot(null)
+                .address(null)
+                .build();
+
+        List<TennisCourt> tennisCourtList = List.of(tennisCourt1,tennisCourt2);
+        doReturn(tennisCourtList).when(tennisCourtRepository).findAll();
+        List<TennisCourt> list2 = tennisCourtServices.getAllTennisCourts();
 
         assertEquals(tennisCourtList,list2);
     }
     @Test
     void canSaveTennisCourt() {
         //given
-        TennisCourt tennisCourt = new TennisCourt(
-                0,
-                "Teren u Prigrevici",
-                SurfaceType.CLAY,
-                "Jako lep teren u Prigrevici",
-                "slikaZaTerenUPrigrevici",
-                null,
-                null
-        );
+        TennisCourt tennisCourt = TennisCourt.builder()
+                .id(0)
+                .name("Teren u Prigrevici")
+                .surfaceType(SurfaceType.CLAY)
+                .description("Jako lep teren u Prigrevici")
+                .image("slikaZaTerenUPrigrevici")
+                .timeslot(null)
+                .address(null)
+                .build();
         //when
-        underTest.saveTennisCourt(tennisCourt);
+        tennisCourtServices.saveTennisCourt(tennisCourt);
         //then
         ArgumentCaptor<TennisCourt> tennisCourtArgumentCaptor =
                 ArgumentCaptor.forClass(TennisCourt.class);
@@ -82,57 +80,59 @@ class TennisCourtServicesTest {
     }
     @Test
     void getTennisCourtById() {
-        TennisCourt e1ForMock = new TennisCourt(
-                0,
-                "Teren u Prigrevici",
-                SurfaceType.CLAY,
-                "Jako lep teren u Prigrevici",
-                "slikaZaTerenUPrigrevici",
-                null,
-                null
-        );
-        doReturn(e1ForMock).when(tennisCourtRepository).findById(0);
+        TennisCourt tennisCourt = TennisCourt.builder()
+                .id(0)
+                .name("Teren u Prigrevici")
+                .surfaceType(SurfaceType.CLAY)
+                .description("Jako lep teren u Prigrevici")
+                .image("slikaZaTerenUPrigrevici")
+                .timeslot(null)
+                .address(null)
+                .build();
+
+        doReturn(tennisCourt).when(tennisCourtRepository).findById(0);
         // Make the service call
-        TennisCourt e1ByService = underTest.getTennisCourtById(0);
+        TennisCourt tennisCourtByService = tennisCourtServices.getTennisCourtById(0);
         // Assert the response
-        assertNotNull(e1ByService,"TennisCourt with this id: "+e1ForMock.getId()+" not found");
-        assertEquals(e1ForMock.getId(),e1ByService.getId());
-        assertEquals(e1ForMock.getName(), e1ByService.getName());
-        assertEquals(e1ForMock.getSurfaceType(), e1ByService.getSurfaceType());
-        assertEquals(e1ForMock.getDescription(), e1ByService.getDescription());
-        assertEquals(e1ForMock.getImage(), e1ByService.getImage());
-        assertEquals(e1ForMock.getTimeslot(), e1ByService.getTimeslot());
-        assertEquals(e1ForMock.getAddress(), e1ByService.getAddress());
+        assertNotNull(tennisCourtByService,"TennisCourt with this id: "+tennisCourt.getId()+" not found");
+        assertEquals(tennisCourt.getId(),tennisCourtByService.getId());
+        assertEquals(tennisCourt.getName(), tennisCourtByService.getName());
+        assertEquals(tennisCourt.getSurfaceType(), tennisCourtByService.getSurfaceType());
+        assertEquals(tennisCourt.getDescription(), tennisCourtByService.getDescription());
+        assertEquals(tennisCourt.getImage(), tennisCourtByService.getImage());
+        assertEquals(tennisCourt.getTimeslot(), tennisCourtByService.getTimeslot());
+        assertEquals(tennisCourt.getAddress(), tennisCourtByService.getAddress());
     }
     @Test
     void deleteTennisCourtById() {
-        TennisCourt e1ForMock = new TennisCourt(
-                0,
-                "Teren u Prigrevici",
-                SurfaceType.CLAY,
-                "Jako lep teren u Prigrevici",
-                "slikaZaTerenUPrigrevici",
-                null,
-                null
-        );
-        underTest.deleteTennisCourtById(e1ForMock.getId());
+        TennisCourt tennisCourt = TennisCourt.builder()
+                .id(0)
+                .name("Teren u Prigrevici")
+                .surfaceType(SurfaceType.CLAY)
+                .description("Jako lep teren u Prigrevici")
+                .image("slikaZaTerenUPrigrevici")
+                .timeslot(null)
+                .address(null)
+                .build();
 
-        verify(tennisCourtRepository).deleteById(e1ForMock.getId());
+        tennisCourtServices.deleteTennisCourtById(tennisCourt.getId());
+
+        verify(tennisCourtRepository).deleteById(tennisCourt.getId());
     }
     @Test
     void updateTennisCourt() {
 
         long id = 0L;
 
-        TennisCourt existingTennisCourt = new TennisCourt(
-                id,
-                "Teren u Prigrevici",
-                SurfaceType.CLAY,
-                "Jako lep teren u Prigrevici",
-                "slikaZaTerenUPrigrevici",
-                null,
-                null
-        );
+        TennisCourt existingTennisCourt = TennisCourt.builder()
+                .id(id)
+                .name("Teren u Prigrevici")
+                .surfaceType(SurfaceType.CLAY)
+                .description("Jako lep teren u Prigrevici")
+                .image("slikaZaTerenUPrigrevici")
+                .timeslot(null)
+                .address(null)
+                .build();
 
         when(tennisCourtRepository.findById(id))
                 .thenReturn(existingTennisCourt);
@@ -145,7 +145,7 @@ class TennisCourtServicesTest {
         updatedTennisCourt.setImage("novaSlika");
         updatedTennisCourt.setDescription("Jako lep teren u Kacu");
         updatedTennisCourt.setSurfaceType(SurfaceType.GRASS);
-        underTest.updateTennisCourt(id,updatedTennisCourt);
+        tennisCourtServices.updateTennisCourt(id,updatedTennisCourt);
         verify(tennisCourtRepository).save(tennisCourtArgumentCaptor.capture());
 
         assertThat(tennisCourtArgumentCaptor

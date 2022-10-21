@@ -1,6 +1,5 @@
 package com.tennis.tennisscheduler.repositories;
 
-import com.tennis.tennisscheduler.models.Address;
 import com.tennis.tennisscheduler.models.TennisCourt;
 import com.tennis.tennisscheduler.models.enumes.SurfaceType;
 import org.junit.jupiter.api.AfterEach;
@@ -14,28 +13,30 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class TennisCourtRepositoryTest {
 
     @Autowired
-    TennisCourtRepository underTest;
+    TennisCourtRepository tennisCourtRepository;
 
     @AfterEach
     void tearDown() {
-        underTest.deleteAll();
+        tennisCourtRepository.deleteAll();
     }
 
     @Test
     void itShouldFindObjectById() {
         //given
-        TennisCourt tennisCourt = new TennisCourt(
-                0,
-                "Teren u Prigrevici",
-                SurfaceType.CLAY,
-                "Jako lep teren u Prigrevici",
-                "slikaZaTerenUPrigrevici",
-                null,
-                null
-                );
-        TennisCourt savedTennisCourt = underTest.save(tennisCourt);
+
+        TennisCourt tennisCourt = TennisCourt.builder()
+                .id(0)
+                .name("Teren u Prigrevici")
+                .surfaceType(SurfaceType.CLAY)
+                .description("Jako lep teren u Prigrevici")
+                .image("slikaZaTerenUPrigrevici")
+                .timeslot(null)
+                .address(null)
+                .build();
+
+        TennisCourt savedTennisCourt = tennisCourtRepository.save(tennisCourt);
         //when
-        TennisCourt expected = underTest.findById(savedTennisCourt.getId());
+        TennisCourt expected = tennisCourtRepository.findById(savedTennisCourt.getId());
         //then
         assertThat(expected).isEqualTo(savedTennisCourt);
     }
