@@ -15,21 +15,23 @@ import java.util.List;
 public class PersonService {
 
     private final PersonRepository personRepository;
-    private final AddressRepository addressRepository;
-
 
     public List<Person> getAllPersons(){
         return personRepository.findAll();
     }
+    
     public Person findById(long id){
         return personRepository.findById(id);
     }
+    
     public Person savePerson(Person person) {
         return personRepository.save(person);
     }
-    public void deletePersonById(Long id){
+    
+    public void deletePersonById(long id){
         personRepository.deleteById(id);
     }
+    
     public Person updatePerson(long id,Person person){
         Person existingPerson = personRepository.findById(id);
         existingPerson.setFirstName(person.getFirstName());
