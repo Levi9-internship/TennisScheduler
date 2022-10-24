@@ -41,7 +41,7 @@ public class TennisCourtController {
     public ResponseEntity<HttpStatus> deleteTennisCourt(@PathVariable long id){
         TennisCourt tennisCourt = tennisCourtServices.getTennisCourtById(id);
         if (tennisCourt == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         tennisCourtServices.deleteTennisCourtById(id);

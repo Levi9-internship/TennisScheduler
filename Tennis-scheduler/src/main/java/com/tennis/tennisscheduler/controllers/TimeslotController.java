@@ -1,14 +1,18 @@
 package com.tennis.tennisscheduler.controllers;
 
 import com.tennis.tennisscheduler.dtos.TimeslotDto;
+import com.tennis.tennisscheduler.dtos.TimeslotResponseDto;
 import com.tennis.tennisscheduler.mappers.TimeslotDtoMapper;
+import com.tennis.tennisscheduler.mappers.TimeslotResponseDtoMapper;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.services.TimeslotService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +23,7 @@ public class TimeslotController {
 
     private final TimeslotService timeslotService;
     private final TimeslotDtoMapper timeslotDtoMapper;
+    private final TimeslotResponseDtoMapper timeslotResponseDtoMapper;
 
     @GetMapping(value = "/")
     public ResponseEntity<List<TimeslotDto>> getAll(){
@@ -40,22 +45,31 @@ public class TimeslotController {
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/")
-    public ResponseEntity<TimeslotDto> save(@RequestBody TimeslotDto timeslotNew){
-        Timeslot timeslot = timeslotService.save(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew), timeslotNew.personId, timeslotNew.courtId);
-
-        return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.CREATED);
+    @PostMapping("/")
+    public ResponseEntity<TimeslotResponseDto> save(@RequestBody @Valid TimeslotDto timeslotNew, BindingResult result){
+        TimeslotResponseDto timeslotResponse = new TimeslotResponseDto();
+        if (!result.hasErrors()){
+            timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew)));
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.CREATED);
+        }
+        else {
+            timeslotResponse.message = result.getAllErrors();
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<TimeslotDto> update(@PathVariable long id, @RequestBody TimeslotDto timeslotUpdate){
+    public ResponseEntity<TimeslotResponseDto> update(@PathVariable long id, @RequestBody TimeslotDto timeslotUpdate){
         Timeslot timeslotExisting = timeslotService.getById(id);
         if (timeslotExisting == null) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
         }
 
-        Timeslot timeslot = timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate), timeslotUpdate.personId, timeslotUpdate.courtId);
-        return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
+        TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
+        if(timeslotResponse.timeslot != null)
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping(value = "/{id}")
