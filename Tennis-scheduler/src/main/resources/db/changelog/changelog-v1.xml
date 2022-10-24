@@ -98,7 +98,7 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="tennis_court_id" type="bigint">
-                <constraints unique="true" nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>

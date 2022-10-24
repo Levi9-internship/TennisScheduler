@@ -1,9 +1,7 @@
 package com.tennis.tennisscheduler.mappers;
 
 import com.tennis.tennisscheduler.dtos.PersonDto;
-import com.tennis.tennisscheduler.dtos.TennisCourtDto;
 import com.tennis.tennisscheduler.models.Person;
-import com.tennis.tennisscheduler.models.TennisCourt;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

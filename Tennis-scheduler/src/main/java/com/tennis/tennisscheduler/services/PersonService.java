@@ -24,18 +24,22 @@ public class PersonService {
     public List<Person> getAllPersons(){
         return personRepository.findAll();
     }
+    
     public Person findById(long id){
         return personRepository.findById(id);
     }
+    
     public Person savePerson(Person person) {
         person.setRole(roleRepository.findByRoleName(UserType.ROLE_TENNIS_PLAYER));
         person.setEnabled(true);
         person.setPassword(bCryptPasswordEncoder.encode(person.getPassword()));
         return personRepository.save(person);
     }
+    
     public void deletePersonById(long id){
         personRepository.deleteById(id);
     }
+    
     public Person updatePerson(long id,Person person){
         Person existingPerson = personRepository.findById(id);
         existingPerson.setFirstName(person.getFirstName());

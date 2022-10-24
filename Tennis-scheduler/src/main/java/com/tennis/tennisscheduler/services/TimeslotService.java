@@ -2,9 +2,8 @@ package com.tennis.tennisscheduler.services;
 
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.repositories.TimeslotRepository;
+import com.tennis.tennisscheduler.response.TimeslotResponse;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,12 +13,15 @@ import java.util.List;
 public class TimeslotService {
     private final TimeslotRepository timeslotRepository;
     private final PersonService personService;
-    public Timeslot update(long id, Timeslot timeslot, long personId, long courtId){
+    private final TennisCourtServices tennisCourtService;
+
+    public TimeslotResponse update(long id, Timeslot timeslot){
         Timeslot existingTimeslot = timeslotRepository.findById(id);
         existingTimeslot.setStartDate(timeslot.getStartDate());
         existingTimeslot.setEndDate(timeslot.getEndDate());
-        existingTimeslot.setPerson(this.personService.findById(personId));
-        return timeslotRepository.save(existingTimeslot);
+        existingTimeslot.setPerson(personService.findById(timeslot.getPerson().getId()));
+        existingTimeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()));
+        return reserveTimeslot(existingTimeslot);
     }
 
     public List<Timeslot> getAll(){
@@ -34,9 +36,15 @@ public class TimeslotService {
         timeslotRepository.deleteById(id);
     }
 
-    public Timeslot save(Timeslot timeslotNew, long personId, long courtId) {
-        //set tennis court
-        timeslotNew.setPerson(personService.findById(personId));
-        return timeslotRepository.save(timeslotNew);
+    public Timeslot save(Timeslot timeslot) {
+        timeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()));
+        timeslot.setPerson(personService.findById(timeslot.getPerson().getId()));
+        return timeslotRepository.save(timeslot);
+    }
+
+    public TimeslotResponse reserveTimeslot(Timeslot timeslot) {
+        TimeslotResponse timeslotResponse = new TimeslotResponse();
+        timeslotResponse.timeslot = save(timeslot);
+        return timeslotResponse;
     }
 }
