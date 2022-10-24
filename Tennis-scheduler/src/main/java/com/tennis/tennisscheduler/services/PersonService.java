@@ -17,7 +17,6 @@ import java.util.List;
 public class PersonService {
 
     private final PersonRepository personRepository;
-    private final AddressRepository addressRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder bCryptPasswordEncoder;
 
