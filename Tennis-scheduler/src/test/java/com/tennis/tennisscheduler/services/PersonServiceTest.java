@@ -1,7 +1,9 @@
 package com.tennis.tennisscheduler.services;
 
 import com.tennis.tennisscheduler.models.Person;
+import com.tennis.tennisscheduler.models.Role;
 import com.tennis.tennisscheduler.models.enumes.Gender;
+import com.tennis.tennisscheduler.models.enumes.UserType;
 import com.tennis.tennisscheduler.repositories.PersonRepository;
 import com.tennis.tennisscheduler.repositories.RoleRepository;
 import jdk.jfr.Enabled;
@@ -31,6 +33,7 @@ class PersonServiceTest {
     PersonService personService;
     @Mock
     RoleRepository roleRepository;
+    @Mock
     PasswordEncoder bCryptPasswordEncoder;
     Date date_s = new Date();
     @BeforeEach
@@ -70,10 +73,8 @@ class PersonServiceTest {
         assertEquals(personList,list2);
     }
     @Test
-    @Disabled
     void canSavePerson() {
         //given
-
         Person person = Person.builder()
                 .id(0)
                 .firstName("Zoran")
@@ -83,7 +84,14 @@ class PersonServiceTest {
                 .gender(Gender.MALE)
                 .address(null)
                 .phoneNumber("0621234567")
+                .password("levi9")
                 .build();
+        Role role = Role.builder()
+                .id(0)
+                .roleName(UserType.ROLE_TENNIS_PLAYER)
+                .build();
+        doReturn(role).when(roleRepository).findByRoleName(UserType.ROLE_TENNIS_PLAYER);
+
         //when
         personService.savePerson(person);
         //then
@@ -92,6 +100,8 @@ class PersonServiceTest {
         verify(personRepository).save(personArgumentCaptor.capture());
 
         assertThat(personArgumentCaptor.getValue()).isEqualTo(person);
+        assertThat(personArgumentCaptor.getValue().getRole().getRoleName()).isEqualTo(role.getRoleName());
+        assertThat(personArgumentCaptor.getValue().getPassword()).isEqualTo(person.getPassword());
     }
 
     @Test
