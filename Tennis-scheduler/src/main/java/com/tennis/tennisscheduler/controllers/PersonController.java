@@ -1,6 +1,7 @@
 package com.tennis.tennisscheduler.controllers;
 
 import com.tennis.tennisscheduler.dtos.PersonDto;
+import com.tennis.tennisscheduler.dtos.UpdatePasswordDto;
 import com.tennis.tennisscheduler.mappers.PersonDtoMapper;
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.services.PersonService;
@@ -9,6 +10,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,6 +27,7 @@ public class PersonController {
     private final PersonService personService;
     private final PersonDtoMapper personDtoMapper;
     @GetMapping("/")
+    @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     public ResponseEntity<List<PersonDto>>getAllPersons(){
 
         List<PersonDto> persons = new ArrayList<>();
@@ -38,6 +43,7 @@ public class PersonController {
         return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deletePerson(@PathVariable long id) {
         Person personExisting = personService.findById(id);
         if (personExisting == null) {
@@ -48,6 +54,7 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PersonDto> getPersonById(@PathVariable long id){
         Person person = personService.findById(id);
         if(person==null){
@@ -56,6 +63,7 @@ public class PersonController {
         return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.OK);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PersonDto> updatePerson(@PathVariable long id,@RequestBody PersonDto personDto){
         Person personExisting = personService.findById(id);
         if (personExisting == null) {
@@ -65,4 +73,15 @@ public class PersonController {
         Person person = personService.updatePerson(id, personDtoMapper.fromPersonDtoToPerson(personDto));
         return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.OK);
     }
+
+    @PutMapping("/")
+    @PreAuthorize("hasRole('TENNIS_PLAYER')")
+    public ResponseEntity<PersonDto> updatePerson(@RequestBody PersonDto personDto){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person user = (Person) authentication.getPrincipal();
+
+        Person person = personService.updatePerson(user.getId(), personDtoMapper.fromPersonDtoToPerson(personDto));
+        return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.OK);
+    }
+
 }

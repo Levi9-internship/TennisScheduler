@@ -50,5 +50,18 @@ public class PersonService {
         existingPerson.setAddress(person.getAddress());
         return personRepository.save(existingPerson);
    }
+
+
+   public String updatePassword(long id, String oldPassword, String newPassword){
+        Person existingPerson = personRepository.findById(id);
+
+        String e = bCryptPasswordEncoder.encode(oldPassword);
+        if (e.equals(existingPerson.getPassword()))
+            existingPerson.setPassword(bCryptPasswordEncoder.encode(newPassword));
+        else
+            return "Current password is not correct!";
+
+        return "Successfully changed password.";
+   }
     
 }
