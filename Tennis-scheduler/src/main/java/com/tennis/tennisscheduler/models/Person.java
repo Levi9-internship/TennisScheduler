@@ -1,14 +1,12 @@
 package com.tennis.tennisscheduler.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.tennis.tennisscheduler.models.enumes.Gender;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Set;
-
+import java.util.*;
 
 @Entity
 @Setter
@@ -17,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Table
-public class Person {
+public class Person implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -30,6 +28,10 @@ public class Person {
     @Column(unique = true)
     private String email;
     @Column
+    private String password;
+    @Column
+    private boolean enabled;
+    @Column
     private Gender gender;
     @Column
     private String phoneNumber;
@@ -37,8 +39,40 @@ public class Person {
     private Date birthday;
     @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
     private Address address;
-
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
     private Set<Timeslot> timeslot;
+    @ManyToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
+    private Role role;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<Role> collection = new ArrayList<Role>();
+        collection.add(this.role);
+        return collection;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
 }

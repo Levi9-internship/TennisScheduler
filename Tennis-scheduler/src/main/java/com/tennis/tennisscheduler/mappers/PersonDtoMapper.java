@@ -17,6 +17,7 @@ public interface PersonDtoMapper {
     @Mapping(source = "phoneNumber", target = "phoneNumber")
     @Mapping(source = "birthday", target = "birthday")
     @Mapping(source = "address", target = "address")
+    @Mapping(source = "password", target = "password")
     PersonDto fromPersonToPersonDto (Person person);
 
     @Mapping(source = "id", target = "id")
@@ -27,5 +28,6 @@ public interface PersonDtoMapper {
     @Mapping(source = "phoneNumber", target = "phoneNumber")
     @Mapping(source = "birthday", target = "birthday")
     @Mapping(source = "address", target = "address")
+    @Mapping(source = "password", target = "password")
     Person fromPersonDtoToPerson (PersonDto personDto);
 }

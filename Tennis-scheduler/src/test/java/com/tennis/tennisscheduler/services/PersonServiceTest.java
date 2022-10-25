@@ -1,15 +1,21 @@
 package com.tennis.tennisscheduler.services;
 
 import com.tennis.tennisscheduler.models.Person;
+import com.tennis.tennisscheduler.models.Role;
 import com.tennis.tennisscheduler.models.enumes.Gender;
-import com.tennis.tennisscheduler.repositories.AddressRepository;
+import com.tennis.tennisscheduler.models.enumes.UserType;
 import com.tennis.tennisscheduler.repositories.PersonRepository;
+import com.tennis.tennisscheduler.repositories.RoleRepository;
+import jdk.jfr.Enabled;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 import java.util.List;
@@ -25,10 +31,14 @@ class PersonServiceTest {
     @Mock
     PersonRepository personRepository;
     PersonService personService;
+    @Mock
+    RoleRepository roleRepository;
+    @Mock
+    PasswordEncoder bCryptPasswordEncoder;
     Date date_s = new Date();
     @BeforeEach
     void setUp() {
-        personService = new PersonService(personRepository);
+        personService = new PersonService(personRepository,roleRepository, bCryptPasswordEncoder);
     }
 
     @Test
@@ -65,7 +75,6 @@ class PersonServiceTest {
     @Test
     void canSavePerson() {
         //given
-
         Person person = Person.builder()
                 .id(0)
                 .firstName("Zoran")
@@ -75,7 +84,14 @@ class PersonServiceTest {
                 .gender(Gender.MALE)
                 .address(null)
                 .phoneNumber("0621234567")
+                .password("levi9")
                 .build();
+        Role role = Role.builder()
+                .id(0)
+                .roleName(UserType.ROLE_TENNIS_PLAYER)
+                .build();
+        doReturn(role).when(roleRepository).findByRoleName(UserType.ROLE_TENNIS_PLAYER);
+
         //when
         personService.savePerson(person);
         //then
@@ -84,6 +100,8 @@ class PersonServiceTest {
         verify(personRepository).save(personArgumentCaptor.capture());
 
         assertThat(personArgumentCaptor.getValue()).isEqualTo(person);
+        assertThat(personArgumentCaptor.getValue().getRole().getRoleName()).isEqualTo(role.getRoleName());
+        assertThat(personArgumentCaptor.getValue().getPassword()).isEqualTo(person.getPassword());
     }
 
     @Test

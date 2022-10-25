@@ -1,11 +1,13 @@
 package com.tennis.tennisscheduler.services;
 
 import com.tennis.tennisscheduler.models.Person;
+import com.tennis.tennisscheduler.models.enumes.UserType;
 import com.tennis.tennisscheduler.repositories.AddressRepository;
 
 import com.tennis.tennisscheduler.repositories.PersonRepository;
+import com.tennis.tennisscheduler.repositories.RoleRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.List;
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder bCryptPasswordEncoder;
 
     public List<Person> getAllPersons(){
         return personRepository.findAll();
@@ -25,6 +29,9 @@ public class PersonService {
     }
     
     public Person savePerson(Person person) {
+        person.setRole(roleRepository.findByRoleName(UserType.ROLE_TENNIS_PLAYER));
+        person.setEnabled(true);
+        person.setPassword(bCryptPasswordEncoder.encode(person.getPassword()));
         return personRepository.save(person);
     }
     
