@@ -4,6 +4,9 @@ import com.tennis.tennisscheduler.dtos.AuthenticationRequestDto;
 import com.tennis.tennisscheduler.dtos.UpdatePasswordDto;
 import com.tennis.tennisscheduler.dtos.UserTokenStateDto;
 import com.tennis.tennisscheduler.dtos.UserWithChangedPasswordDto;
+import com.tennis.tennisscheduler.dtos.PersonDto;
+import com.tennis.tennisscheduler.dtos.UserTokenStateDto;
+import com.tennis.tennisscheduler.mappers.PersonDtoMapper;
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.services.PersonService;
 import com.tennis.tennisscheduler.utils.TokenUtils;
@@ -24,6 +27,7 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final TokenUtils tokenUtils;
     private final PersonService personService;
+    private final PersonDtoMapper personDtoMapper;
 
     @PostMapping("/login")
     public ResponseEntity<UserTokenStateDto> login(@RequestBody AuthenticationRequestDto authenticationRequest) {
@@ -38,6 +42,7 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(new UserTokenStateDto(jwt, user.getRole().getRoleName()));
     }
+
 
     @PreAuthorize("hasRole('TENNIS_PLAYER')")
     @PutMapping("/change-password")
@@ -60,5 +65,14 @@ public class AuthenticationController {
 
         return new ResponseEntity<>(new UserWithChangedPasswordDto(new UserTokenStateDto(jwt,user.getRole().getRoleName()),message)
                 ,HttpStatus.OK);
+                
+    @GetMapping("/logged-user")
+    @PreAuthorize("hasAnyRole('TENNIS_PLAYER', 'ADMIN')")
+    public ResponseEntity<PersonDto> getLoggedUser() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person person = (Person)authentication.getPrincipal();
+
+        return ResponseEntity.ok(personDtoMapper.fromPersonToPersonDto(person));
     }
 }
