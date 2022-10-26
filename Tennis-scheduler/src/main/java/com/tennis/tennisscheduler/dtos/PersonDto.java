@@ -17,5 +17,4 @@ public class PersonDto {
     public Date birthday;
     public Address address;
     public String password;
-    public String confirmPassword;
 }

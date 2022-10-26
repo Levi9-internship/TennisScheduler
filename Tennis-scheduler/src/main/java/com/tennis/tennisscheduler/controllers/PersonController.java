@@ -3,6 +3,7 @@ package com.tennis.tennisscheduler.controllers;
 import com.tennis.tennisscheduler.dtos.PersonDto;
 import com.tennis.tennisscheduler.mappers.PersonDtoMapper;
 import com.tennis.tennisscheduler.models.Person;
+import com.tennis.tennisscheduler.models.enumes.UserType;
 import com.tennis.tennisscheduler.services.PersonService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
@@ -63,25 +64,25 @@ public class PersonController {
         return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.OK);
     }
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<PersonDto> updatePerson(@PathVariable long id,@RequestBody PersonDto personDto){
-        Person personExisting = personService.findById(id);
-        if (personExisting == null) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
-        }
-
-        Person person = personService.updatePerson(id, personDtoMapper.fromPersonDtoToPerson(personDto));
-        return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.OK);
-    }
-
-    @PutMapping("/")
     @PreAuthorize("hasAnyRole('TENNIS_PLAYER','ADMIN')")
-    public ResponseEntity<PersonDto> updatePerson(@RequestBody PersonDto personDto){
+    public ResponseEntity<PersonDto> updatePerson(@PathVariable long id,@RequestBody PersonDto personDto){
+
+        Person personExisting = personService.findById(id);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person) authentication.getPrincipal();
 
-        Person person = personService.updatePerson(user.getId(), personDtoMapper.fromPersonDtoToPerson(personDto));
-        return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.OK);
-    }
+        if(id==user.getId()) {
 
+                Person person = personService.updatePerson(user.getId(), personDtoMapper.fromPersonDtoToPerson(personDto));
+                return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person), HttpStatus.OK);
+        }else if (user.getRole().getRoleName().equals(UserType.ROLE_ADMIN)) {
+            if (personExisting == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            Person person = personService.updatePerson(id, personDtoMapper.fromPersonDtoToPerson(personDto));
+            return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
 }
