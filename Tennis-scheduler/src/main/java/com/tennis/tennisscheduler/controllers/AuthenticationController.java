@@ -40,7 +40,7 @@ public class AuthenticationController {
     }
 
     @PreAuthorize("hasRole('TENNIS_PLAYER')")
-    @PutMapping("/")
+    @PutMapping("/change-password")
     public ResponseEntity<UserWithChangedPasswordDto> updatePersonPassword(@RequestBody UpdatePasswordDto updatePasswordDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person) authentication.getPrincipal();
