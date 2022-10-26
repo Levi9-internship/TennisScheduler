@@ -17,9 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 class DurationValidatorTest {
 
-    @Mock
     ConstraintValidatorContext constraintValidatorContext;
-    @Mock
     ConstraintValidator durationValidator;
 
     @BeforeEach

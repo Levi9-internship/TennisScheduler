@@ -23,9 +23,7 @@ import static org.mockito.Mockito.doReturn;
 @ExtendWith(MockitoExtension.class)
 class OverlappingTimeslotsValidatorTest {
 
-    @Mock
     ConstraintValidatorContext constraintValidatorContext;
-    @Mock
     ConstraintValidator overlappingTimeslotsValidator;
     @Mock
     TimeslotRepository timeslotRepository;
