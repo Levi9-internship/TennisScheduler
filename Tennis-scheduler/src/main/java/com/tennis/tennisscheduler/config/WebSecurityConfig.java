@@ -57,7 +57,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/authentication/*").permitAll()
                                     .antMatchers("/tennis-courts/{id}").permitAll()
                                     .antMatchers("/tennis-courts/").permitAll()
-                                    .antMatchers("/persons/*").hasRole("ADMIN")
 
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated().and()

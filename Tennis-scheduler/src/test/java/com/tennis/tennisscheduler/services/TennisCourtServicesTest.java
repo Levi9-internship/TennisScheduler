@@ -9,6 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -51,7 +53,9 @@ class TennisCourtServicesTest {
                 .address(null)
                 .build();
 
-        List<TennisCourt> tennisCourtList = List.of(tennisCourt1,tennisCourt2);
+        List<TennisCourt> tennisCourtList = new ArrayList<>();
+        tennisCourtList.add(tennisCourt1);
+        tennisCourtList.add(tennisCourt2);
         doReturn(tennisCourtList).when(tennisCourtRepository).findAll();
         List<TennisCourt> list2 = tennisCourtServices.getAllTennisCourts();
 
