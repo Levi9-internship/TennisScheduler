@@ -71,18 +71,13 @@ public class PersonController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person) authentication.getPrincipal();
 
-        if(id==user.getId()) {
+        if (personExisting == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-                Person person = personService.updatePerson(user.getId(), personDtoMapper.fromPersonDtoToPerson(personDto));
-                return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person), HttpStatus.OK);
-        }else if (user.getRole().getRoleName().equals(UserType.ROLE_ADMIN)) {
-            if (personExisting == null) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            Person person = personService.updatePerson(id, personDtoMapper.fromPersonDtoToPerson(personDto));
-            return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && id != user.getId())
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        
+        Person person = personService.updatePerson(id, personDtoMapper.fromPersonDtoToPerson(personDto));
+        return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person), HttpStatus.OK);
     }
 }
