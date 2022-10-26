@@ -6,17 +6,15 @@ import com.tennis.tennisscheduler.models.enumes.Gender;
 import com.tennis.tennisscheduler.models.enumes.UserType;
 import com.tennis.tennisscheduler.repositories.PersonRepository;
 import com.tennis.tennisscheduler.repositories.RoleRepository;
-import jdk.jfr.Enabled;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledForJreRange;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -66,7 +64,9 @@ class PersonServiceTest {
                 .phoneNumber("062121231237")
                 .build();
 
-        List<Person> personList = List.of(person1,person2);
+        List<Person> personList = new ArrayList<>();
+        personList.add(person1);
+        personList.add(person2);
         doReturn(personList).when(personRepository).findAll();
         List<Person> list2 = personService.getAllPersons();
 
