@@ -31,4 +31,7 @@ public class Timeslot {
     @JoinColumn(name="tennis_court_id")
     @JsonIgnore
     private TennisCourt tennisCourt;
+
+    @Column
+    private boolean deleted = false;
 }

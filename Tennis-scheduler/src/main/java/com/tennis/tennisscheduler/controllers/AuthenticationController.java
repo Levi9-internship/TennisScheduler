@@ -3,17 +3,18 @@ package com.tennis.tennisscheduler.controllers;
 import com.tennis.tennisscheduler.dtos.AuthenticationRequestDto;
 import com.tennis.tennisscheduler.dtos.UserTokenStateDto;
 import com.tennis.tennisscheduler.models.Person;
+import com.tennis.tennisscheduler.models.Timeslot;
+import com.tennis.tennisscheduler.services.TimeslotService;
 import com.tennis.tennisscheduler.utils.TokenUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/authentication")
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final TokenUtils tokenUtils;
+    private final TimeslotService timeslotService;
 
     @PostMapping("/login")
     public ResponseEntity<UserTokenStateDto> login(@RequestBody AuthenticationRequestDto authenticationRequest) {
@@ -35,4 +37,5 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(new UserTokenStateDto(jwt, user.getRole().getRoleName()));
     }
+
 }

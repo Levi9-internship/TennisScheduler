@@ -1,5 +1,6 @@
 package com.tennis.tennisscheduler.services;
 
+import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.repositories.TimeslotRepository;
 import com.tennis.tennisscheduler.response.TimeslotResponse;
@@ -46,5 +47,17 @@ public class TimeslotService {
         TimeslotResponse timeslotResponse = new TimeslotResponse();
         timeslotResponse.timeslot = save(timeslot);
         return timeslotResponse;
+    }
+
+    public void cancelTimeslot(Person user,long idTimeslot) {
+        Timeslot existingTimeslot = timeslotRepository.findTimeSlotUserById(idTimeslot, user.getId());
+        existingTimeslot.setDeleted(true);
+        timeslotRepository.save(existingTimeslot);
+    }
+
+    public void cancelTimeslotAdmin(long idTimeslot) {
+        Timeslot existingTimeslot = timeslotRepository.findById(idTimeslot);
+        existingTimeslot.setDeleted(true);
+        timeslotRepository.save(existingTimeslot);
     }
 }

@@ -4,6 +4,7 @@ import com.tennis.tennisscheduler.dtos.TimeslotDto;
 import com.tennis.tennisscheduler.dtos.TimeslotResponseDto;
 import com.tennis.tennisscheduler.mappers.TimeslotDtoMapper;
 import com.tennis.tennisscheduler.mappers.TimeslotResponseDtoMapper;
+import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.services.TimeslotService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -11,6 +12,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,6 +90,31 @@ public class TimeslotController {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
         timeslotService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('TENNIS_PLAYER')")
+    @PutMapping(value = "/cancel/{id}")
+    public ResponseEntity<HttpStatus> cancelTimeslot(@PathVariable long id){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person user = (Person)authentication.getPrincipal();
+
+        Timeslot timeslotExisting = timeslotService.getById(id);
+        if (timeslotExisting == null) {
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+        }
+        timeslotService.cancelTimeslot(user, id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(value = "/cancel-admin/{id}")
+    public ResponseEntity<HttpStatus> cancelTimeslotAdmin(@PathVariable long id){
+
+        Timeslot timeslotExisting = timeslotService.getById(id);
+        if (timeslotExisting == null) {
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+        }
+        timeslotService.cancelTimeslotAdmin(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
