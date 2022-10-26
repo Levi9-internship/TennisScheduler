@@ -33,7 +33,7 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         Person user = (Person)authentication.getPrincipal();
-        String jwt = tokenUtils.generateToken(user.getEmail());
+        String jwt = tokenUtils.generateToken(user.getEmail(), user.getRole().getRoleName());
 
         return ResponseEntity.ok(new UserTokenStateDto(jwt, user.getRole().getRoleName()));
     }
