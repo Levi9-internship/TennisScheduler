@@ -3,6 +3,7 @@ package com.tennis.tennisscheduler.controllers;
 import com.tennis.tennisscheduler.dtos.AuthenticationRequestDto;
 import com.tennis.tennisscheduler.dtos.UpdatePasswordDto;
 import com.tennis.tennisscheduler.dtos.UserTokenStateDto;
+import com.tennis.tennisscheduler.dtos.UserWithChangedPasswordDto;
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.services.PersonService;
 import com.tennis.tennisscheduler.utils.TokenUtils;
@@ -40,22 +41,24 @@ public class AuthenticationController {
 
     @PreAuthorize("hasRole('TENNIS_PLAYER')")
     @PutMapping("/")
-    public ResponseEntity<String> updatePersonPassword(@RequestBody UpdatePasswordDto updatePasswordDto){
+    public ResponseEntity<UserWithChangedPasswordDto> updatePersonPassword(@RequestBody UpdatePasswordDto updatePasswordDto){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person) authentication.getPrincipal();
+        String message;
+        String jwt = "";
 
-        String message = personService.updatePassword(user.getId(), updatePasswordDto.oldPassword, updatePasswordDto.newPassword);
-
-        if (message.equals("Successfully changed password.")){
-             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+        if(personService.updatePassword(user.getId(), updatePasswordDto.oldPassword, updatePasswordDto.newPassword)){
+            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     user.getEmail(), updatePasswordDto.newPassword));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            jwt = tokenUtils.generateToken(user.getEmail());
+            message = "Successfully changed password.";
+        }else
+            message = "Current password is not correct.";
 
-            String jwt = tokenUtils.generateToken(user.getEmail());
 
-        }
-
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return new ResponseEntity<>(new UserWithChangedPasswordDto(new UserTokenStateDto(jwt,user.getRole().getRoleName()),message)
+                ,HttpStatus.OK);
     }
 }

@@ -52,16 +52,17 @@ public class PersonService {
    }
 
 
-   public String updatePassword(long id, String oldPassword, String newPassword){
+   public Boolean updatePassword(long id, String oldPassword, String newPassword){
         Person existingPerson = personRepository.findById(id);
 
-        String e = bCryptPasswordEncoder.encode(oldPassword);
-        if (e.equals(existingPerson.getPassword()))
+        if (bCryptPasswordEncoder.matches(oldPassword, existingPerson.getPassword())) {
             existingPerson.setPassword(bCryptPasswordEncoder.encode(newPassword));
+            personRepository.save(existingPerson);
+        }
         else
-            return "Current password is not correct!";
+            return false;
 
-        return "Successfully changed password.";
+        return true;
    }
     
 }
