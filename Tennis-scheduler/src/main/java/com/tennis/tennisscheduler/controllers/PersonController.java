@@ -24,6 +24,7 @@ public class PersonController {
 
     private final PersonService personService;
     private final PersonDtoMapper personDtoMapper;
+
     @GetMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     public ResponseEntity<List<PersonDto>>getAllPersons(){
@@ -52,8 +53,9 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('TENNIS_PLAYER', 'ADMIN')")
     public ResponseEntity<PersonDto> getPersonById(@PathVariable long id){
+
         Person person = personService.findById(id);
         if(person==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
