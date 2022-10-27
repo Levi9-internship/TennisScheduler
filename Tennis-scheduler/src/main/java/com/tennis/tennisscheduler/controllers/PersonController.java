@@ -28,6 +28,8 @@ public class PersonController {
 
     @GetMapping("/")
     public ResponseEntity<List<PersonDto>>getAllPersons(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person user = (Person)authentication.getPrincipal();
 
         List<PersonDto> persons = new ArrayList<>();
         for (Person person: personService.getAllPersons()) {

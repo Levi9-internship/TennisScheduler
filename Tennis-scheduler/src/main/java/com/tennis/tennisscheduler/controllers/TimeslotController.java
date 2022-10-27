@@ -139,11 +139,7 @@ public class TimeslotController {
         if (user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && timeslotExisting.getPerson().getId() != user.getId())
             return new ResponseEntity<>( HttpStatus.UNAUTHORIZED);
 
-        if (user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER))
-            timeslotService.cancelTimeslot(user, id);
-        else
-            timeslotService.cancelTimeslot(timeslotExisting.getPerson(), id);
-
+        timeslotService.cancelTimeslot(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

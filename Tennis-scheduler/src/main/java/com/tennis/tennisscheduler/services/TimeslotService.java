@@ -53,8 +53,8 @@ public class TimeslotService {
         return timeslotResponse;
     }
 
-    public void cancelTimeslot(Person user,long idTimeslot) {
-        Timeslot existingTimeslot = timeslotRepository.findTimeSlotUserById(idTimeslot, user.getId());
+    public void cancelTimeslot(long idTimeslot) {
+        Timeslot existingTimeslot = timeslotRepository.findById(idTimeslot);
         existingTimeslot.setDeleted(true);
         timeslotRepository.save(existingTimeslot);
     }
