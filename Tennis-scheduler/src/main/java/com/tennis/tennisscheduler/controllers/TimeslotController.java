@@ -7,6 +7,7 @@ import com.tennis.tennisscheduler.mappers.TimeslotResponseDtoMapper;
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.models.enumes.UserType;
+import com.tennis.tennisscheduler.response.TimeslotResponse;
 import com.tennis.tennisscheduler.services.TimeslotService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
@@ -89,17 +90,16 @@ public class TimeslotController {
     public ResponseEntity<TimeslotResponseDto> update(@PathVariable long id, @RequestBody @Valid TimeslotDto timeslotUpdate, BindingResult result){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person)authentication.getPrincipal();
-
+        TimeslotResponseDto timeslotResponse = new TimeslotResponseDto();
         Timeslot timeslotExisting = timeslotService.getById(id);
         if (!result.hasErrors()){
             if (timeslotExisting == null)
                 return new ResponseEntity<>( HttpStatus.NOT_FOUND);
-
             if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER)){
                 if(timeslotExisting.getPerson().getId()== user.getId()){
                     if (timeslotService.checkIfUserIsOwnerOfTimeslot(user.getId(), timeslotUpdate.id)){
                         timeslotUpdate.personId = user.getId();
-                        TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
+                        timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
                         if(timeslotResponse.timeslot != null)
                             return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
                         else
@@ -113,8 +113,8 @@ public class TimeslotController {
             timeslotResponse.message = result.getAllErrors();
             return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
     }
-
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<HttpStatus> deleteById(@PathVariable long id){
