@@ -108,12 +108,14 @@ public class TimeslotController {
                         return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
                 } else
                     return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            } else  {
+                timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
+                return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
             }
         } else {
             timeslotResponse.message = result.getAllErrors();
             return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
     }
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
