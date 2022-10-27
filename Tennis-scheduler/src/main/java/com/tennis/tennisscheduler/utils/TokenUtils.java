@@ -1,5 +1,6 @@
 package com.tennis.tennisscheduler.utils;
 
+import com.tennis.tennisscheduler.models.enumes.UserType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -27,10 +28,11 @@ public class TokenUtils {
 
     private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
-    public String generateToken(String email) {
+    public String generateToken(String email, UserType roleName) {
         return Jwts.builder()
                 .setIssuer(APP_NAME)
                 .setSubject(email)
+                .claim("role", roleName)
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate())
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
