@@ -29,10 +29,26 @@ public class PersonController {
     @GetMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     public ResponseEntity<List<PersonDto>>getAllPersons(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person user = (Person)authentication.getPrincipal();
 
         List<PersonDto> persons = new ArrayList<>();
         for (Person person: personService.getAllPersons()) {
             persons.add(personDtoMapper.fromPersonToPersonDto(person));
+        }
+        return new ResponseEntity<>(persons, HttpStatus.OK);
+    }
+
+    @GetMapping("/players")
+    @PreAuthorize("hasRole('TENNIS_PLAYER')")
+    public ResponseEntity<List<PersonDto>>getAllPersonsPlayer(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person user = (Person)authentication.getPrincipal();
+
+        List<PersonDto> persons = new ArrayList<>();
+        for (Person person: personService.getAllPersons()) {
+            if(!((user.getId()==person.getId()) || (person.getRole().getRoleName().equals(UserType.ROLE_ADMIN)) ))
+                persons.add(personDtoMapper.fromPersonToPersonDto(person));
         }
         return new ResponseEntity<>(persons, HttpStatus.OK);
     }
