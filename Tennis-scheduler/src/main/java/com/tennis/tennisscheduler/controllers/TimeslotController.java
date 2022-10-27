@@ -40,10 +40,8 @@ public class TimeslotController {
 
         List<TimeslotDto> timeslots = new ArrayList<>();
         if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER)) {
-            for (Timeslot timeslot : timeslotService.getAll()) {
-                if(timeslot.getPerson().getId()==user.getId()) {
-                    timeslots.add(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot));
-                }
+            for (Timeslot timeslot : timeslotService.getAllTimeslotsForUser(user.getId())) {
+                timeslots.add(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot));
             }
         } else{
             for (Timeslot timeslot : timeslotService.getAll()) {
@@ -68,12 +66,19 @@ public class TimeslotController {
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     @PostMapping(value = "/")
     public ResponseEntity<TimeslotResponseDto> save(@RequestBody @Valid TimeslotDto timeslotNew, BindingResult result){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person user = (Person)authentication.getPrincipal();
+
         TimeslotResponseDto timeslotResponse = new TimeslotResponseDto();
-        if (!result.hasErrors()){
+        if (!result.hasErrors() && user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER)){
+            timeslotNew.personId = user.getId();
             timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew)));
             return new ResponseEntity<>(timeslotResponse, HttpStatus.CREATED);
         }
-        else {
+        else if(!result.hasErrors() && user.getRole().getRoleName().equals(UserType.ROLE_ADMIN)){
+            timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew)));
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.CREATED);
+        } else {
             timeslotResponse.message = result.getAllErrors();
             return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
         }
@@ -81,10 +86,27 @@ public class TimeslotController {
 
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     @PutMapping(value = "/{id}")
-    public ResponseEntity<TimeslotResponseDto> update(@PathVariable long id, @RequestBody TimeslotDto timeslotUpdate){
+    public ResponseEntity<TimeslotResponseDto> update(@PathVariable long id, @RequestBody @Valid TimeslotDto timeslotUpdate){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person user = (Person)authentication.getPrincipal();
+
         Timeslot timeslotExisting = timeslotService.getById(id);
-        if (timeslotExisting == null) {
+        if (timeslotExisting == null)
             return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+
+        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER)){
+            if(timeslotExisting.getPerson().getId()== user.getId()){
+                if (timeslotService.checkIfUserIsOwnerOfTimeslot(user.getId(), timeslotUpdate.id)){
+                    timeslotUpdate.personId = user.getId();
+                    TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
+                    if(timeslotResponse.timeslot != null)
+                        return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
+                    else
+                        return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
+                } else
+                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            } else
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
 
         TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
@@ -99,7 +121,7 @@ public class TimeslotController {
     public ResponseEntity<HttpStatus> deleteById(@PathVariable long id){
         Timeslot timeslotExisting = timeslotService.getById(id);
         if (timeslotExisting == null) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
         }
         timeslotService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -111,18 +133,17 @@ public class TimeslotController {
         Person user = (Person)authentication.getPrincipal();
 
         Timeslot timeslotExisting = timeslotService.getById(id);
-        if (timeslotExisting == null) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
-        }
+        if (timeslotExisting == null)
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
 
-        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER)){
-            if(timeslotExisting.getPerson().getId() == user.getId()) {
-                timeslotService.cancelTimeslot(user, id);
-                return new ResponseEntity<>(HttpStatus.OK);
-            }else
-                return new ResponseEntity<>( HttpStatus.UNAUTHORIZED);
-            }
-        timeslotService.cancelTimeslotAdmin(id);
+        if (user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && timeslotExisting.getPerson().getId() != user.getId())
+            return new ResponseEntity<>( HttpStatus.UNAUTHORIZED);
+
+        if (user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER))
+            timeslotService.cancelTimeslot(user, id);
+        else
+            timeslotService.cancelTimeslot(timeslotExisting.getPerson(), id);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -29,6 +29,10 @@ public class TimeslotService {
         return timeslotRepository.findAll();
     }
 
+    public List<Timeslot> getAllTimeslotsForUser(long personId){
+        return timeslotRepository.getAllTimeslotsForUser(personId);
+    }
+
     public Timeslot getById(long id){
         return timeslotRepository.findById(id);
     }
@@ -55,9 +59,9 @@ public class TimeslotService {
         timeslotRepository.save(existingTimeslot);
     }
 
-    public void cancelTimeslotAdmin(long idTimeslot) {
-        Timeslot existingTimeslot = timeslotRepository.findById(idTimeslot);
-        existingTimeslot.setDeleted(true);
-        timeslotRepository.save(existingTimeslot);
+    public boolean checkIfUserIsOwnerOfTimeslot(long userId, long timeslotId) {
+        if (timeslotRepository.checkIfUserIsOwnerOfTimeslot(userId, timeslotId) == null)
+            return false;
+        return true;
     }
 }

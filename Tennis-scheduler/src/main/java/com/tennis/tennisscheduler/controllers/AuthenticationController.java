@@ -5,13 +5,10 @@ import com.tennis.tennisscheduler.dtos.PersonDto;
 import com.tennis.tennisscheduler.dtos.UserTokenStateDto;
 import com.tennis.tennisscheduler.mappers.PersonDtoMapper;
 import com.tennis.tennisscheduler.models.Person;
-import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.services.TimeslotService;
-import com.tennis.tennisscheduler.services.PersonService;
 
 import com.tennis.tennisscheduler.utils.TokenUtils;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;

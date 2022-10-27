@@ -3,12 +3,15 @@ package com.tennis.tennisscheduler.controllers;
 import com.tennis.tennisscheduler.dtos.PersonDto;
 import com.tennis.tennisscheduler.mappers.PersonDtoMapper;
 import com.tennis.tennisscheduler.models.Person;
+import com.tennis.tennisscheduler.models.enumes.UserType;
 import com.tennis.tennisscheduler.services.PersonService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -29,6 +32,20 @@ public class PersonController {
         List<PersonDto> persons = new ArrayList<>();
         for (Person person: personService.getAllPersons()) {
             persons.add(personDtoMapper.fromPersonToPersonDto(person));
+        }
+        return new ResponseEntity<>(persons, HttpStatus.OK);
+    }
+
+    @GetMapping("/players")
+    @PreAuthorize("hasRole('TENNIS_PLAYER')")
+    public ResponseEntity<List<PersonDto>>getAllPersonsPlayer(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person user = (Person)authentication.getPrincipal();
+
+        List<PersonDto> persons = new ArrayList<>();
+        for (Person person: personService.getAllPersons()) {
+            if(!((user.getId()==person.getId()) || (person.getRole().getRoleName().equals(UserType.ROLE_ADMIN)) ))
+                persons.add(personDtoMapper.fromPersonToPersonDto(person));
         }
         return new ResponseEntity<>(persons, HttpStatus.OK);
     }

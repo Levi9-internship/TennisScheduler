@@ -23,7 +23,7 @@ public class Timeslot {
     private Date startDate;
     @Column
     private Date endDate;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="person_id")
     @JsonIgnore
     private Person person;
