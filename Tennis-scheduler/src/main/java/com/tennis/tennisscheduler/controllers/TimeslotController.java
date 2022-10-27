@@ -66,17 +66,16 @@ public class TimeslotController {
 
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     @PutMapping(value = "/{id}")
-    public ResponseEntity<TimeslotResponseDto> update(@PathVariable long id, @RequestBody TimeslotDto timeslotUpdate){
-        Timeslot timeslotExisting = timeslotService.getById(id);
-        if (timeslotExisting == null) {
-            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+    public ResponseEntity<TimeslotResponseDto> update(@PathVariable long id,@Valid @RequestBody  TimeslotDto timeslotUpdate, BindingResult result){
+        TimeslotResponseDto timeslotResponse = new TimeslotResponseDto();
+        if (!result.hasErrors()){
+            timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.CREATED);
         }
-
-        TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
-        if(timeslotResponse.timeslot != null)
-            return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
-        else
+        else {
+            timeslotResponse.message = result.getAllErrors();
             return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")

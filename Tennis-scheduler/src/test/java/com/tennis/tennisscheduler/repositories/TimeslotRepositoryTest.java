@@ -57,28 +57,28 @@ public class TimeslotRepositoryTest {
 
     @Test
     void checkOverlappingWithStartOfExistingTimeslot(){
-        List<Timeslot> expected = timeslotRepository.overlappingWithStartOfExistingTimeslot(new Date(2022, 12,12,18,0), new Date(2022, 12,12,20,0), tennisCourtId);
+        List<Timeslot> expected = timeslotRepository.overlappingWithStartOfExistingTimeslot(new Date(2022, 12,12,18,0), new Date(2022, 12,12,20,0), tennisCourtId, 0L);
 
         assertThat(expected).isEqualTo(timeslotRepository.findAll());
     }
 
     @Test
     void overlappingWithEndOfExistingTimeslot(){
-        List<Timeslot> expected = timeslotRepository.overlappingWithEndOfExistingTimeslot(new Date(2022, 12,12,20,0), new Date(2022, 12,12,21,0), tennisCourtId);
+        List<Timeslot> expected = timeslotRepository.overlappingWithEndOfExistingTimeslot(new Date(2022, 12,12,20,0), new Date(2022, 12,12,21,0), tennisCourtId, 0L);
 
         assertThat(expected).isEqualTo(timeslotRepository.findAll());
     }
 
     @Test
     void overlappingWithMiddleOfExistingTimeslot(){
-        List<Timeslot> expected = timeslotRepository.overlappingWithMiddleOfExistingTimeslot(new Date(2022, 12,12,20,0), new Date(2022, 12,12,20,15), tennisCourtId);
+        List<Timeslot> expected = timeslotRepository.overlappingWithMiddleOfExistingTimeslot(new Date(2022, 12,12,20,0), new Date(2022, 12,12,20,15), tennisCourtId, 0L);
 
         assertThat(expected).isEqualTo(timeslotRepository.findAll());
     }
 
     @Test
     void overlappingWithStartAndEndOfExistingTimeslot(){
-        List<Timeslot> expected = timeslotRepository.overlappingWithStartAndEndOfExistingTimeslot(new Date(2022, 12,12,19,0), new Date(2022, 12,12,20,45), tennisCourtId);
+        List<Timeslot> expected = timeslotRepository.overlappingWithStartAndEndOfExistingTimeslot(new Date(2022, 12,12,19,0), new Date(2022, 12,12,20,45), tennisCourtId, 0L);
 
         assertThat(expected).isEqualTo(timeslotRepository.findAll());
     }
