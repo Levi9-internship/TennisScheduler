@@ -59,8 +59,11 @@ public class AuthenticationController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             jwt = tokenUtils.generateToken(user.getEmail());
             message = "Successfully changed password.";
-        } else
+        } else {
             message = "Current password is not correct.";
+            return new ResponseEntity<>(new UserWithChangedPasswordDto(new UserTokenStateDto(jwt, user.getRole().getRoleName()), message)
+                    , HttpStatus.BAD_REQUEST);
+        }
 
 
         return new ResponseEntity<>(new UserWithChangedPasswordDto(new UserTokenStateDto(jwt, user.getRole().getRoleName()), message)
