@@ -57,7 +57,7 @@ public class AuthenticationController {
                     user.getEmail(), updatePasswordDto.newPassword));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            jwt = tokenUtils.generateToken(user.getEmail());
+            jwt = tokenUtils.generateToken(user.getEmail(), user.getRole().getRoleName());
             message = "Successfully changed password.";
         } else {
             message = "Current password is not correct.";
