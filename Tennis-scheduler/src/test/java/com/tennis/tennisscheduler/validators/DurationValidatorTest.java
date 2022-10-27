@@ -32,9 +32,7 @@ class DurationValidatorTest {
                 .dateEnd(new Date(2022, 12,12,22,30))
                 .build();
 
-        boolean valid = durationValidator.isValid(timeslotDto, constraintValidatorContext);
-
-        assertFalse(valid);
+        assertFalse(durationValidator.isValid(timeslotDto, constraintValidatorContext));
     }
 
     @Test
@@ -44,9 +42,7 @@ class DurationValidatorTest {
                 .dateEnd(new Date(2022, 12,12,19,45))
                 .build();
 
-        boolean valid = durationValidator.isValid(timeslotDto, constraintValidatorContext);
-
-        assertFalse(valid);
+        assertFalse(durationValidator.isValid(timeslotDto, constraintValidatorContext));
     }
 
     @Test
@@ -56,9 +52,7 @@ class DurationValidatorTest {
                 .dateEnd(new Date(2022, 12,12,19,00))
                 .build();
 
-        boolean valid = durationValidator.isValid(timeslotDto, constraintValidatorContext);
-
-        assertTrue(valid);
+        assertTrue(durationValidator.isValid(timeslotDto, constraintValidatorContext));
     }
 
 }
