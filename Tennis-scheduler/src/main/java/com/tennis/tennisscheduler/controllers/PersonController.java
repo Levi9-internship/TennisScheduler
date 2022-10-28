@@ -27,7 +27,7 @@ public class PersonController {
     private final PersonDtoMapper personDtoMapper;
 
     @GetMapping("/")
-    @PreAuthorize("hasAnyRole('TENNIS_PLAYER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     public ResponseEntity<List<PersonDto>>getAllPersons(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person)authentication.getPrincipal();

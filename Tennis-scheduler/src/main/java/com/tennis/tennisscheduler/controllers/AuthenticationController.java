@@ -29,7 +29,6 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final TokenUtils tokenUtils;
     private final PersonService personService;
-    private final TimeslotService timeslotService;
     private final PersonDtoMapper personDtoMapper;
 
     @PostMapping("/login")
