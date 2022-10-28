@@ -45,9 +45,9 @@ public class TimeslotController {
                 timeslots.add(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot));
             }
         } else{
-            for (Timeslot timeslot : timeslotService.getAll()) {
+            for (Timeslot timeslot : timeslotService.getAll())
                 timeslots.add(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot));
-            }
+
         }
         return new ResponseEntity<>(timeslots, HttpStatus.OK);
     }
@@ -92,31 +92,34 @@ public class TimeslotController {
         Person user = (Person)authentication.getPrincipal();
         TimeslotResponseDto timeslotResponse = new TimeslotResponseDto();
         Timeslot timeslotExisting = timeslotService.getById(id);
+
         if (!result.hasErrors()){
             if (timeslotExisting == null)
-                return new ResponseEntity<>( HttpStatus.NOT_FOUND);
-            if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER)){
-                if(timeslotExisting.getPerson().getId()== user.getId()){
-                    if (timeslotService.checkIfUserIsOwnerOfTimeslot(user.getId(), timeslotUpdate.id)){
-                        timeslotUpdate.personId = user.getId();
-                        timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
-                        if(timeslotResponse.timeslot != null)
-                            return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
-                        else
-                            return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
-                    } else
-                        return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-                } else
-                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-            } else  {
-                timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
-                return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
-            }
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+
+        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER)){
+            if(timeslotExisting.getPerson().getId()!= user.getId()){
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);  }
+
+            timeslotUpdate.personId = user.getId();
+             TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
+             if(timeslotResponse.timeslot != null)
+                 return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
+             else
+                 return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
+        }
+
+        TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
+        if (timeslotResponse.timeslot != null)
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
         } else {
             timeslotResponse.message = result.getAllErrors();
             return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
         }
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<HttpStatus> deleteById(@PathVariable long id){

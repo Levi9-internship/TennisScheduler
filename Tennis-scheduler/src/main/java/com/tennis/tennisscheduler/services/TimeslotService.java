@@ -26,7 +26,7 @@ public class TimeslotService {
     }
 
     public List<Timeslot> getAll(){
-        return timeslotRepository.findAll();
+        return timeslotRepository.getALlTimeslotsAdmin();
     }
 
     public List<Timeslot> getAllTimeslotsForUser(long personId){
@@ -57,11 +57,5 @@ public class TimeslotService {
         Timeslot existingTimeslot = timeslotRepository.findById(idTimeslot);
         existingTimeslot.setDeleted(true);
         timeslotRepository.save(existingTimeslot);
-    }
-
-    public boolean checkIfUserIsOwnerOfTimeslot(long userId, long timeslotId) {
-        if (timeslotRepository.checkIfUserIsOwnerOfTimeslot(userId, timeslotId) == null)
-            return false;
-        return true;
     }
 }
