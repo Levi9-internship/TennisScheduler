@@ -27,7 +27,7 @@ public class PersonController {
     private final PersonDtoMapper personDtoMapper;
 
     @GetMapping("/")
-    @PreAuthorize("hasAnyRole('TENNIS_PLAYER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     public ResponseEntity<List<PersonDto>>getAllPersons(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person)authentication.getPrincipal();
@@ -52,6 +52,7 @@ public class PersonController {
         return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deletePerson(@PathVariable long id) {
         Person personExisting = personService.findById(id);
         if (personExisting == null)
@@ -72,13 +73,20 @@ public class PersonController {
         return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.OK);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('TENNIS_PLAYER','ADMIN')")
     public ResponseEntity<PersonDto> updatePerson(@PathVariable long id,@RequestBody PersonDto personDto){
-        Person personExisting = personService.findById(id);
-        if (personExisting == null) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
-        }
 
+        Person personExisting = personService.findById(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person user = (Person) authentication.getPrincipal();
+
+        if (personExisting == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && id != user.getId())
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        
         Person person = personService.updatePerson(id, personDtoMapper.fromPersonDtoToPerson(personDto));
-        return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.OK);
+        return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person), HttpStatus.OK);
     }
 }
