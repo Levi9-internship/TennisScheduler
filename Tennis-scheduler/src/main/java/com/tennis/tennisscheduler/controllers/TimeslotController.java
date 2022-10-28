@@ -102,14 +102,14 @@ public class TimeslotController {
                 return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);  }
 
             timeslotUpdate.personId = user.getId();
-             TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
+            timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
              if(timeslotResponse.timeslot != null)
                  return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
              else
                  return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
         }
 
-        TimeslotResponseDto timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
+        timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
         if (timeslotResponse.timeslot != null)
             return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
         else
