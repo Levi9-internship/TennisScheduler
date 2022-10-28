@@ -10,8 +10,9 @@ import java.util.List;
 
 @Repository
 public interface TimeslotRepository extends JpaRepository<Timeslot,Long> {
+    List<Time>
     Timeslot findById(long id);
-    @Query("select t from Timeslot t join fetch t.person p where p.id = ?2 and date(t.startDate) = date(?1) and t.id != ?3 and t.deleted = false")
+    @Query("select t from Timeslot t join fetch t.person p where p.id = ?2 and date(t.startDate) = date(?1) and t.deleted = false")
     Timeslot checkIfTimeslotIsAlreadyReserved(Date startDate, long idPerson, long idTimeslot);
     @Query("select t from Timeslot t join fetch t.tennisCourt court where ?1 <= t.startDate and ?2 <= t.endDate and t.startDate >= ?1 and t.startDate <= ?2 and court.id = ?3 and t.id != ?4 and t.deleted = false")
     List<Timeslot> overlappingWithStartOfExistingTimeslot(Date startDate, Date endDate, long idTennisCourt, long idTimeslot);
