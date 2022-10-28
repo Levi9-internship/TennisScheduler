@@ -10,6 +10,8 @@ import java.util.List;
 
 @Repository
 public interface TimeslotRepository extends JpaRepository<Timeslot,Long> {
+    @Query("select  t from Timeslot t where t.deleted = false")
+    List<Timeslot> getALlTimeslotsAdmin();
     Timeslot findById(long id);
     @Query("select t from Timeslot t join fetch t.person p where p.id = ?2 and date(t.startDate) = date(?1) and t.deleted = false")
     Timeslot checkIfTimeslotIsAlreadyReserved(Date startDate, long idPerson);

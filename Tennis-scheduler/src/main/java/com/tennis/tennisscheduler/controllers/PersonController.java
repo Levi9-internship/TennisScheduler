@@ -27,27 +27,21 @@ public class PersonController {
     private final PersonDtoMapper personDtoMapper;
 
     @GetMapping("/")
+    @PreAuthorize("hasAnyRole('TENNIS_PLAYER', 'ADMIN')")
     public ResponseEntity<List<PersonDto>>getAllPersons(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person)authentication.getPrincipal();
 
         List<PersonDto> persons = new ArrayList<>();
-        for (Person person: personService.getAllPersons()) {
-            persons.add(personDtoMapper.fromPersonToPersonDto(person));
-        }
-        return new ResponseEntity<>(persons, HttpStatus.OK);
-    }
+        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER)){
+            for (Person person: personService.getAllPersons()) {
+                if(!((person.getRole().getRoleName().equals(UserType.ROLE_ADMIN)) ))
+                    persons.add(personDtoMapper.fromPersonToPersonDto(person));
+            }
+        }else{
+            for (Person person: personService.getAllPersons())
+                    persons.add(personDtoMapper.fromPersonToPersonDto(person));
 
-    @GetMapping("/players")
-    @PreAuthorize("hasRole('TENNIS_PLAYER')")
-    public ResponseEntity<List<PersonDto>>getAllPersonsPlayer(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Person user = (Person)authentication.getPrincipal();
-
-        List<PersonDto> persons = new ArrayList<>();
-        for (Person person: personService.getAllPersons()) {
-            if(!((user.getId()==person.getId()) || (person.getRole().getRoleName().equals(UserType.ROLE_ADMIN)) ))
-                persons.add(personDtoMapper.fromPersonToPersonDto(person));
         }
         return new ResponseEntity<>(persons, HttpStatus.OK);
     }
@@ -60,9 +54,9 @@ public class PersonController {
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deletePerson(@PathVariable long id) {
         Person personExisting = personService.findById(id);
-        if (personExisting == null) {
+        if (personExisting == null)
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
-        }
+
         personService.deletePersonById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
