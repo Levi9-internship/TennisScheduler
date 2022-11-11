@@ -19,13 +19,13 @@ public class OverlappingTimeslotsValidator implements ConstraintValidator<Overla
 
     @Override
     public boolean isValid(TimeslotDto timeslotDto, ConstraintValidatorContext constraintValidatorContext) {
-        if (timeslotRepository.overlappingWithStartOfExistingTimeslot(timeslotDto.dateStart, timeslotDto.dateEnd, timeslotDto.courtId).size() > 0)
+        if (timeslotRepository.overlappingWithStartOfExistingTimeslot(timeslotDto.dateStart, timeslotDto.dateEnd, timeslotDto.courtId, timeslotDto.id).size() > 0)
             return false;
-        else if (timeslotRepository.overlappingWithEndOfExistingTimeslot(timeslotDto.dateStart, timeslotDto.dateEnd, timeslotDto.courtId).size() > 0)
+        else if (timeslotRepository.overlappingWithEndOfExistingTimeslot(timeslotDto.dateStart, timeslotDto.dateEnd, timeslotDto.courtId, timeslotDto.id).size() > 0)
             return false;
-        else if (timeslotRepository.overlappingWithStartAndEndOfExistingTimeslot(timeslotDto.dateStart, timeslotDto.dateEnd, timeslotDto.courtId).size() > 0)
+        else if (timeslotRepository.overlappingWithStartAndEndOfExistingTimeslot(timeslotDto.dateStart, timeslotDto.dateEnd, timeslotDto.courtId, timeslotDto.id).size() > 0)
             return false;
-        else if (timeslotRepository.overlappingWithMiddleOfExistingTimeslot(timeslotDto.dateStart, timeslotDto.dateEnd, timeslotDto.courtId).size() > 0)
+        else if (timeslotRepository.overlappingWithMiddleOfExistingTimeslot(timeslotDto.dateStart, timeslotDto.dateEnd, timeslotDto.courtId, timeslotDto.id).size() > 0)
             return false;
         else
             return true;

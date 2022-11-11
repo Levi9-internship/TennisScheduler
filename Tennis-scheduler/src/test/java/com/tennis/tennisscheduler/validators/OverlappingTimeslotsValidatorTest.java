@@ -56,7 +56,7 @@ class OverlappingTimeslotsValidatorTest {
                 .build();
 
         doReturn(timeslots).when(timeslotRepository).overlappingWithEndOfExistingTimeslot(timeslotDto.dateStart,
-               timeslotDto.dateEnd, tennisCourt.getId());
+               timeslotDto.dateEnd, tennisCourt.getId(), 0L);
 
         assertFalse(overlappingTimeslotsValidator.isValid(timeslotDto, constraintValidatorContext));
     }
@@ -70,7 +70,7 @@ class OverlappingTimeslotsValidatorTest {
                 .build();
 
         doReturn(timeslots).when(timeslotRepository).overlappingWithStartOfExistingTimeslot(timeslotDto.dateStart,
-                timeslotDto.dateEnd, tennisCourt.getId());
+                timeslotDto.dateEnd, tennisCourt.getId(), 0L);
 
         assertFalse(overlappingTimeslotsValidator.isValid(timeslotDto, constraintValidatorContext));
     }
@@ -84,7 +84,7 @@ class OverlappingTimeslotsValidatorTest {
                 .build();
 
         doReturn(timeslots).when(timeslotRepository).overlappingWithMiddleOfExistingTimeslot(timeslotDto.dateStart,
-                timeslotDto.dateEnd, tennisCourt.getId());
+                timeslotDto.dateEnd, tennisCourt.getId(), 0L);
 
         assertFalse(overlappingTimeslotsValidator.isValid(timeslotDto, constraintValidatorContext));
     }
@@ -98,7 +98,7 @@ class OverlappingTimeslotsValidatorTest {
                 .build();
 
         doReturn(timeslots).when(timeslotRepository).overlappingWithStartAndEndOfExistingTimeslot(timeslotDto.dateStart,
-                timeslotDto.dateEnd, tennisCourt.getId());
+                timeslotDto.dateEnd, tennisCourt.getId(), 0L);
 
         assertFalse(overlappingTimeslotsValidator.isValid(timeslotDto, constraintValidatorContext));
     }
@@ -112,7 +112,7 @@ class OverlappingTimeslotsValidatorTest {
                 .build();
 
         doReturn(new ArrayList<>()).when(timeslotRepository).overlappingWithEndOfExistingTimeslot(timeslotDto.dateStart,
-                timeslotDto.dateEnd, tennisCourt.getId());
+                timeslotDto.dateEnd, tennisCourt.getId(), 0L);
 
         assertTrue(overlappingTimeslotsValidator.isValid(timeslotDto, constraintValidatorContext));
     }
