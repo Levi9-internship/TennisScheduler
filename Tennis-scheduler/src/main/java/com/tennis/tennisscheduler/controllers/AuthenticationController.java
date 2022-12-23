@@ -32,12 +32,10 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<UserTokenStateDto> login(@RequestBody AuthenticationRequestDto authenticationRequest) {
-
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getEmail(), authenticationRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         Person user = (Person)authentication.getPrincipal();
         String jwt = tokenUtils.generateToken(user.getEmail(), user.getRole().getRoleName());
 
@@ -54,16 +52,15 @@ public class AuthenticationController {
         String jwt = "";
 
         if (personService.updatePassword(user.getId(), updatePasswordDto.getOldPassword(), updatePasswordDto.getNewPassword())) {
-            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    user.getEmail(), updatePasswordDto.getNewPassword()));
-
+            authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), updatePasswordDto.getNewPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             jwt = tokenUtils.generateToken(user.getEmail(), user.getRole().getRoleName());
             message = UpdatePersonPasswordMessages.SUCCESSFULLY_CHANGED_PASSWORD;
         } else {
             message = UpdatePersonPasswordMessages.UNSUCCESSFULLY_CHANGED_PASSWORD;
             return new ResponseEntity<>(new UserWithChangedPasswordDto(new UserTokenStateDto(jwt, user.getRole().getRoleName()), message)
-                    , HttpStatus.BAD_REQUEST);
+                    ,HttpStatus.BAD_REQUEST);
         }
 
 
@@ -73,7 +70,6 @@ public class AuthenticationController {
     @GetMapping("/logged-user")
     @PreAuthorize("hasAnyRole('TENNIS_PLAYER', 'ADMIN')")
     public ResponseEntity<PersonDto> getLoggedUser() {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person person = (Person)authentication.getPrincipal();
 
