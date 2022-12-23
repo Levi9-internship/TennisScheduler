@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/persons")
@@ -32,18 +33,18 @@ public class PersonController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person)authentication.getPrincipal();
 
-        List<PersonDto> persons = new ArrayList<>();
-        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER)){
-            for (Person person: personService.getAllPersons()) {
-                if(!((person.getRole().getRoleName().equals(UserType.ROLE_ADMIN)) ))
-                    persons.add(personDtoMapper.fromPersonToPersonDto(person));
-            }
-        }else{
-            for (Person person: personService.getAllPersons())
-                    persons.add(personDtoMapper.fromPersonToPersonDto(person));
+        List<PersonDto> persons;
 
-        }
+        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER)){
+             persons = personService.getAllPersons().stream()
+                    .filter(person -> !((person.getRole().getRoleName().equals(UserType.ROLE_ADMIN))))
+                    .map(person -> personDtoMapper.fromPersonToPersonDto(person))
+                    .collect(Collectors.toList());
+        }else
+             persons = personService.getAllPersons().stream().map(person -> personDtoMapper.fromPersonToPersonDto(person)).collect(Collectors.toList());
+
         return new ResponseEntity<>(persons, HttpStatus.OK);
+
     }
 
     @PostMapping("/")
