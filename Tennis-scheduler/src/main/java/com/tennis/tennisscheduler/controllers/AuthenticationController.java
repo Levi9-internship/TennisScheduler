@@ -34,7 +34,7 @@ public class AuthenticationController {
     public ResponseEntity<UserTokenStateDto> login(@RequestBody AuthenticationRequestDto authenticationRequest) {
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                authenticationRequest.email, authenticationRequest.password));
+                authenticationRequest.getEmail(), authenticationRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -53,9 +53,9 @@ public class AuthenticationController {
         String message;
         String jwt = "";
 
-        if (personService.updatePassword(user.getId(), updatePasswordDto.oldPassword, updatePasswordDto.newPassword)) {
+        if (personService.updatePassword(user.getId(), updatePasswordDto.getOldPassword(), updatePasswordDto.getNewPassword())) {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    user.getEmail(), updatePasswordDto.newPassword));
+                    user.getEmail(), updatePasswordDto.getNewPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
             jwt = tokenUtils.generateToken(user.getEmail(), user.getRole().getRoleName());

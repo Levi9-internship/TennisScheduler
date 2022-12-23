@@ -17,7 +17,7 @@ public class DurationValidator  implements ConstraintValidator<DurationValidate,
 
     @Override
     public boolean isValid(TimeslotDto timeslotDto, ConstraintValidatorContext constraintValidatorContext) {
-        Minutes minutes = Minutes.minutesBetween(new DateTime(timeslotDto.dateStart), new DateTime(timeslotDto.dateEnd));
+        Minutes minutes = Minutes.minutesBetween(new DateTime(timeslotDto.getDateStart()), new DateTime(timeslotDto.getDateEnd()));
         if(minutes.isGreaterThan(Minutes.minutes(120)) || minutes.isLessThan(Minutes.minutes(30)))
             return false;
 

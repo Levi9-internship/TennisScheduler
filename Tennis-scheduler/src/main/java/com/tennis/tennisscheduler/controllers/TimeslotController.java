@@ -72,7 +72,7 @@ public class TimeslotController {
 
         TimeslotResponseDto timeslotResponse = new TimeslotResponseDto();
         if (!result.hasErrors() && user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER)){
-            timeslotNew.personId = user.getId();
+            timeslotNew.setPersonId(user.getId());
             timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew)));
             return new ResponseEntity<>(timeslotResponse, HttpStatus.CREATED);
         }
@@ -80,7 +80,7 @@ public class TimeslotController {
             timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew)));
             return new ResponseEntity<>(timeslotResponse, HttpStatus.CREATED);
         } else {
-            timeslotResponse.message = result.getAllErrors();
+            timeslotResponse.setMessage(result.getAllErrors());
             return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
         }
     }
@@ -101,21 +101,21 @@ public class TimeslotController {
             if(timeslotExisting.getPerson().getId()!= user.getId()){
                 return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);  }
 
-            timeslotUpdate.personId = user.getId();
+            timeslotUpdate.setPersonId(user.getId());
             timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
-             if(timeslotResponse.timeslot != null)
+             if(timeslotResponse.getTimeslot() != null)
                  return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
              else
                  return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
         }
 
         timeslotResponse = timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
-        if (timeslotResponse.timeslot != null)
+        if (timeslotResponse.getTimeslot() != null)
             return new ResponseEntity<>(timeslotResponse, HttpStatus.OK);
         else
             return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
         } else {
-            timeslotResponse.message = result.getAllErrors();
+            timeslotResponse.setMessage(result.getAllErrors());
             return new ResponseEntity<>(timeslotResponse, HttpStatus.BAD_REQUEST);
         }
     }

@@ -16,7 +16,7 @@ public class SameDateValidator implements ConstraintValidator<SameDateValidate, 
 
     @Override
     public boolean isValid(TimeslotDto timeslotDto, ConstraintValidatorContext constraintValidatorContext) {
-        if(timeslotDto.dateStart.after(timeslotDto.dateEnd) || !DateUtils.isSameDay(timeslotDto.dateStart, timeslotDto.dateEnd))
+        if(timeslotDto.getDateStart().after(timeslotDto.getDateEnd()) || !DateUtils.isSameDay(timeslotDto.getDateStart(), timeslotDto.getDateEnd()))
             return false;
         return true;
     }

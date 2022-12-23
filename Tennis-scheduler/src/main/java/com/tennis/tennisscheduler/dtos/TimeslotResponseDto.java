@@ -1,12 +1,16 @@
 package com.tennis.tennisscheduler.dtos;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.validation.ObjectError;
 
 import java.util.List;
 
+@Getter
+@Setter
 public class TimeslotResponseDto {
  
-    public TimeslotDto timeslot;
+    private TimeslotDto timeslot;
 
-    public List<ObjectError> message;
+    private List<ObjectError> message;
 }

@@ -16,7 +16,7 @@ public class FutureDateValidator implements ConstraintValidator<FutureDateValida
 
     @Override
     public boolean isValid(TimeslotDto timeslotDto, ConstraintValidatorContext constraintValidatorContext) {
-        if(timeslotDto.dateStart.before(new Date()) || timeslotDto.dateEnd.before(new Date()))
+        if(timeslotDto.getDateStart().before(new Date()) || timeslotDto.getDateEnd().before(new Date()))
             return false;
         return true;
     }
