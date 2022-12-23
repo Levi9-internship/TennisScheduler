@@ -1,6 +1,6 @@
 package com.tennis.tennisscheduler.validators.annotations;
 
-import com.tennis.tennisscheduler.models.TimeslotMessage;
+import com.tennis.tennisscheduler.messages.TimeslotMessage;
 import com.tennis.tennisscheduler.validators.OverlappingTimeslotsValidator;
 
 import javax.validation.Constraint;

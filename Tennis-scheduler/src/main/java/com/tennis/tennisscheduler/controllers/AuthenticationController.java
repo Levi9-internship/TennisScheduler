@@ -5,11 +5,10 @@ import com.tennis.tennisscheduler.dtos.UpdatePasswordDto;
 import com.tennis.tennisscheduler.dtos.UserTokenStateDto;
 import com.tennis.tennisscheduler.dtos.UserWithChangedPasswordDto;
 import com.tennis.tennisscheduler.dtos.PersonDto;
-import com.tennis.tennisscheduler.dtos.UserTokenStateDto;
 import com.tennis.tennisscheduler.mappers.PersonDtoMapper;
 import com.tennis.tennisscheduler.models.Person;
+import com.tennis.tennisscheduler.messages.UpdatePersonPasswordMessages;
 import com.tennis.tennisscheduler.services.PersonService;
-import com.tennis.tennisscheduler.services.TimeslotService;
 
 import com.tennis.tennisscheduler.utils.TokenUtils;
 import lombok.AllArgsConstructor;
@@ -60,9 +59,9 @@ public class AuthenticationController {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
             jwt = tokenUtils.generateToken(user.getEmail(), user.getRole().getRoleName());
-            message = "Successfully changed password.";
+            message = UpdatePersonPasswordMessages.SUCCESSFULLY_CHANGED_PASSWORD;
         } else {
-            message = "Current password is not correct.";
+            message = UpdatePersonPasswordMessages.UNSUCCESSFULLY_CHANGED_PASSWORD;
             return new ResponseEntity<>(new UserWithChangedPasswordDto(new UserTokenStateDto(jwt, user.getRole().getRoleName()), message)
                     , HttpStatus.BAD_REQUEST);
         }
