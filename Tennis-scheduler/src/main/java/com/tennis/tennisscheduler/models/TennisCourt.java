@@ -31,4 +31,6 @@ public class TennisCourt {
     private Set<Timeslot> timeslot;
     @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
     private Address address;
+    @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
+    private WorkingTime workingTime;
 }

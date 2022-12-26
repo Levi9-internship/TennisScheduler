@@ -38,6 +38,7 @@ public class TennisCourtServices {
         existingTennisCourt.setDescription(tennisCourt.getDescription());
         existingTennisCourt.setImage(tennisCourt.getImage());
         existingTennisCourt.setSurfaceType(tennisCourt.getSurfaceType());
+        existingTennisCourt.setWorkingTime(tennisCourt.getWorkingTime());
 
         existingTennisCourt.setAddress(tennisCourt.getAddress());
 

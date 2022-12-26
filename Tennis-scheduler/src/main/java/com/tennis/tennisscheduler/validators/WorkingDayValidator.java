@@ -1,14 +1,19 @@
 package com.tennis.tennisscheduler.validators;
 
 import com.tennis.tennisscheduler.dtos.TimeslotDto;
-import com.tennis.tennisscheduler.models.enumes.WorkingHours;
+import com.tennis.tennisscheduler.models.TennisCourt;
+import com.tennis.tennisscheduler.repositories.TennisCourtRepository;
 import com.tennis.tennisscheduler.validators.annotations.WorkingDayValidate;
+import lombok.AllArgsConstructor;
 import org.joda.time.DateTimeConstants;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+@AllArgsConstructor
 
 public class WorkingDayValidator implements ConstraintValidator<WorkingDayValidate, TimeslotDto> {
+
+    private final TennisCourtRepository tennisCourtRepository;
 
     @Override
     public void initialize(WorkingDayValidate constraintAnnotation) {
@@ -17,14 +22,23 @@ public class WorkingDayValidator implements ConstraintValidator<WorkingDayValida
 
     @Override
     public boolean isValid(TimeslotDto timeslotDto, ConstraintValidatorContext constraintValidatorContext) {
-        if(timeslotDto.getDateStart().getDay() == DateTimeConstants.SATURDAY || timeslotDto.getDateStart().getDay() == DateTimeConstants.SUNDAY){
-            if(timeslotDto.getDateStart().getHours() < WorkingHours.WEEKEND.startHours || timeslotDto.getDateEnd().getHours() >= WorkingHours.WEEKEND.endHours){
-                return false;
+
+        TennisCourt tennisCourt = tennisCourtRepository.findById(timeslotDto.courtId);
+        if(timeslotDto.dateStart.getDay() == DateTimeConstants.SATURDAY
+                || timeslotDto.dateStart.getDay() == DateTimeConstants.SUNDAY){
+            if(timeslotDto.dateStart.getHours() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekend().getHours()
+                    || timeslotDto.dateEnd.getHours() > tennisCourt.getWorkingTime().getEndWorkingTimeWeekend().getHours()) {
+                if(timeslotDto.dateStart.getMinutes() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekend().getMinutes()
+                        || timeslotDto.dateEnd.getMinutes() > tennisCourt.getWorkingTime().getEndWorkingTimeWeekend().getMinutes())
+                    return false;
             }
-        } else {
-            if(timeslotDto.getDateStart().getHours() < WorkingHours.WORKING_DAYS.startHours ||  timeslotDto.getDateEnd().getHours() >= WorkingHours.WORKING_DAYS.endHours){
-                return false;
-            }
+        }
+        else{
+            if(timeslotDto.dateStart.getHours() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekDay().getHours()
+                    ||  timeslotDto.dateEnd.getHours() > tennisCourt.getWorkingTime().getEndWorkingTimeWeekDay().getHours())
+                if(timeslotDto.dateStart.getMinutes() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekDay().getMinutes()
+                        ||  timeslotDto.dateEnd.getMinutes() > tennisCourt.getWorkingTime().getEndWorkingTimeWeekDay().getMinutes())
+                    return false;
         }
         return true;
     }
