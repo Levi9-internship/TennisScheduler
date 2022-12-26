@@ -5,11 +5,10 @@ import com.tennis.tennisscheduler.dtos.UpdatePasswordDto;
 import com.tennis.tennisscheduler.dtos.UserTokenStateDto;
 import com.tennis.tennisscheduler.dtos.UserWithChangedPasswordDto;
 import com.tennis.tennisscheduler.dtos.PersonDto;
-import com.tennis.tennisscheduler.dtos.UserTokenStateDto;
 import com.tennis.tennisscheduler.mappers.PersonDtoMapper;
 import com.tennis.tennisscheduler.models.Person;
+import com.tennis.tennisscheduler.messages.UpdatePersonPasswordMessages;
 import com.tennis.tennisscheduler.services.PersonService;
-import com.tennis.tennisscheduler.services.TimeslotService;
 
 import com.tennis.tennisscheduler.utils.TokenUtils;
 import lombok.AllArgsConstructor;
@@ -33,12 +32,10 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<UserTokenStateDto> login(@RequestBody AuthenticationRequestDto authenticationRequest) {
-
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                authenticationRequest.email, authenticationRequest.password));
+                authenticationRequest.getEmail(), authenticationRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         Person user = (Person)authentication.getPrincipal();
         String jwt = tokenUtils.generateToken(user.getEmail(), user.getRole().getRoleName());
 
@@ -54,17 +51,16 @@ public class AuthenticationController {
         String message;
         String jwt = "";
 
-        if (personService.updatePassword(user.getId(), updatePasswordDto.oldPassword, updatePasswordDto.newPassword)) {
-            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    user.getEmail(), updatePasswordDto.newPassword));
-
+        if (personService.updatePassword(user.getId(), updatePasswordDto.getOldPassword(), updatePasswordDto.getNewPassword())) {
+            authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), updatePasswordDto.getNewPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             jwt = tokenUtils.generateToken(user.getEmail(), user.getRole().getRoleName());
-            message = "Successfully changed password.";
+            message = UpdatePersonPasswordMessages.SUCCESSFULLY_CHANGED_PASSWORD;
         } else {
-            message = "Current password is not correct.";
+            message = UpdatePersonPasswordMessages.UNSUCCESSFULLY_CHANGED_PASSWORD;
             return new ResponseEntity<>(new UserWithChangedPasswordDto(new UserTokenStateDto(jwt, user.getRole().getRoleName()), message)
-                    , HttpStatus.BAD_REQUEST);
+                    ,HttpStatus.BAD_REQUEST);
         }
 
 
@@ -74,7 +70,6 @@ public class AuthenticationController {
     @GetMapping("/logged-user")
     @PreAuthorize("hasAnyRole('TENNIS_PLAYER', 'ADMIN')")
     public ResponseEntity<PersonDto> getLoggedUser() {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person person = (Person)authentication.getPrincipal();
 

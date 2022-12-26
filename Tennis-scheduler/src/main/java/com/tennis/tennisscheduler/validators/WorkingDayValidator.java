@@ -17,12 +17,12 @@ public class WorkingDayValidator implements ConstraintValidator<WorkingDayValida
 
     @Override
     public boolean isValid(TimeslotDto timeslotDto, ConstraintValidatorContext constraintValidatorContext) {
-        if(timeslotDto.dateStart.getDay() == DateTimeConstants.SATURDAY || timeslotDto.dateStart.getDay() == DateTimeConstants.SUNDAY){
-            if(timeslotDto.dateStart.getHours() < WorkingHours.WEEKEND.startHours || timeslotDto.dateEnd.getHours() >= WorkingHours.WEEKEND.endHours){
+        if(timeslotDto.getDateStart().getDay() == DateTimeConstants.SATURDAY || timeslotDto.getDateStart().getDay() == DateTimeConstants.SUNDAY){
+            if(timeslotDto.getDateStart().getHours() < WorkingHours.WEEKEND.startHours || timeslotDto.getDateEnd().getHours() >= WorkingHours.WEEKEND.endHours){
                 return false;
             }
         } else {
-            if(timeslotDto.dateStart.getHours() < WorkingHours.WORKING_DAYS.startHours ||  timeslotDto.dateEnd.getHours() >= WorkingHours.WORKING_DAYS.endHours){
+            if(timeslotDto.getDateStart().getHours() < WorkingHours.WORKING_DAYS.startHours ||  timeslotDto.getDateEnd().getHours() >= WorkingHours.WORKING_DAYS.endHours){
                 return false;
             }
         }

@@ -1,13 +1,14 @@
 package com.tennis.tennisscheduler.dtos;
 
 import com.tennis.tennisscheduler.models.enumes.UserType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@AllArgsConstructor
 public class UserTokenStateDto {
-    public String accessToken;
-    public UserType role;
-
-    public UserTokenStateDto(String accessToken, UserType role) {
-        this.accessToken = accessToken;
-        this.role = role;
-    }
+    private String accessToken;
+    private UserType role;
 }

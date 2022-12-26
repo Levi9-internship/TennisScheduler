@@ -1,10 +1,7 @@
 package com.tennis.tennisscheduler.dtos;
 
 import com.tennis.tennisscheduler.validators.annotations.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -18,18 +15,12 @@ import java.util.Date;
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TimeslotDto {
-    public long id = 0L;
-    public Date dateStart;
-    public Date dateEnd;
-    public long personId;
-    public long courtId;
-    public TimeslotDto () {}
-    public TimeslotDto(long id, Date dateStart, Date dateEnd, long personId, long courtId) {
-        this.id = id;
-        this.dateStart = dateStart;
-        this.dateEnd = dateEnd;
-        this.personId = personId;
-        this.courtId = courtId;
-    }
+    private long id = 0L;
+    private Date dateStart;
+    private Date dateEnd;
+    private long personId;
+    private long courtId;
 }

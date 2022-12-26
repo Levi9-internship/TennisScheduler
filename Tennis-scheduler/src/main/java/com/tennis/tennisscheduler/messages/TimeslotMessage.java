@@ -1,4 +1,4 @@
-package com.tennis.tennisscheduler.models;
+package com.tennis.tennisscheduler.messages;
 
 public class TimeslotMessage {
     public static final String SAME_DATE_MESSAGE = "Selected date must be at same day, and start has to be before end!";

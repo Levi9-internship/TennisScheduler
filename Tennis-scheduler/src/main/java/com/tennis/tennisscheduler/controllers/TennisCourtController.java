@@ -24,9 +24,9 @@ public class TennisCourtController {
     @GetMapping("/")
     public ResponseEntity<List<TennisCourtDto>>getAllTennisCourts(){
         List<TennisCourtDto> tennisCourts = new ArrayList<>();
-        for (TennisCourt tennisCourt : tennisCourtServices.getAllTennisCourts()){
+        for (TennisCourt tennisCourt : tennisCourtServices.getAllTennisCourts())
             tennisCourts.add(tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt));
-        }
+
         return new ResponseEntity<>(tennisCourts, HttpStatus.OK);
     }
 
@@ -42,9 +42,8 @@ public class TennisCourtController {
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteTennisCourt(@PathVariable long id){
         TennisCourt tennisCourt = tennisCourtServices.getTennisCourtById(id);
-        if (tennisCourt == null){
+        if (tennisCourt == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         tennisCourtServices.deleteTennisCourtById(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -53,9 +52,8 @@ public class TennisCourtController {
     @GetMapping("/{id}")
     public ResponseEntity<TennisCourtDto>getTennisCourtById(@PathVariable long id){
         TennisCourt tennisCourt = tennisCourtServices.getTennisCourtById(id);
-        if (tennisCourt == null){
+        if (tennisCourt == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<>(tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt),HttpStatus.OK);
     }
@@ -64,9 +62,8 @@ public class TennisCourtController {
     @PutMapping("/{id}")
     public ResponseEntity<TennisCourtDto> updateTennisCourt(@PathVariable long id, @RequestBody TennisCourtDto tennisCourtDto){
         TennisCourt tennisCourtExisting = tennisCourtServices.getTennisCourtById(id);
-        if (tennisCourtExisting == null){
+        if (tennisCourtExisting == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
         TennisCourt tennisCourt = tennisCourtServices.updateTennisCourt(id, tennisCourtDtoMapper.fromTennisCourtDtoToTennisCourt(tennisCourtDto));
         return new ResponseEntity<>(tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt),HttpStatus.OK);
