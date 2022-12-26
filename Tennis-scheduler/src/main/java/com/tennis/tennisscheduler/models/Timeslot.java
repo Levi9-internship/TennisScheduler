@@ -2,6 +2,7 @@ package com.tennis.tennisscheduler.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -33,5 +34,6 @@ public class Timeslot {
     private TennisCourt tennisCourt;
 
     @Column
+    @Type(type= "org.hibernate.type.NumericBooleanType")
     private boolean deleted = false;
 }
