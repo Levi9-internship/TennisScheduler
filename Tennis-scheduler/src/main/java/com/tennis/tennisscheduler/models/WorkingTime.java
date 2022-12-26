@@ -30,6 +30,4 @@ public class WorkingTime {
     private Time startWorkingTimeWeekend;
     @Column
     private Time endWorkingTimeWeekend;
-    @OneToMany(mappedBy = "workingTime",fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
-    private List<TennisCourt> tennisCourts;
 }
