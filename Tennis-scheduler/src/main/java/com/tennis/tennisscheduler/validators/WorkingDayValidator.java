@@ -23,21 +23,21 @@ public class WorkingDayValidator implements ConstraintValidator<WorkingDayValida
     @Override
     public boolean isValid(TimeslotDto timeslotDto, ConstraintValidatorContext constraintValidatorContext) {
 
-        TennisCourt tennisCourt = tennisCourtRepository.findById(timeslotDto.courtId);
-        if(timeslotDto.dateStart.getDay() == DateTimeConstants.SATURDAY
-                || timeslotDto.dateStart.getDay() == DateTimeConstants.SUNDAY){
-            if(timeslotDto.dateStart.getHours() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekend().getHours()
-                    || timeslotDto.dateEnd.getHours() > tennisCourt.getWorkingTime().getEndWorkingTimeWeekend().getHours()) {
-                if(timeslotDto.dateStart.getMinutes() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekend().getMinutes()
-                        || timeslotDto.dateEnd.getMinutes() > tennisCourt.getWorkingTime().getEndWorkingTimeWeekend().getMinutes())
+        TennisCourt tennisCourt = tennisCourtRepository.findById(timeslotDto.getCourtId());
+        if(timeslotDto.getDateStart().getDay() == DateTimeConstants.SATURDAY
+                || timeslotDto.getDateStart().getDay() == DateTimeConstants.SUNDAY){
+            if(timeslotDto.getDateStart().getHours() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekend().getHours()
+                    || timeslotDto.getDateEnd().getHours() > tennisCourt.getWorkingTime().getEndWorkingTimeWeekend().getHours()) {
+                if(timeslotDto.getDateStart().getMinutes() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekend().getMinutes()
+                        || timeslotDto.getDateEnd().getMinutes() > tennisCourt.getWorkingTime().getEndWorkingTimeWeekend().getMinutes())
                     return false;
             }
         }
         else{
-            if(timeslotDto.dateStart.getHours() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekDay().getHours()
-                    ||  timeslotDto.dateEnd.getHours() > tennisCourt.getWorkingTime().getEndWorkingTimeWeekDay().getHours())
-                if(timeslotDto.dateStart.getMinutes() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekDay().getMinutes()
-                        ||  timeslotDto.dateEnd.getMinutes() > tennisCourt.getWorkingTime().getEndWorkingTimeWeekDay().getMinutes())
+            if(timeslotDto.getDateStart().getHours() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekDay().getHours()
+                    ||  timeslotDto.getDateEnd().getHours() > tennisCourt.getWorkingTime().getEndWorkingTimeWeekDay().getHours())
+                if(timeslotDto.getDateStart().getMinutes() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekDay().getMinutes()
+                        ||  timeslotDto.getDateEnd().getMinutes() > tennisCourt.getWorkingTime().getEndWorkingTimeWeekDay().getMinutes())
                     return false;
         }
         return true;

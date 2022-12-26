@@ -8,11 +8,11 @@ import lombok.Setter;
 @Setter
 public class TennisCourtDto {
 
-    public long id;
-    public String name;
-    public SurfaceType surfaceType;
-    public String description;
-    public String image;
-    public Address address;
+    private long id;
+    private String name;
+    private SurfaceType surfaceType;
+    private String description;
+    private String image;
+    private Address address;
     private WorkingTimeDto workingTimeDto;
 }
