@@ -5,4 +5,56 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+    <changeSet author="danilo" id="alert-124">
+        <addColumn tableName="tennis_court" >
+            <column name="working_time_id" type="bigint">
+                <constraints/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="create-22" author="danilo">
+        <createTable tableName="working_time">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" unique="true" nullable="false"/>
+            </column>
+            <column name="end_working_time_week_day" type="time">
+                <constraints/>
+            </column>
+            <column name="end_working_time_weekend" type="time">
+                <constraints/>
+            </column>
+            <column name="start_working_time_week_day" type="time">
+                <constraints/>
+            </column>
+            <column name="start_working_time_weekend" type="time">
+                <constraints/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="fk-4124" author="danilo">
+        <addForeignKeyConstraint baseColumnNames="working_time_id"
+                                 baseTableName="tennis_court"
+                                 constraintName="fk_working_time"
+                                 referencedColumnNames="id"
+                                 referencedTableName="working_time"/>
+    </changeSet>
+
+    <changeSet author="danilo" id="insert-1234">
+        <insert tableName="working_time">
+            <column name="end_working_time_weekend" value="20:00:00"/>
+            <column name="end_working_time_week_day" value="22:00:00"/>
+            <column name="start_working_time_weekend" value="14:00:00"/>
+            <column name="start_working_time_week_day" value="12:00:00"/>
+        </insert>
+    </changeSet>
+    <changeSet author="danilo" id="insert-1124">
+        <insert tableName="working_time">
+            <column name="end_working_time_weekend" value="18:00:00"/>
+            <column name="end_working_time_week_day" value="21:00:00"/>
+            <column name="start_working_time_weekend" value="15:30:00"/>
+            <column name="start_working_time_week_day" value="13:00:00"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

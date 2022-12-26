@@ -6,11 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Time;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Setter
 @Getter
+@Table
 @NoArgsConstructor
 @AllArgsConstructor
 public class WorkingTime {
@@ -20,13 +23,13 @@ public class WorkingTime {
     @Column
     private long id;
     @Column
-    private Date startWorkingTimeWeekDay;
+    private Time startWorkingTimeWeekDay;
     @Column
-    private Date endWorkingTimeWeekDay;
+    private Time endWorkingTimeWeekDay;
     @Column
-    private Date startWorkingTimeWeekend;
+    private Time startWorkingTimeWeekend;
     @Column
-    private Date endWorkingTimeWeekend;
-    @ManyToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
-    private TennisCourt tennisCourt;
+    private Time endWorkingTimeWeekend;
+    @OneToMany(mappedBy = "workingTime",fetch = FetchType.LAZY,cascade =  CascadeType.ALL)
+    private List<TennisCourt> tennisCourts;
 }

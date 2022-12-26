@@ -31,7 +31,7 @@ public class TennisCourt {
     private Set<Timeslot> timeslot;
     @OneToOne(fetch = FetchType.EAGER,cascade =  CascadeType.ALL)
     private Address address;
-    @OneToMany
-    @JoinColumn(name="tennis_court_id")
-    private Set<WorkingTime> workingTimes;
+    @ManyToOne(fetch = FetchType.EAGER,cascade =  CascadeType.PERSIST)
+    @JoinColumn(name="working_time_id")
+    private WorkingTime workingTime;
 }

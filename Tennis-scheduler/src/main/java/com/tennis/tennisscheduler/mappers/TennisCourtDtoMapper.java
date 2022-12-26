@@ -14,6 +14,7 @@ public interface TennisCourtDtoMapper {
     @Mapping(source = "description", target = "description")
     @Mapping(source = "image", target = "image")
     @Mapping(source = "address", target = "address")
+    @Mapping(source = "workingTime", target = "workingTimeDto")
     TennisCourtDto fromTennisCourtToTennisCourtDto (TennisCourt tennisCourt);
 
     @Mapping(source = "id", target = "id")
@@ -22,5 +23,6 @@ public interface TennisCourtDtoMapper {
     @Mapping(source = "description", target = "description")
     @Mapping(source = "image", target = "image")
     @Mapping(source = "address", target = "address")
+    @Mapping(source = "workingTimeDto", target = "workingTime")
     TennisCourt fromTennisCourtDtoToTennisCourt (TennisCourtDto tennisCourtDto);
 }

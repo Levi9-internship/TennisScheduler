@@ -20,7 +20,7 @@ public class IsReservedValidator implements ConstraintValidator<IsReservedValida
     public boolean isValid(TimeslotDto timeslotDto, ConstraintValidatorContext constraintValidatorContext) {
         if (timeslotRepository.checkIfTimeslotIsAlreadyReserved(timeslotDto.dateStart,timeslotDto.personId, timeslotDto.id) == null)
             return true;
-        else
-            return false;
+
+        return false;
     }
 }

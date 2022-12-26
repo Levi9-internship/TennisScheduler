@@ -2,7 +2,13 @@ package com.tennis.tennisscheduler.dtos;
 
 import com.tennis.tennisscheduler.models.Address;
 import com.tennis.tennisscheduler.models.enumes.SurfaceType;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.ManyToOne;
+
+@Getter
+@Setter
 public class TennisCourtDto {
 
     public long id;
@@ -11,5 +17,5 @@ public class TennisCourtDto {
     public String description;
     public String image;
     public Address address;
-
+    private WorkingTimeDto workingTimeDto;
 }
