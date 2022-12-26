@@ -26,5 +26,6 @@ public class OverlappingTimeslotsValidator implements ConstraintValidator<Overla
             return false;
 
         return true;
+
     }
 }

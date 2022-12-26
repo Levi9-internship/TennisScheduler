@@ -49,7 +49,7 @@ public class TimeslotService {
 
     public TimeslotResponse reserveTimeslot(Timeslot timeslot) {
         TimeslotResponse timeslotResponse = new TimeslotResponse();
-        timeslotResponse.timeslot = save(timeslot);
+        timeslotResponse.setTimeslot(save(timeslot));
         return timeslotResponse;
     }
 

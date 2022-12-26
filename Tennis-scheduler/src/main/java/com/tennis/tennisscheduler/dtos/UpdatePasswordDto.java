@@ -1,7 +1,12 @@
 package com.tennis.tennisscheduler.dtos;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class UpdatePasswordDto {
 
-    public String oldPassword;
-    public String newPassword;
+    private String oldPassword;
+    private String newPassword;
 }
