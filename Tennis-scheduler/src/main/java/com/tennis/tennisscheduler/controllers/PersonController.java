@@ -1,6 +1,7 @@
 package com.tennis.tennisscheduler.controllers;
 
 import com.tennis.tennisscheduler.dtos.PersonDto;
+import com.tennis.tennisscheduler.exceptions.ApiRequestException;
 import com.tennis.tennisscheduler.mappers.PersonDtoMapper;
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.models.enumes.UserType;
@@ -14,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,7 +55,7 @@ public class PersonController {
     public ResponseEntity<HttpStatus> deletePerson(@PathVariable long id) {
         Person personExisting = personService.findById(id);
         if (personExisting == null)
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
         personService.deletePersonById(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -64,10 +64,9 @@ public class PersonController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('TENNIS_PLAYER', 'ADMIN')")
     public ResponseEntity<PersonDto> getPersonById(@PathVariable long id){
-
         Person person = personService.findById(id);
         if(person==null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
         return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.OK);
     }
@@ -79,7 +78,7 @@ public class PersonController {
         Person user = (Person) authentication.getPrincipal();
 
         if (personExisting == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
         if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && id != user.getId())
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

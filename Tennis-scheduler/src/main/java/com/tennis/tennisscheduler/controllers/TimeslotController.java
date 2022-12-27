@@ -2,12 +2,12 @@ package com.tennis.tennisscheduler.controllers;
 
 import com.tennis.tennisscheduler.dtos.TimeslotDto;
 import com.tennis.tennisscheduler.dtos.TimeslotResponseDto;
+import com.tennis.tennisscheduler.exceptions.ApiRequestException;
 import com.tennis.tennisscheduler.mappers.TimeslotDtoMapper;
 import com.tennis.tennisscheduler.mappers.TimeslotResponseDtoMapper;
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.models.enumes.UserType;
-import com.tennis.tennisscheduler.response.TimeslotResponse;
 import com.tennis.tennisscheduler.services.TimeslotService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
@@ -20,9 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -40,7 +38,7 @@ public class TimeslotController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person)authentication.getPrincipal();
 
-        List<TimeslotDto> timeslots = new ArrayList<>();
+        List<TimeslotDto> timeslots;
         if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER))
             timeslots = timeslotService.getAllTimeslotsForUser(user.getId()).stream()
                     .map(timeslot ->timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot))
@@ -58,7 +56,7 @@ public class TimeslotController {
     public ResponseEntity<TimeslotDto> getById(@PathVariable long id){
         Timeslot timeslot = timeslotService.getById(id);
         if (timeslot == null)
-            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
         return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
     }
@@ -75,8 +73,8 @@ public class TimeslotController {
         }
         else if(!result.hasErrors() && user.getRole().getRoleName().equals(UserType.ROLE_ADMIN))
             return new ResponseEntity<>(timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew))), HttpStatus.CREATED);
-        else
-            return new ResponseEntity<>(new TimeslotResponseDto(result.getAllErrors()), HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(new TimeslotResponseDto(result.getAllErrors()), HttpStatus.BAD_REQUEST);
 
     }
 
@@ -93,16 +91,15 @@ public class TimeslotController {
             return new ResponseEntity<>(new TimeslotResponseDto(result.getAllErrors()), HttpStatus.BAD_REQUEST);
 
         if(timeslotResponseDto.getTimeslot() == null)
-            return new ResponseEntity<>(timeslotResponseDto, HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException(HttpStatus.BAD_REQUEST,"There is no timeslots");
 
         if (timeslotExisting == null)
-            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
-        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && timeslotExisting.getPerson().getId() == user.getId())
-            timeslotUpdate.setPersonId(user.getId());
-        else
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        if(!user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && timeslotExisting.getPerson().getId() != user.getId())
+            throw new ApiRequestException(HttpStatus.UNAUTHORIZED,"You don't have permission");
 
+        timeslotUpdate.setPersonId(user.getId());
         return new ResponseEntity<>(timeslotResponseDto, HttpStatus.OK);
     }
 
@@ -111,7 +108,7 @@ public class TimeslotController {
     public ResponseEntity<HttpStatus> deleteById(@PathVariable long id){
         Timeslot timeslotExisting = timeslotService.getById(id);
         if (timeslotExisting == null)
-            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
         timeslotService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -121,13 +118,13 @@ public class TimeslotController {
     public ResponseEntity<HttpStatus> cancelTimeslot(@PathVariable long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person)authentication.getPrincipal();
-
         Timeslot timeslotExisting = timeslotService.getById(id);
+
         if (timeslotExisting == null)
-            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
         if (user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && timeslotExisting.getPerson().getId() != user.getId())
-            return new ResponseEntity<>( HttpStatus.UNAUTHORIZED);
+            throw new ApiRequestException(HttpStatus.UNAUTHORIZED,"You don't have permission");
 
         timeslotService.cancelTimeslot(id);
         return new ResponseEntity<>(HttpStatus.OK);

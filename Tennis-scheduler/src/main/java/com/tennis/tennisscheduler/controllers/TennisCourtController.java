@@ -1,6 +1,7 @@
 package com.tennis.tennisscheduler.controllers;
 
 import com.tennis.tennisscheduler.dtos.TennisCourtDto;
+import com.tennis.tennisscheduler.exceptions.ApiRequestException;
 import com.tennis.tennisscheduler.mappers.TennisCourtDtoMapper;
 import com.tennis.tennisscheduler.models.TennisCourt;
 import com.tennis.tennisscheduler.services.TennisCourtServices;
@@ -43,7 +44,7 @@ public class TennisCourtController {
     public ResponseEntity<HttpStatus> deleteTennisCourt(@PathVariable long id){
         TennisCourt tennisCourt = tennisCourtServices.getTennisCourtById(id);
         if (tennisCourt == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
         tennisCourtServices.deleteTennisCourtById(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -53,7 +54,7 @@ public class TennisCourtController {
     public ResponseEntity<TennisCourtDto>getTennisCourtById(@PathVariable long id){
         TennisCourt tennisCourt = tennisCourtServices.getTennisCourtById(id);
         if (tennisCourt == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
         return new ResponseEntity<>(tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt),HttpStatus.OK);
     }
@@ -63,7 +64,7 @@ public class TennisCourtController {
     public ResponseEntity<TennisCourtDto> updateTennisCourt(@PathVariable long id, @RequestBody TennisCourtDto tennisCourtDto){
         TennisCourt tennisCourtExisting = tennisCourtServices.getTennisCourtById(id);
         if (tennisCourtExisting == null)
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
         TennisCourt tennisCourt = tennisCourtServices.updateTennisCourt(id, tennisCourtDtoMapper.fromTennisCourtDtoToTennisCourt(tennisCourtDto));
         return new ResponseEntity<>(tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt),HttpStatus.OK);
