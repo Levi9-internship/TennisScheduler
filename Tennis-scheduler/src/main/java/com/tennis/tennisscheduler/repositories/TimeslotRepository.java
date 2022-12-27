@@ -23,8 +23,6 @@ public interface TimeslotRepository extends JpaRepository<Timeslot,Long> {
     List<Timeslot> overlappingWithStartAndEndOfExistingTimeslot(Date startDate, Date endDate, long idTennisCourt, long idTimeslot);
     @Query("select t from Timeslot t join fetch t.tennisCourt court where ?1 >= t.startDate and ?2 <= t.endDate and court.id = ?3 and t.id <> ?4 and t.deleted = false")
     List<Timeslot> overlappingWithMiddleOfExistingTimeslot(Date startDate, Date endDate, long idTennisCourt, long idTimeslot);
-    @Query("select t from Timeslot t join fetch t.person p where t.id = ?2 and p.id = ?1")
-    Timeslot checkIfUserIsOwnerOfTimeslot(long userId, long timeslotId);
     @Query("select t from Timeslot t join fetch t.person p where p.id = ?1 and t.deleted = false")
     List<Timeslot> getAllTimeslotsForUser(long personId);
 }
