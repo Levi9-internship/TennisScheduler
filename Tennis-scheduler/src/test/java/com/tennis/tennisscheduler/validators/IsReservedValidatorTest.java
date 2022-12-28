@@ -39,7 +39,6 @@ public class IsReservedValidatorTest {
                 .id(1)
                 .startDate(new DateTime(2021, 12, 12, 21,30).toDate())
                 .endDate(new DateTime(2021, 12, 12, 22,30).toDate())
-                .deleted(false)
                 .person(person)
                 .build();
     }
@@ -53,7 +52,7 @@ public class IsReservedValidatorTest {
                 .personId(1)
                 .build();
 
-        doReturn(null).when(timeslotRepository).checkIfTimeslotIsAlreadyReserved(timeslotDto.dateStart, timeslotDto.personId, timeslotDto.id);
+        doReturn(null).when(timeslotRepository).checkIfTimeslotIsAlreadyReserved(timeslotDto.getDateStart(), timeslotDto.getPersonId(), timeslotDto.getId());
 
         assertTrue(isReservedValidator.isValid(timeslotDto, constraintValidatorContext));
     }
@@ -67,7 +66,7 @@ public class IsReservedValidatorTest {
                 .personId(person.getId())
                 .build();
 
-        doReturn(timeslot).when(timeslotRepository).checkIfTimeslotIsAlreadyReserved(timeslotDto.dateStart, timeslotDto.personId, timeslotDto.id);
+        doReturn(timeslot).when(timeslotRepository).checkIfTimeslotIsAlreadyReserved(timeslotDto.getDateStart(), timeslotDto.getPersonId(), timeslotDto.getId());
 
         assertFalse(isReservedValidator.isValid(timeslotDto, constraintValidatorContext));
     }

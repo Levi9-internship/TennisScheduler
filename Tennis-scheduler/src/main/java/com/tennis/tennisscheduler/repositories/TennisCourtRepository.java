@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TennisCourtRepository extends JpaRepository<TennisCourt,Long> {
-
     TennisCourt findById(long id);
 }

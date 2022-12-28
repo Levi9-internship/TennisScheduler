@@ -51,7 +51,6 @@ public class TimeslotRepositoryTest {
         Timeslot timeslot = Timeslot.builder()
                 .startDate(new Date(2022, 12,12,19,45))
                 .endDate(new Date(2022, 12,12,20,30))
-                .deleted(false)
                 .tennisCourt(tennisCourt)
                 .build();
         timeslotRepository.save(timeslot);
