@@ -1,6 +1,7 @@
 package com.tennis.tennisscheduler.validators;
 
 import com.tennis.tennisscheduler.dtos.TimeslotDto;
+import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.repositories.TimeslotRepository;
 import com.tennis.tennisscheduler.validators.annotations.IsReservedValidate;
 import lombok.AllArgsConstructor;
