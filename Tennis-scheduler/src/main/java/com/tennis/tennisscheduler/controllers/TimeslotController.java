@@ -103,16 +103,6 @@ public class TimeslotController {
         return new ResponseEntity<>(timeslotResponseDto, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<HttpStatus> deleteById(@PathVariable long id){
-        Timeslot timeslotExisting = timeslotService.getById(id);
-        if (timeslotExisting == null)
-            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
-
-        timeslotService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     @PutMapping(value = "/cancel/{id}")
     public ResponseEntity<HttpStatus> cancelTimeslot(@PathVariable long id){
@@ -126,7 +116,7 @@ public class TimeslotController {
         if (user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && timeslotExisting.getPerson().getId() != user.getId())
             throw new ApiRequestException(HttpStatus.UNAUTHORIZED,"You don't have permission");
 
-        timeslotService.cancelTimeslot(id);
+        timeslotService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

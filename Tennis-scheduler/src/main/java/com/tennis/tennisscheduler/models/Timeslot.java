@@ -32,7 +32,4 @@ public class Timeslot {
     @JoinColumn(name="tennis_court_id")
     @JsonIgnore
     private TennisCourt tennisCourt;
-    @Column
-    @Type(type= "org.hibernate.type.NumericBooleanType")
-    private boolean deleted = false;
 }

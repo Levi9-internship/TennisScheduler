@@ -1,12 +1,13 @@
 package com.tennis.tennisscheduler.services;
 
-import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.repositories.TimeslotRepository;
 import com.tennis.tennisscheduler.response.TimeslotResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -41,6 +42,13 @@ public class TimeslotService {
         timeslotRepository.deleteById(id);
     }
 
+    @Scheduled(cron = "${greeting.cron}")
+    public void deleteDeprecatedTimeslots(){
+        for (Timeslot timeslot: timeslotRepository.getDeprecatedTimeslots(new Date())) {
+            timeslotRepository.deleteById(timeslot.getId());
+        }
+    }
+
     public Timeslot save(Timeslot timeslot) {
         timeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()));
         timeslot.setPerson(personService.findById(timeslot.getPerson().getId()));
@@ -51,11 +59,5 @@ public class TimeslotService {
         TimeslotResponse timeslotResponse = new TimeslotResponse();
         timeslotResponse.setTimeslot(save(timeslot));
         return timeslotResponse;
-    }
-
-    public void cancelTimeslot(long idTimeslot) {
-        Timeslot existingTimeslot = timeslotRepository.findById(idTimeslot);
-        existingTimeslot.setDeleted(true);
-        timeslotRepository.save(existingTimeslot);
     }
 }
