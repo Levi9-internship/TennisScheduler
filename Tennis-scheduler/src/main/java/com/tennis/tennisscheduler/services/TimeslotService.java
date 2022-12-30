@@ -15,7 +15,7 @@ import java.util.List;
 public class TimeslotService {
     private final TimeslotRepository timeslotRepository;
     private final PersonService personService;
-    private final TennisCourtServices tennisCourtService;
+    private final TennisCourtService tennisCourtService;
 
     public TimeslotResponse update(long id, Timeslot timeslot){
         Timeslot existingTimeslot = timeslotRepository.findById(id);

@@ -19,15 +19,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class TennisCourtServicesTest {
+class TennisCourtServiceTest {
 
     @Mock
     private TennisCourtRepository tennisCourtRepository;
-    private TennisCourtServices tennisCourtServices;
+    private TennisCourtService tennisCourtService;
 
     @BeforeEach
     void setUp() {
-        tennisCourtServices = new TennisCourtServices(tennisCourtRepository);
+        tennisCourtService = new TennisCourtService(tennisCourtRepository);
     }
 
     @Test
@@ -57,7 +57,7 @@ class TennisCourtServicesTest {
         tennisCourtList.add(tennisCourt1);
         tennisCourtList.add(tennisCourt2);
         doReturn(tennisCourtList).when(tennisCourtRepository).findAll();
-        List<TennisCourt> list2 = tennisCourtServices.getAllTennisCourts();
+        List<TennisCourt> list2 = tennisCourtService.getAllTennisCourts();
 
         assertEquals(tennisCourtList,list2);
     }
@@ -74,7 +74,7 @@ class TennisCourtServicesTest {
                 .address(null)
                 .build();
         //when
-        tennisCourtServices.saveTennisCourt(tennisCourt);
+        tennisCourtService.saveTennisCourt(tennisCourt);
         //then
         ArgumentCaptor<TennisCourt> tennisCourtArgumentCaptor =
                 ArgumentCaptor.forClass(TennisCourt.class);
@@ -96,7 +96,7 @@ class TennisCourtServicesTest {
 
         doReturn(tennisCourt).when(tennisCourtRepository).findById(0);
         // Make the service call
-        TennisCourt tennisCourtByService = tennisCourtServices.getTennisCourtById(0);
+        TennisCourt tennisCourtByService = tennisCourtService.getTennisCourtById(0);
         // Assert the response
         assertNotNull(tennisCourtByService,"TennisCourt with this id: "+tennisCourt.getId()+" not found");
         assertEquals(tennisCourt.getId(),tennisCourtByService.getId());
@@ -119,7 +119,7 @@ class TennisCourtServicesTest {
                 .address(null)
                 .build();
 
-        tennisCourtServices.deleteTennisCourtById(tennisCourt.getId());
+        tennisCourtService.deleteTennisCourtById(tennisCourt.getId());
 
         verify(tennisCourtRepository).deleteById(tennisCourt.getId());
     }
@@ -149,7 +149,7 @@ class TennisCourtServicesTest {
         updatedTennisCourt.setImage("novaSlika");
         updatedTennisCourt.setDescription("Jako lep teren u Kacu");
         updatedTennisCourt.setSurfaceType(SurfaceType.GRASS);
-        tennisCourtServices.updateTennisCourt(id,updatedTennisCourt);
+        tennisCourtService.updateTennisCourt(id,updatedTennisCourt);
         verify(tennisCourtRepository).save(tennisCourtArgumentCaptor.capture());
 
         assertThat(tennisCourtArgumentCaptor

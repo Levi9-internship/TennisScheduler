@@ -1,7 +1,6 @@
 package com.tennis.tennisscheduler.services;
 
 import com.tennis.tennisscheduler.models.TennisCourt;
-import com.tennis.tennisscheduler.repositories.AddressRepository;
 import com.tennis.tennisscheduler.repositories.TennisCourtRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class TennisCourtServices {
+public class TennisCourtService {
     private final TennisCourtRepository tennisCourtRepository;
 
     public List<TennisCourt> getAllTennisCourts(){
