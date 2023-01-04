@@ -3,6 +3,7 @@ package com.tennis.tennisscheduler.services;
 import com.tennis.tennisscheduler.models.TennisCourt;
 import com.tennis.tennisscheduler.models.enumes.SurfaceType;
 import com.tennis.tennisscheduler.repositories.TennisCourtRepository;
+import com.tennis.tennisscheduler.services.impl.TennisCourtServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class TennisCourtServiceTest {
+class TennisCourtServiceImplTest {
 
     @Mock
     private TennisCourtRepository tennisCourtRepository;
@@ -28,7 +29,7 @@ class TennisCourtServiceTest {
 
     @BeforeEach
     void setUp() {
-        tennisCourtService = new TennisCourtService(tennisCourtRepository);
+        tennisCourtService = new TennisCourtServiceImpl(tennisCourtRepository);
     }
 
     @Test

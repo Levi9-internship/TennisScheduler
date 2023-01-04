@@ -6,6 +6,7 @@ import com.tennis.tennisscheduler.models.enumes.Gender;
 import com.tennis.tennisscheduler.models.enumes.UserType;
 import com.tennis.tennisscheduler.repositories.PersonRepository;
 import com.tennis.tennisscheduler.repositories.RoleRepository;
+import com.tennis.tennisscheduler.services.impl.PersonServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class PersonServiceTest {
+class PersonServiceImplTest {
 
     @Mock
     PersonRepository personRepository;
@@ -37,7 +38,7 @@ class PersonServiceTest {
     Date date_s = new Date();
     @BeforeEach
     void setUp() {
-        personService = new PersonService(personRepository,roleRepository, bCryptPasswordEncoder);
+        personService = new PersonServiceImpl(personRepository,roleRepository, bCryptPasswordEncoder);
     }
 
     @Test

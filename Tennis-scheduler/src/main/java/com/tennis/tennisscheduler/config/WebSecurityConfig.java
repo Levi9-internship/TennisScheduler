@@ -2,7 +2,7 @@ package com.tennis.tennisscheduler.config;
 
 import com.tennis.tennisscheduler.security.RestAuthenticationEntryPoint;
 import com.tennis.tennisscheduler.security.TokenAuthenticationFilter;
-import com.tennis.tennisscheduler.services.CustomUserDetailsService;
+import com.tennis.tennisscheduler.services.impl.CustomUserDetailsServiceImpl;
 import com.tennis.tennisscheduler.utils.TokenUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/v3/api-docs/**",
             "/swagger-ui/**"
     };
-    private final CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsServiceImpl customUserDetailsServiceImpl;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     private final TokenUtils tokenUtils;
 
@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
-            .userDetailsService(customUserDetailsService)
+            .userDetailsService(customUserDetailsServiceImpl)
             .passwordEncoder(passwordEncoder());
     }
 
@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
-                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsService), BasicAuthenticationFilter.class);
+                .addFilterBefore(new TokenAuthenticationFilter(tokenUtils, customUserDetailsServiceImpl), BasicAuthenticationFilter.class);
 
         http.csrf().disable();
     }

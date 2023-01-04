@@ -5,6 +5,7 @@ import com.tennis.tennisscheduler.exceptions.ApiRequestException;
 import com.tennis.tennisscheduler.mappers.TennisCourtDtoMapper;
 import com.tennis.tennisscheduler.models.TennisCourt;
 import com.tennis.tennisscheduler.services.TennisCourtService;
+import com.tennis.tennisscheduler.services.impl.TennisCourtServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

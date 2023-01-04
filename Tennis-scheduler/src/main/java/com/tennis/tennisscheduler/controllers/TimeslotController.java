@@ -9,6 +9,7 @@ import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.models.Timeslot;
 import com.tennis.tennisscheduler.models.enumes.UserType;
 import com.tennis.tennisscheduler.services.TimeslotService;
+import com.tennis.tennisscheduler.services.impl.TimeslotServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
