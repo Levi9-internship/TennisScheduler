@@ -2,7 +2,6 @@ package com.tennis.tennisscheduler.services;
 
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.models.enumes.UserType;
-import com.tennis.tennisscheduler.repositories.AddressRepository;
 
 import com.tennis.tennisscheduler.repositories.PersonRepository;
 import com.tennis.tennisscheduler.repositories.RoleRepository;
@@ -11,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -24,7 +24,7 @@ public class PersonService {
         return personRepository.findAll();
     }
     
-    public Person findById(long id){
+    public Optional<Person> findById(long id){
         return personRepository.findById(id);
     }
     
@@ -40,7 +40,7 @@ public class PersonService {
     }
     
     public Person updatePerson(long id,Person person){
-        Person existingPerson = personRepository.findById(id);
+        Person existingPerson = personRepository.findById(id).get();
         existingPerson.setFirstName(person.getFirstName());
         existingPerson.setLastName(person.getLastName());
         existingPerson.setBirthday(person.getBirthday());
@@ -53,7 +53,7 @@ public class PersonService {
 
 
    public Boolean updatePassword(long id, String oldPassword, String newPassword){
-        Person existingPerson = personRepository.findById(id);
+        Person existingPerson = personRepository.findById(id).get();
 
         if (bCryptPasswordEncoder.matches(oldPassword, existingPerson.getPassword())) {
             existingPerson.setPassword(bCryptPasswordEncoder.encode(newPassword));

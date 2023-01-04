@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -84,7 +85,7 @@ class TennisCourtServiceTest {
     }
     @Test
     void getTennisCourtById() {
-        TennisCourt tennisCourt = TennisCourt.builder()
+         Optional<TennisCourt> tennisCourt = Optional.of(TennisCourt.builder()
                 .id(0)
                 .name("Teren u Prigrevici")
                 .surfaceType(SurfaceType.CLAY)
@@ -92,20 +93,20 @@ class TennisCourtServiceTest {
                 .image("slikaZaTerenUPrigrevici")
                 .timeslot(null)
                 .address(null)
-                .build();
+                .build());
 
         doReturn(tennisCourt).when(tennisCourtRepository).findById(0);
         // Make the service call
-        TennisCourt tennisCourtByService = tennisCourtService.getTennisCourtById(0);
+        TennisCourt tennisCourtByService = tennisCourtService.getTennisCourtById(0).get();
         // Assert the response
-        assertNotNull(tennisCourtByService,"TennisCourt with this id: "+tennisCourt.getId()+" not found");
-        assertEquals(tennisCourt.getId(),tennisCourtByService.getId());
-        assertEquals(tennisCourt.getName(), tennisCourtByService.getName());
-        assertEquals(tennisCourt.getSurfaceType(), tennisCourtByService.getSurfaceType());
-        assertEquals(tennisCourt.getDescription(), tennisCourtByService.getDescription());
-        assertEquals(tennisCourt.getImage(), tennisCourtByService.getImage());
-        assertEquals(tennisCourt.getTimeslot(), tennisCourtByService.getTimeslot());
-        assertEquals(tennisCourt.getAddress(), tennisCourtByService.getAddress());
+        assertNotNull(tennisCourtByService,"TennisCourt with this id: "+tennisCourt.get().getId()+" not found");
+        assertEquals(tennisCourt.get().getId(),tennisCourtByService.getId());
+        assertEquals(tennisCourt.get().getName(), tennisCourtByService.getName());
+        assertEquals(tennisCourt.get().getSurfaceType(), tennisCourtByService.getSurfaceType());
+        assertEquals(tennisCourt.get().getDescription(), tennisCourtByService.getDescription());
+        assertEquals(tennisCourt.get().getImage(), tennisCourtByService.getImage());
+        assertEquals(tennisCourt.get().getTimeslot(), tennisCourtByService.getTimeslot());
+        assertEquals(tennisCourt.get().getAddress(), tennisCourtByService.getAddress());
     }
     @Test
     void deleteTennisCourtById() {
@@ -128,7 +129,7 @@ class TennisCourtServiceTest {
 
         long id = 0L;
 
-        TennisCourt existingTennisCourt = TennisCourt.builder()
+        Optional<TennisCourt> existingTennisCourt = Optional.of(TennisCourt.builder()
                 .id(id)
                 .name("Teren u Prigrevici")
                 .surfaceType(SurfaceType.CLAY)
@@ -136,7 +137,7 @@ class TennisCourtServiceTest {
                 .image("slikaZaTerenUPrigrevici")
                 .timeslot(null)
                 .address(null)
-                .build();
+                .build());
 
         when(tennisCourtRepository.findById(id))
                 .thenReturn(existingTennisCourt);

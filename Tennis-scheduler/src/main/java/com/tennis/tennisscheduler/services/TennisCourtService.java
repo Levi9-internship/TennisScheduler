@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -17,7 +18,7 @@ public class TennisCourtService {
         return tennisCourtRepository.findAll();
     }
 
-    public TennisCourt getTennisCourtById(long id){
+    public Optional<TennisCourt> getTennisCourtById(long id){
 
         return tennisCourtRepository.findById(id);
     }
@@ -32,7 +33,7 @@ public class TennisCourtService {
     }
 
     public TennisCourt updateTennisCourt(long id, TennisCourt tennisCourt){
-        TennisCourt existingTennisCourt = this.tennisCourtRepository.findById(id);
+        TennisCourt existingTennisCourt = this.tennisCourtRepository.findById(id).get();
         existingTennisCourt.setName(tennisCourt.getName());
         existingTennisCourt.setDescription(tennisCourt.getDescription());
         existingTennisCourt.setImage(tennisCourt.getImage());

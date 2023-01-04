@@ -37,7 +37,7 @@ class PersonRepositoryTest {
 
         Person savedPerson = personRepository.save(person);
         //when
-        Person expected = personRepository.findById(savedPerson.getId());
+        Person expected = personRepository.findById(savedPerson.getId()).get();
         //then
         assertThat(expected).isEqualTo(savedPerson);
     }

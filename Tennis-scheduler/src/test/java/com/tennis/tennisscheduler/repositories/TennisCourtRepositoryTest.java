@@ -36,7 +36,7 @@ class TennisCourtRepositoryTest {
 
         TennisCourt savedTennisCourt = tennisCourtRepository.save(tennisCourt);
         //when
-        TennisCourt expected = tennisCourtRepository.findById(savedTennisCourt.getId());
+        TennisCourt expected = tennisCourtRepository.findById(savedTennisCourt.getId()).get();
         //then
         assertThat(expected).isEqualTo(savedTennisCourt);
     }

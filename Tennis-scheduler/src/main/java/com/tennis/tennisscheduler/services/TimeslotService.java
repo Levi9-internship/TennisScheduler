@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -18,11 +19,11 @@ public class TimeslotService {
     private final TennisCourtService tennisCourtService;
 
     public TimeslotResponse update(long id, Timeslot timeslot){
-        Timeslot existingTimeslot = timeslotRepository.findById(id);
+        Timeslot existingTimeslot = timeslotRepository.findById(id).get();
         existingTimeslot.setStartDate(timeslot.getStartDate());
         existingTimeslot.setEndDate(timeslot.getEndDate());
-        existingTimeslot.setPerson(personService.findById(timeslot.getPerson().getId()));
-        existingTimeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()));
+        existingTimeslot.setPerson(personService.findById(timeslot.getPerson().getId()).get());
+        existingTimeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()).get());
         return reserveTimeslot(existingTimeslot);
     }
 
@@ -34,7 +35,7 @@ public class TimeslotService {
         return timeslotRepository.getAllTimeslotsForUser(personId);
     }
 
-    public Timeslot getById(long id){
+    public Optional<Timeslot> getById(long id){
         return timeslotRepository.findById(id);
     }
 
@@ -50,8 +51,8 @@ public class TimeslotService {
     }
 
     public Timeslot save(Timeslot timeslot) {
-        timeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()));
-        timeslot.setPerson(personService.findById(timeslot.getPerson().getId()));
+        timeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()).get());
+        timeslot.setPerson(personService.findById(timeslot.getPerson().getId()).get());
         return timeslotRepository.save(timeslot);
     }
 

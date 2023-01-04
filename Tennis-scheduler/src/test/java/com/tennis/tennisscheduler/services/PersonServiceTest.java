@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,7 +108,7 @@ class PersonServiceTest {
     @Test
     void canGetPersonById() {
 
-        Person person = Person.builder()
+        Optional<Person> person = Optional.of(Person.builder()
                 .id(0)
                 .firstName("Zoran")
                 .lastName("Zoranovic")
@@ -116,21 +117,21 @@ class PersonServiceTest {
                 .gender(Gender.MALE)
                 .address(null)
                 .phoneNumber("0621234567")
-                .build();
+                .build());
 
         doReturn(person).when(personRepository).findById(0);
         // Make the service call
-        Person personByService = personService.findById(0);
+        Person personByService = personService.findById(0).get();
         // Assert the response
-        assertNotNull(personByService,"TennisCourt with this id: "+person.getId()+" not found");
-        assertEquals(person.getId(),personByService.getId());
-        assertEquals(person.getFirstName(), personByService.getFirstName());
-        assertEquals(person.getLastName(), personByService.getLastName());
-        assertEquals(person.getGender(), personByService.getGender());
-        assertEquals(person.getPhoneNumber(), personByService.getPhoneNumber());
-        assertEquals(person.getEmail(), personByService.getEmail());
-        assertEquals(person.getBirthday(), personByService.getBirthday());
-        assertEquals(person.getAddress(), personByService.getAddress());
+        assertNotNull(personByService,"TennisCourt with this id: "+person.get().getId()+" not found");
+        assertEquals(person.get().getId(),personByService.getId());
+        assertEquals(person.get().getFirstName(), personByService.getFirstName());
+        assertEquals(person.get().getLastName(), personByService.getLastName());
+        assertEquals(person.get().getGender(), personByService.getGender());
+        assertEquals(person.get().getPhoneNumber(), personByService.getPhoneNumber());
+        assertEquals(person.get().getEmail(), personByService.getEmail());
+        assertEquals(person.get().getBirthday(), personByService.getBirthday());
+        assertEquals(person.get().getAddress(), personByService.getAddress());
     }
     @Test
     void canDeletePersonById() {
@@ -154,7 +155,7 @@ class PersonServiceTest {
 
         long id = 0L;
 
-        Person existingPerson = Person.builder()
+        Optional<Person> existingPerson = Optional.of(Person.builder()
                 .id(0)
                 .firstName("Zoran")
                 .lastName("Zoranovic")
@@ -163,7 +164,7 @@ class PersonServiceTest {
                 .gender(Gender.MALE)
                 .address(null)
                 .phoneNumber("0621234567")
-                .build();
+                .build());
 
         when(personRepository.findById(id))
                 .thenReturn(existingPerson);

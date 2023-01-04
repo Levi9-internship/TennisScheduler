@@ -23,7 +23,7 @@ public class WorkingDayValidator implements ConstraintValidator<WorkingDayValida
     @Override
     public boolean isValid(TimeslotDto timeslotDto, ConstraintValidatorContext constraintValidatorContext) {
 
-        TennisCourt tennisCourt = tennisCourtRepository.findById(timeslotDto.getCourtId());
+        TennisCourt tennisCourt = tennisCourtRepository.findById(timeslotDto.getCourtId()).get();
         if(timeslotDto.getDateStart().getDay() == DateTimeConstants.SATURDAY
                 || timeslotDto.getDateStart().getDay() == DateTimeConstants.SUNDAY){
             if(timeslotDto.getDateStart().getHours() < tennisCourt.getWorkingTime().getStartWorkingTimeWeekend().getHours()

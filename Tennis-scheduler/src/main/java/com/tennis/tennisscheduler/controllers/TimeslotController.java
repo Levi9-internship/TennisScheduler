@@ -54,11 +54,15 @@ public class TimeslotController {
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<TimeslotDto> getById(@PathVariable long id){
-        Timeslot timeslot = timeslotService.getById(id);
-        if (timeslot == null)
-            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
+//        Timeslot timeslot = timeslotService.getById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
+//        if (timeslot == null)
+//            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
-        return new ResponseEntity<>(timeslotDtoMapper.fromTimeslotToTimeslotDto(timeslot), HttpStatus.OK);
+        return new ResponseEntity<>(timeslotDtoMapper
+                .fromTimeslotToTimeslotDto(timeslotService
+                        .getById(id)
+                        .orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!")))
+                , HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
@@ -83,7 +87,7 @@ public class TimeslotController {
     public ResponseEntity<TimeslotResponseDto> update(@PathVariable long id, @RequestBody @Valid TimeslotDto timeslotUpdate, BindingResult result){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person)authentication.getPrincipal();
-        Timeslot timeslotExisting = timeslotService.getById(id);
+        Timeslot timeslotExisting = timeslotService.getById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
         TimeslotResponseDto timeslotResponseDto = timeslotResponseDtoMapper
                 .toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
 
@@ -108,10 +112,10 @@ public class TimeslotController {
     public ResponseEntity<HttpStatus> cancelTimeslot(@PathVariable long id){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person)authentication.getPrincipal();
-        Timeslot timeslotExisting = timeslotService.getById(id);
+        Timeslot timeslotExisting = timeslotService.getById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
 
-        if (timeslotExisting == null)
-            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
+//        if (timeslotExisting == null)
+//            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
         if (user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && timeslotExisting.getPerson().getId() != user.getId())
             throw new ApiRequestException(HttpStatus.UNAUTHORIZED,"You don't have permission");
