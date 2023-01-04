@@ -54,15 +54,11 @@ public class TimeslotController {
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<TimeslotDto> getById(@PathVariable long id){
-//        Timeslot timeslot = timeslotService.getById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
-//        if (timeslot == null)
-//            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
-
         return new ResponseEntity<>(timeslotDtoMapper
                 .fromTimeslotToTimeslotDto(timeslotService
                         .getById(id)
                         .orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!")))
-                , HttpStatus.OK);
+                ,HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
@@ -79,7 +75,6 @@ public class TimeslotController {
             return new ResponseEntity<>(timeslotResponseDtoMapper.toTimeslotResponseDto(timeslotService.reserveTimeslot(timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotNew))), HttpStatus.CREATED);
 
         return new ResponseEntity<>(new TimeslotResponseDto(result.getAllErrors()), HttpStatus.BAD_REQUEST);
-
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
@@ -113,9 +108,6 @@ public class TimeslotController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person)authentication.getPrincipal();
         Timeslot timeslotExisting = timeslotService.getById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
-
-//        if (timeslotExisting == null)
-//            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
         if (user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && timeslotExisting.getPerson().getId() != user.getId())
             throw new ApiRequestException(HttpStatus.UNAUTHORIZED,"You don't have permission");
