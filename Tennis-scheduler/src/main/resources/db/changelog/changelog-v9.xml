@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="danilo" id="1235">
+        <update tableName="tennis_court">
+            <column name="image" value="images.jpeg" />
+            <where>name = 'Teren u Kragujevcu'</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="danilo" id="1236">
+        <update tableName="tennis_court">
+            <column name="image" value="images.jpeg" />
+            <where>name = 'Teren u Novom Sadu'</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="danilo" id="1237">
+        <update tableName="tennis_court">
+            <column name="working_time_id" value="1" />
+            <where>name = 'Teren u Kragujevcu'</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="danilo" id="1238">
+        <update tableName="tennis_court">
+            <column name="working_time_id" value="2" />
+            <where>name = 'Teren u Novom Sadu'</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>
