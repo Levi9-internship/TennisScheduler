@@ -1,63 +1,28 @@
 package com.tennis.tennisscheduler.services;
 
 import com.tennis.tennisscheduler.models.Timeslot;
-import com.tennis.tennisscheduler.repositories.TimeslotRepository;
 import com.tennis.tennisscheduler.response.TimeslotResponse;
-import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
-@Service
-@AllArgsConstructor
-public class TimeslotService {
-    private final TimeslotRepository timeslotRepository;
-    private final PersonService personService;
-    private final TennisCourtService tennisCourtService;
+public interface TimeslotService {
+    TimeslotResponse update(long id, Timeslot timeslot);
 
-    public TimeslotResponse update(long id, Timeslot timeslot){
-        Timeslot existingTimeslot = timeslotRepository.findById(id);
-        existingTimeslot.setStartDate(timeslot.getStartDate());
-        existingTimeslot.setEndDate(timeslot.getEndDate());
-        existingTimeslot.setPerson(personService.findById(timeslot.getPerson().getId()));
-        existingTimeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()));
-        return reserveTimeslot(existingTimeslot);
-    }
+    List<Timeslot> getAll();
 
-    public List<Timeslot> getAll(){
-        return timeslotRepository.getALlTimeslotsAdmin();
-    }
+    List<Timeslot> getAllTimeslotsForUser(long personId);
 
-    public List<Timeslot> getAllTimeslotsForUser(long personId){
-        return timeslotRepository.getAllTimeslotsForUser(personId);
-    }
+   Optional<Timeslot> getById(long id);
 
-    public Timeslot getById(long id){
-        return timeslotRepository.findById(id);
-    }
-
-    public void deleteById(long id){
-        timeslotRepository.deleteById(id);
-    }
+    void deleteById(long id);
 
     @Scheduled(cron = "${greeting.cron}")
-    public void deleteDeprecatedTimeslots(){
-        for (Timeslot timeslot: timeslotRepository.getDeprecatedTimeslots(new Date())) {
-            timeslotRepository.deleteById(timeslot.getId());
-        }
-    }
+    void deleteDeprecatedTimeslots();
 
-    public Timeslot save(Timeslot timeslot) {
-        timeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()));
-        timeslot.setPerson(personService.findById(timeslot.getPerson().getId()));
-        return timeslotRepository.save(timeslot);
-    }
+    Timeslot save(Timeslot timeslot);
 
-    public TimeslotResponse reserveTimeslot(Timeslot timeslot) {
-        TimeslotResponse timeslotResponse = new TimeslotResponse();
-        timeslotResponse.setTimeslot(save(timeslot));
-        return timeslotResponse;
-    }
+    TimeslotResponse reserveTimeslot(Timeslot timeslot);
 }

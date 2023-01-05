@@ -5,6 +5,7 @@ import com.tennis.tennisscheduler.exceptions.ApiRequestException;
 import com.tennis.tennisscheduler.mappers.TennisCourtDtoMapper;
 import com.tennis.tennisscheduler.models.TennisCourt;
 import com.tennis.tennisscheduler.services.TennisCourtService;
+import com.tennis.tennisscheduler.services.impl.TennisCourtServiceImpl;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,29 +43,24 @@ public class TennisCourtController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteTennisCourt(@PathVariable long id){
-        TennisCourt tennisCourt = tennisCourtService.getTennisCourtById(id);
-        if (tennisCourt == null)
-            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
-
+        tennisCourtService.getTennisCourtById(id).orElseThrow(() -> new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
         tennisCourtService.deleteTennisCourtById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TennisCourtDto>getTennisCourtById(@PathVariable long id){
-        TennisCourt tennisCourt = tennisCourtService.getTennisCourtById(id);
-        if (tennisCourt == null)
-            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
-
-        return new ResponseEntity<>(tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt),HttpStatus.OK);
+        return new ResponseEntity<>(tennisCourtDtoMapper
+                .fromTennisCourtToTennisCourtDto(tennisCourtService
+                        .getTennisCourtById(id)
+                        .orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!")))
+                ,HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<TennisCourtDto> updateTennisCourt(@PathVariable long id, @RequestBody TennisCourtDto tennisCourtDto){
-        TennisCourt tennisCourtExisting = tennisCourtService.getTennisCourtById(id);
-        if (tennisCourtExisting == null)
-            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
+        tennisCourtService.getTennisCourtById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
 
         TennisCourt tennisCourt = tennisCourtService.updateTennisCourt(id, tennisCourtDtoMapper.fromTennisCourtDtoToTennisCourt(tennisCourtDto));
         return new ResponseEntity<>(tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt),HttpStatus.OK);

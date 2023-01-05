@@ -52,7 +52,8 @@ public class IsReservedValidatorTest {
                 .personId(1)
                 .build();
 
-        doReturn(null).when(timeslotRepository).checkIfTimeslotIsAlreadyReserved(timeslotDto.getDateStart(), timeslotDto.getPersonId(), timeslotDto.getId());
+        doReturn(null)
+                .when(timeslotRepository).checkIfTimeslotIsAlreadyReserved(timeslotDto.getDateStart(), timeslotDto.getPersonId(), timeslotDto.getId());
 
         assertTrue(isReservedValidator.isValid(timeslotDto, constraintValidatorContext));
     }

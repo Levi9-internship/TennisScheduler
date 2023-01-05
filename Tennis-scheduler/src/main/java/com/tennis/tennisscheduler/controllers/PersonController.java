@@ -53,10 +53,7 @@ public class PersonController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<HttpStatus> deletePerson(@PathVariable long id) {
-        Person personExisting = personService.findById(id);
-        if (personExisting == null)
-            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
-
+        personService.findById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
         personService.deletePersonById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -64,21 +61,17 @@ public class PersonController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('TENNIS_PLAYER', 'ADMIN')")
     public ResponseEntity<PersonDto> getPersonById(@PathVariable long id){
-        Person person = personService.findById(id);
-        if(person==null)
-            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
-
-        return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.OK);
+        return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(personService
+                .findById(id)
+                .orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!")))
+                ,HttpStatus.OK);
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('TENNIS_PLAYER','ADMIN')")
     public ResponseEntity<PersonDto> updatePerson(@PathVariable long id,@RequestBody PersonDto personDto){
-        Person personExisting = personService.findById(id);
+        personService.findById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person) authentication.getPrincipal();
-
-        if (personExisting == null)
-            throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
         if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && id != user.getId())
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

@@ -1,11 +1,8 @@
 package com.tennis.tennisscheduler.security;
 
-import com.tennis.tennisscheduler.services.CustomUserDetailsService;
+import com.tennis.tennisscheduler.services.impl.CustomUserDetailsServiceImpl;
 import com.tennis.tennisscheduler.utils.TokenUtils;
-import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,7 +17,7 @@ import java.io.IOException;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenUtils tokenUtils;
-    private final CustomUserDetailsService userDetailsService;
+    private final CustomUserDetailsServiceImpl userDetailsService;
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {

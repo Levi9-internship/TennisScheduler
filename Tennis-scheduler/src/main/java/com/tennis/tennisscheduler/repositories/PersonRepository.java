@@ -3,8 +3,11 @@ package com.tennis.tennisscheduler.repositories;
 import com.tennis.tennisscheduler.models.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
 @Repository
 public interface PersonRepository extends JpaRepository<Person,Long> {
-    Person findById(long id);
+    Optional<Person> findById(long id);
     Person findByEmail(String email);
 }

@@ -1,4 +1,4 @@
-package com.tennis.tennisscheduler.services;
+package com.tennis.tennisscheduler.services.impl;
 
 import com.tennis.tennisscheduler.models.Person;
 import com.tennis.tennisscheduler.repositories.PersonRepository;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class CustomUserDetailsService  implements UserDetailsService {
+public class CustomUserDetailsServiceImpl implements UserDetailsService {
     private final PersonRepository personRepository;
 
     @Override
