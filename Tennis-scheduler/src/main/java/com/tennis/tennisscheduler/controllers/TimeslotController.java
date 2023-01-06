@@ -84,11 +84,12 @@ public class TimeslotController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person)authentication.getPrincipal();
         Timeslot timeslotExisting = timeslotService.getById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
-        TimeslotResponseDto timeslotResponseDto = timeslotResponseDtoMapper
-                .toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
 
         if(result.hasErrors())
             return new ResponseEntity<>(new TimeslotResponseDto(result.getAllErrors()), HttpStatus.BAD_REQUEST);
+
+        TimeslotResponseDto timeslotResponseDto = timeslotResponseDtoMapper
+                .toTimeslotResponseDto(timeslotService.update(id, timeslotDtoMapper.fromTimeslotDtoToTimeslot(timeslotUpdate)));
 
         if(timeslotResponseDto.getTimeslot() == null)
             throw new ApiRequestException(HttpStatus.BAD_REQUEST,"There is no timeslots");
