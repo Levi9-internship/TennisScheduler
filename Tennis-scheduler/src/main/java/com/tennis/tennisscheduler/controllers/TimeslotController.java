@@ -96,7 +96,7 @@ public class TimeslotController {
         if (timeslotExisting == null)
             throw new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!");
 
-        if(!user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && timeslotExisting.getPerson().getId() != user.getId())
+        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && timeslotExisting.getPerson().getId() != user.getId())
             throw new ApiRequestException(HttpStatus.UNAUTHORIZED,"You don't have permission");
 
         timeslotUpdate.setPersonId(user.getId());
