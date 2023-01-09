@@ -1,6 +1,5 @@
-package com.tennis.tennisscheduler.response;
+package com.tennis.tennisscheduler.dto;
 
-import com.tennis.tennisscheduler.model.Timeslot;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TimeslotResponse {
+public class TimeslotResponseDto {
+ 
+    private TimeslotDto timeslot;
     private List<ObjectError> message;
-    private Timeslot timeslot;
+
+    public TimeslotResponseDto(List<ObjectError> message) {
+        this.message = message;
+    }
 }

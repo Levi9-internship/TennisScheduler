@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.tennis</groupId>
     <artifactId>Tennis-scheduler</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${version}</version>
     <name>Tennis-scheduler</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -34,6 +34,7 @@
         <spring-boot-starter-test.version>2.7.4</spring-boot-starter-test.version>
         <h2.version>2.1.214</h2.version>
         <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
+        <version>1.0</version>
     </properties>
     <dependencies>
         <dependency>
@@ -51,10 +52,6 @@
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase-core.version}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-devtools</artifactId>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-maven-plugin</artifactId>
@@ -67,7 +64,6 @@
             <version>${postgresql.version}</version>
             <scope>runtime</scope>
         </dependency>
-        <!-- swagger dependencies-->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
@@ -116,12 +112,10 @@
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
-        <!-- Spring Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
@@ -145,8 +139,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>9</source>
-                    <target>9</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.mapstruct</groupId>
@@ -187,5 +179,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

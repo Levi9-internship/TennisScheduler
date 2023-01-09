@@ -2,8 +2,8 @@ package com.tennis.tennisscheduler.config;
 
 import com.tennis.tennisscheduler.security.RestAuthenticationEntryPoint;
 import com.tennis.tennisscheduler.security.TokenAuthenticationFilter;
-import com.tennis.tennisscheduler.services.impl.CustomUserDetailsServiceImpl;
-import com.tennis.tennisscheduler.utils.TokenUtils;
+import com.tennis.tennisscheduler.service.CustomUserDetailsServiceImpl;
+import com.tennis.tennisscheduler.util.TokenUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
