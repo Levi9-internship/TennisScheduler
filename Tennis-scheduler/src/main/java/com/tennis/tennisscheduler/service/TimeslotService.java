@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +36,8 @@ public class TimeslotService {
         return timeslotRepository.getAllTimeslotsForUser(personId);
     }
 
-    public Optional<Timeslot> getById(long id){
-        return timeslotRepository.findById(id);
+    public Timeslot getById(Long id){
+        return timeslotRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     public void deleteById(long id){

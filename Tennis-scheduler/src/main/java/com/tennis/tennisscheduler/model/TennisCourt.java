@@ -13,7 +13,7 @@ import java.util.Set;
 @Builder
 public class TennisCourt {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private String name;
     private SurfaceType surfaceType;

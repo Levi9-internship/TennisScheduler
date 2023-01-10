@@ -13,7 +13,7 @@ import java.util.Date;
 @Builder
 public class Timeslot {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private Date startDate;
     private Date endDate;

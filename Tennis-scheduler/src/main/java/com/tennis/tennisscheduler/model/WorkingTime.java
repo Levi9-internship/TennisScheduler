@@ -11,7 +11,7 @@ import java.sql.Time;
 @AllArgsConstructor
 public class WorkingTime {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private Time startWorkingTimeWeekDay;
     private Time endWorkingTimeWeekDay;
