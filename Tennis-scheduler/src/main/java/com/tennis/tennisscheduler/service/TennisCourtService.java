@@ -4,7 +4,9 @@ import com.tennis.tennisscheduler.model.TennisCourt;
 import com.tennis.tennisscheduler.repository.TennisCourtRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +19,9 @@ public class TennisCourtService {
         return tennisCourtRepository.findAll();
     }
 
-    public Optional<TennisCourt> getTennisCourtById(long id){
+    public TennisCourt getTennisCourtById(long id){
 
-        return tennisCourtRepository.findById(id);
+        return tennisCourtRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     public TennisCourt saveTennisCourt(TennisCourt tennisCourt){
@@ -28,10 +30,12 @@ public class TennisCourtService {
     }
 
     public void deleteTennisCourtById(Long id){
+        tennisCourtRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         tennisCourtRepository.deleteById(id);
     }
 
     public TennisCourt updateTennisCourt(long id, TennisCourt tennisCourt){
+        tennisCourtRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         TennisCourt existingTennisCourt = this.tennisCourtRepository.findById(id).get();
         existingTennisCourt.setName(tennisCourt.getName());
         existingTennisCourt.setDescription(tennisCourt.getDescription());
