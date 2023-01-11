@@ -28,8 +28,8 @@ public class TimeslotService {
         Timeslot existingTimeslot = timeslotRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         existingTimeslot.setStartDate(timeslot.getStartDate());
         existingTimeslot.setEndDate(timeslot.getEndDate());
-        existingTimeslot.setPerson(personService.findById(timeslot.getPerson().getId()).get());
-        existingTimeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()).get());
+        existingTimeslot.setPerson(personService.findById(timeslot.getPerson().getId()));
+        existingTimeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()));
         return reserveTimeslot(existingTimeslot, null);
     }
 
@@ -53,8 +53,8 @@ public class TimeslotService {
     }
 
     private Timeslot save(Timeslot timeslot) {
-        timeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()).get());
-        timeslot.setPerson(personService.findById(timeslot.getPerson().getId()).get());
+        timeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()));
+        timeslot.setPerson(personService.findById(timeslot.getPerson().getId()));
         return timeslotRepository.save(timeslot);
     }
 
