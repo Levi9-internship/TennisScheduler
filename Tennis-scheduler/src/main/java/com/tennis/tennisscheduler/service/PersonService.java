@@ -52,8 +52,7 @@ public class PersonService{
         if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && id != user.getId())
             throw new ApiRequestException(HttpStatus.UNAUTHORIZED,"Tennis player can't change person data");
 
-        personRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        Person existingPerson = personRepository.findById(id).get();
+        Person existingPerson = personRepository.findById(id).orElseThrow(EntityNotFoundException::new);;
         existingPerson.setFirstName(person.getFirstName());
         existingPerson.setLastName(person.getLastName());
         existingPerson.setBirthday(person.getBirthday());
