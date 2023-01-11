@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "tennis-courts")
@@ -23,46 +24,31 @@ public class TennisCourtController {
     public final TennisCourtService tennisCourtService;
     public final TennisCourtDtoMapper tennisCourtDtoMapper;
     @GetMapping("/")
-    public ResponseEntity<List<TennisCourtDto>>getAllTennisCourts(){
-        List<TennisCourtDto> tennisCourts = new ArrayList<>();
-        for (TennisCourt tennisCourt : tennisCourtService.getAllTennisCourts())
-            tennisCourts.add(tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt));
-
-        return new ResponseEntity<>(tennisCourts, HttpStatus.OK);
+    public List<TennisCourtDto> getAllTennisCourts(){
+        return tennisCourtService.getAllTennisCourts().stream().map(tennisCourt -> tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt)).collect(Collectors.toList());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
-    public ResponseEntity<TennisCourtDto> saveTennisCourt(@RequestBody TennisCourtDto tennisCourtDto){
-        TennisCourt tennisCourt = tennisCourtService.saveTennisCourt(tennisCourtDtoMapper.fromTennisCourtDtoToTennisCourt(tennisCourtDto));
-
-        return new ResponseEntity<>(tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt),HttpStatus.CREATED);
+    public TennisCourtDto saveTennisCourt(@RequestBody TennisCourtDto tennisCourtDto){
+        return tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourtService.saveTennisCourt(tennisCourtDtoMapper.fromTennisCourtDtoToTennisCourt(tennisCourtDto)));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteTennisCourt(@PathVariable long id){
-        tennisCourtService.getTennisCourtById(id).orElseThrow(() -> new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
+    public void deleteTennisCourt(@PathVariable long id){
         tennisCourtService.deleteTennisCourtById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TennisCourtDto>getTennisCourtById(@PathVariable long id){
-        return new ResponseEntity<>(tennisCourtDtoMapper
-                .fromTennisCourtToTennisCourtDto(tennisCourtService
-                        .getTennisCourtById(id)
-                        .orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!")))
-                ,HttpStatus.OK);
+    public TennisCourtDto getTennisCourtById(@PathVariable long id){
+        return tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourtService.getTennisCourtById(id));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<TennisCourtDto> updateTennisCourt(@PathVariable long id, @RequestBody TennisCourtDto tennisCourtDto){
-        tennisCourtService.getTennisCourtById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
-
-        TennisCourt tennisCourt = tennisCourtService.updateTennisCourt(id, tennisCourtDtoMapper.fromTennisCourtDtoToTennisCourt(tennisCourtDto));
-        return new ResponseEntity<>(tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt),HttpStatus.OK);
+    public TennisCourtDto updateTennisCourt(@PathVariable long id, @RequestBody TennisCourtDto tennisCourtDto){
+        return tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourtService.updateTennisCourt(id, tennisCourtDtoMapper.fromTennisCourtDtoToTennisCourt(tennisCourtDto)));
     }
 
 }

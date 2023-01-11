@@ -95,9 +95,9 @@ class TennisCourtServiceTest {
                 .address(null)
                 .build());
 
-        doReturn(tennisCourt).when(tennisCourtRepository).findById(0);
+        doReturn(tennisCourt).when(tennisCourtRepository).findById(0L);
         // Make the service call
-        TennisCourt tennisCourtByService = tennisCourtService.getTennisCourtById(0).get();
+        TennisCourt tennisCourtByService = tennisCourtService.getTennisCourtById(0);
         // Assert the response
         assertNotNull(tennisCourtByService,"TennisCourt with this id: "+tennisCourt.get().getId()+" not found");
         assertEquals(tennisCourt.get().getId(),tennisCourtByService.getId());
