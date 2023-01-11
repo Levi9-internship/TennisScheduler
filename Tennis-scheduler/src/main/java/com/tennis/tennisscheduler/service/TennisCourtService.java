@@ -1,8 +1,10 @@
 package com.tennis.tennisscheduler.service;
 
+import com.tennis.tennisscheduler.exception.ApiRequestException;
 import com.tennis.tennisscheduler.model.TennisCourt;
 import com.tennis.tennisscheduler.repository.TennisCourtRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -20,7 +22,7 @@ public class TennisCourtService {
     }
 
     public TennisCourt getTennisCourtById(long id){
-        return tennisCourtRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return tennisCourtRepository.findById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id isn't valid"));
     }
 
     public TennisCourt saveTennisCourt(TennisCourt tennisCourt){
@@ -28,12 +30,12 @@ public class TennisCourtService {
     }
 
     public void deleteTennisCourtById(Long id){
-        tennisCourtRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        tennisCourtRepository.findById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id isn't valid"));
         tennisCourtRepository.deleteById(id);
     }
 
     public TennisCourt updateTennisCourt(long id, TennisCourt tennisCourt){
-        TennisCourt existingTennisCourt = tennisCourtRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        TennisCourt existingTennisCourt = tennisCourtRepository.findById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id isn't valid"));
         existingTennisCourt.setName(tennisCourt.getName());
         existingTennisCourt.setDescription(tennisCourt.getDescription());
         existingTennisCourt.setImage(tennisCourt.getImage());

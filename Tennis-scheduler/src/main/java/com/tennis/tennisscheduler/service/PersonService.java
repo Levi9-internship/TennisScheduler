@@ -30,7 +30,7 @@ public class PersonService{
     }
 
     public Person findById(long id) {
-        return personRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return personRepository.findById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id isn't valid"));
     }
 
     public Person savePerson(Person person) {
@@ -41,18 +41,18 @@ public class PersonService{
     }
 
     public void deletePersonById(long id) {
-        personRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        personRepository.findById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id isn't valid"));
         personRepository.deleteById(id);
     }
 
-    public Person updatePerson(long id, Person person) throws RuntimeException{
+    public Person updatePerson(long id, Person person) throws ApiRequestException{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person) authentication.getPrincipal();
 
         if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && id != user.getId())
             throw new ApiRequestException(HttpStatus.UNAUTHORIZED,"Tennis player can't change person data");
 
-        Person existingPerson = personRepository.findById(id).orElseThrow(EntityNotFoundException::new);;
+        Person existingPerson = personRepository.findById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id isn't valid"));;
         existingPerson.setFirstName(person.getFirstName());
         existingPerson.setLastName(person.getLastName());
         existingPerson.setBirthday(person.getBirthday());
