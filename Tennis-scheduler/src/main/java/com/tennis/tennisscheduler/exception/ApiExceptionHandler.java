@@ -4,12 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 import static java.lang.System.*;
 
@@ -33,5 +32,31 @@ public class ApiExceptionHandler {
                 .path("Resource NOT FOUND")
                 .build();
         return new ResponseEntity<>(errorDetails,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {HttpClientErrorException.BadRequest.class})
+    public ResponseEntity<ErrorDetails> handleApiRequestException(HttpClientErrorException.BadRequest e, WebRequest webRequest){
+
+        final ErrorDetails errorDetails = ErrorDetails
+                .builder()
+                .timestamp(currentTimeMillis())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(e.getMessage())
+                .path("BAD REQUEST")
+                .build();
+        return new ResponseEntity<>(errorDetails,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {HttpClientErrorException.Unauthorized.class})
+    public ResponseEntity<ErrorDetails> handleApiRequestException(HttpClientErrorException.Unauthorized e, WebRequest webRequest){
+
+        final ErrorDetails errorDetails = ErrorDetails
+                .builder()
+                .timestamp(currentTimeMillis())
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .message(e.getMessage())
+                .path("You don't have permission")
+                .build();
+        return new ResponseEntity<>(errorDetails,HttpStatus.UNAUTHORIZED);
     }
 }
