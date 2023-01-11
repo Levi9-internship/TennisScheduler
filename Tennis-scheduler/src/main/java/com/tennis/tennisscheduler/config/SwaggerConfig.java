@@ -37,25 +37,4 @@ public class SwaggerConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
-
-    private ApiInfo getApiInfo() {
-
-        return new ApiInfoBuilder()
-                .title("Swagger API Doc for Tennis Scheduler")
-                .description("More description about the API")
-                .version("2.9.2")
-                .build();
-    }
-
-    private ApiInfo apiDetails() {
-
-        return new ApiInfo(
-                "Swagger API Doc",
-                "Simple API for Tennis Scheduler",
-                "2.9.2",
-                "Free to use",
-                new Contact("...", "http://javabrains.io", "a@b.com"), "API License", "http://javabrains.io",
-                Collections.emptyList());
-    }
-
 }
