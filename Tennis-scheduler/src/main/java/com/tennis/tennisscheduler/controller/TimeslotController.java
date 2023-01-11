@@ -59,9 +59,7 @@ public class TimeslotController {
 
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
     @PutMapping(value = "/cancel/{id}")
-    public ResponseEntity<HttpStatus> cancelTimeslot(@PathVariable long id){
+    public void cancelTimeslot(@PathVariable long id){
         timeslotService.deleteById(id);
-
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
