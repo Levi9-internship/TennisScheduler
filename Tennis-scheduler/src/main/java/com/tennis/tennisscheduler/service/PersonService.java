@@ -24,16 +24,12 @@ public class PersonService{
     private final PasswordEncoder bCryptPasswordEncoder;
     public List<Person> getAllPersons() {
 
-        List<Person> persons;
-
         if(SecurityContextUtil.GetLoggedUser().getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER))
-            persons = personRepository.findAll().stream()
+            return personRepository.findAll().stream()
                     .filter(person -> !((person.getRole().getRoleName().equals(UserType.ROLE_ADMIN))))
                     .collect(Collectors.toList());
         else
-            persons = personRepository.findAll().stream().collect(Collectors.toList());
-
-        return persons;
+            return personRepository.findAll().stream().collect(Collectors.toList());
     }
 
     public Person findById(long id) {
