@@ -1,14 +1,10 @@
 package com.tennis.tennisscheduler.controller;
 
 import com.tennis.tennisscheduler.dto.TennisCourtDto;
-import com.tennis.tennisscheduler.exception.ApiRequestException;
 import com.tennis.tennisscheduler.mapper.TennisCourtDtoMapper;
-import com.tennis.tennisscheduler.model.TennisCourt;
 import com.tennis.tennisscheduler.service.TennisCourtService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 

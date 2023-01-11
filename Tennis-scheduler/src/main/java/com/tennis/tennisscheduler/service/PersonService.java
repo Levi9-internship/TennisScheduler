@@ -6,17 +6,14 @@ import com.tennis.tennisscheduler.model.enumes.UserType;
 
 import com.tennis.tennisscheduler.repository.PersonRepository;
 import com.tennis.tennisscheduler.repository.RoleRepository;
+import com.tennis.tennisscheduler.security.SecurityContextUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -26,7 +23,17 @@ public class PersonService{
     private final RoleRepository roleRepository;
     private final PasswordEncoder bCryptPasswordEncoder;
     public List<Person> getAllPersons() {
-        return personRepository.findAll();
+
+        List<Person> persons;
+
+        if(SecurityContextUtil.GetLoggedUser().getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER))
+            persons = personRepository.findAll().stream()
+                    .filter(person -> !((person.getRole().getRoleName().equals(UserType.ROLE_ADMIN))))
+                    .collect(Collectors.toList());
+        else
+            persons = personRepository.findAll().stream().collect(Collectors.toList());
+
+        return persons;
     }
 
     public Person findById(long id) {
@@ -46,10 +53,8 @@ public class PersonService{
     }
 
     public Person updatePerson(long id, Person person) throws ApiRequestException{
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Person user = (Person) authentication.getPrincipal();
 
-        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && id != user.getId())
+        if(SecurityContextUtil.GetLoggedUser().getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && id != SecurityContextUtil.GetLoggedUser().getId())
             throw new ApiRequestException(HttpStatus.UNAUTHORIZED,"Tennis player can't change person data");
 
         Person existingPerson = personRepository.findById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id isn't valid"));;

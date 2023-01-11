@@ -6,11 +6,8 @@ import com.tennis.tennisscheduler.repository.TennisCourtRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
