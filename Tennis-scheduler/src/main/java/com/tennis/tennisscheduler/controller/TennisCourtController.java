@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "tennis-courts")
@@ -24,11 +25,7 @@ public class TennisCourtController {
     public final TennisCourtDtoMapper tennisCourtDtoMapper;
     @GetMapping("/")
     public List<TennisCourtDto> getAllTennisCourts(){
-        List<TennisCourtDto> tennisCourts = new ArrayList<>();
-        for (TennisCourt tennisCourt : tennisCourtService.getAllTennisCourts())
-            tennisCourts.add(tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt));
-
-        return tennisCourts;
+        return tennisCourtService.getAllTennisCourts().stream().map(tennisCourt -> tennisCourtDtoMapper.fromTennisCourtToTennisCourtDto(tennisCourt)).collect(Collectors.toList());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
