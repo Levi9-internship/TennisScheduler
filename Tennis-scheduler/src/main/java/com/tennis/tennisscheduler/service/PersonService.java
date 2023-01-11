@@ -1,14 +1,20 @@
 package com.tennis.tennisscheduler.service;
 
+import com.tennis.tennisscheduler.exception.ApiRequestException;
 import com.tennis.tennisscheduler.model.Person;
 import com.tennis.tennisscheduler.model.enumes.UserType;
 
 import com.tennis.tennisscheduler.repository.PersonRepository;
 import com.tennis.tennisscheduler.repository.RoleRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +29,8 @@ public class PersonService{
         return personRepository.findAll();
     }
 
-    public Optional<Person> findById(long id) {
-        return personRepository.findById(id);
+    public Person findById(long id) {
+        return personRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     public Person savePerson(Person person) {
@@ -35,10 +41,18 @@ public class PersonService{
     }
 
     public void deletePersonById(long id) {
+        personRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         personRepository.deleteById(id);
     }
 
-    public Person updatePerson(long id, Person person) {
+    public Person updatePerson(long id, Person person) throws RuntimeException{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Person user = (Person) authentication.getPrincipal();
+
+        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && id != user.getId())
+            throw new ApiRequestException(HttpStatus.UNAUTHORIZED,"Tennis player can't change person data");
+
+        personRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         Person existingPerson = personRepository.findById(id).get();
         existingPerson.setFirstName(person.getFirstName());
         existingPerson.setLastName(person.getLastName());

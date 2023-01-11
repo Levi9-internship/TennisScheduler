@@ -29,7 +29,7 @@ public class PersonController {
 
     @GetMapping("/")
     @PreAuthorize("hasAnyRole('ADMIN','TENNIS_PLAYER')")
-    public ResponseEntity<List<PersonDto>>getAllPersons(){
+    public List<PersonDto>getAllPersons(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Person user = (Person)authentication.getPrincipal();
         List<PersonDto> persons;
@@ -42,41 +42,27 @@ public class PersonController {
         else
              persons = personService.getAllPersons().stream().map(person -> personDtoMapper.fromPersonToPersonDto(person)).collect(Collectors.toList());
 
-        return new ResponseEntity<>(persons, HttpStatus.OK);
+        return persons;
     }
 
     @PostMapping("/")
-    public ResponseEntity<PersonDto> savePerson(@RequestBody PersonDto personNew) {
-        Person person = personService.savePerson(personDtoMapper.fromPersonDtoToPerson(personNew));
-        return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person),HttpStatus.CREATED);
+    public PersonDto savePerson(@RequestBody PersonDto personNew) {
+        return personDtoMapper.fromPersonToPersonDto(personService.savePerson(personDtoMapper.fromPersonDtoToPerson(personNew)));
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<HttpStatus> deletePerson(@PathVariable long id) {
-        personService.findById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
+    public void deletePerson(@PathVariable long id) {
         personService.deletePersonById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('TENNIS_PLAYER', 'ADMIN')")
-    public ResponseEntity<PersonDto> getPersonById(@PathVariable long id){
-        return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(personService
-                .findById(id)
-                .orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!")))
-                ,HttpStatus.OK);
+    public PersonDto getPersonById(@PathVariable long id){
+        return personDtoMapper.fromPersonToPersonDto(personService.findById(id));
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('TENNIS_PLAYER','ADMIN')")
-    public ResponseEntity<PersonDto> updatePerson(@PathVariable long id,@RequestBody PersonDto personDto){
-        personService.findById(id).orElseThrow(()->new ApiRequestException(HttpStatus.NOT_FOUND,"This id doesn't exist!"));
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Person user = (Person) authentication.getPrincipal();
-
-        if(user.getRole().getRoleName().equals(UserType.ROLE_TENNIS_PLAYER) && id != user.getId())
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        
-        Person person = personService.updatePerson(id, personDtoMapper.fromPersonDtoToPerson(personDto));
-        return new ResponseEntity<>(personDtoMapper.fromPersonToPersonDto(person), HttpStatus.OK);
+    public PersonDto updatePerson(@PathVariable long id,@RequestBody PersonDto personDto){
+        return personDtoMapper.fromPersonToPersonDto(personService.updatePerson(id, personDtoMapper.fromPersonDtoToPerson(personDto)));
     }
 }

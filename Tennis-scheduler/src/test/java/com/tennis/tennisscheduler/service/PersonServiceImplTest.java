@@ -119,9 +119,9 @@ class PersonServiceImplTest {
                 .phoneNumber("0621234567")
                 .build());
 
-        doReturn(person).when(personRepository).findById(0);
+        doReturn(person).when(personRepository).findById(0L);
         // Make the service call
-        Person personByService = personService.findById(0).get();
+        Person personByService = personService.findById(0);
         // Assert the response
         assertNotNull(personByService,"TennisCourt with this id: "+person.get().getId()+" not found");
         assertEquals(person.get().getId(),personByService.getId());

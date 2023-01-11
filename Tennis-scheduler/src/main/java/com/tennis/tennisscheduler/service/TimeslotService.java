@@ -23,7 +23,7 @@ public class TimeslotService {
         Timeslot existingTimeslot = timeslotRepository.findById(id).get();
         existingTimeslot.setStartDate(timeslot.getStartDate());
         existingTimeslot.setEndDate(timeslot.getEndDate());
-        existingTimeslot.setPerson(personService.findById(timeslot.getPerson().getId()).get());
+        existingTimeslot.setPerson(personService.findById(timeslot.getPerson().getId()));
         existingTimeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()).get());
         return reserveTimeslot(existingTimeslot);
     }
@@ -53,7 +53,7 @@ public class TimeslotService {
 
     public Timeslot save(Timeslot timeslot) {
         timeslot.setTennisCourt(tennisCourtService.getTennisCourtById(timeslot.getTennisCourt().getId()).get());
-        timeslot.setPerson(personService.findById(timeslot.getPerson().getId()).get());
+        timeslot.setPerson(personService.findById(timeslot.getPerson().getId()));
         return timeslotRepository.save(timeslot);
     }
 
