@@ -34,10 +34,12 @@ class PersonServiceImplTest {
     RoleRepository roleRepository;
     @Mock
     PasswordEncoder bCryptPasswordEncoder;
+
+
     Date date_s = new Date();
     @BeforeEach
     void setUp() {
-        personService = new PersonService(personRepository,roleRepository, bCryptPasswordEncoder);
+        personService = new PersonService(personRepository,roleRepository, bCryptPasswordEncoder,null,null);
     }
 
     @Test
