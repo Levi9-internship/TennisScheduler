@@ -20,12 +20,10 @@ public class TennisCourtService {
     }
 
     public TennisCourt getTennisCourtById(long id){
-
         return tennisCourtRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     public TennisCourt saveTennisCourt(TennisCourt tennisCourt){
-
         return tennisCourtRepository.save(tennisCourt);
     }
 
@@ -35,8 +33,7 @@ public class TennisCourtService {
     }
 
     public TennisCourt updateTennisCourt(long id, TennisCourt tennisCourt){
-        tennisCourtRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        TennisCourt existingTennisCourt = this.tennisCourtRepository.findById(id).get();
+        TennisCourt existingTennisCourt = tennisCourtRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         existingTennisCourt.setName(tennisCourt.getName());
         existingTennisCourt.setDescription(tennisCourt.getDescription());
         existingTennisCourt.setImage(tennisCourt.getImage());
