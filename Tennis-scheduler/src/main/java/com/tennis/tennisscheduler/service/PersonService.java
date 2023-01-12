@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class PersonService{
                     .filter(person -> !((person.getRole().getRoleName().equals(UserType.ROLE_ADMIN))))
                     .collect(Collectors.toList());
         else
-            return personRepository.findAll().stream().collect(Collectors.toList());
+            return new ArrayList<>(personRepository.findAll());
     }
 
     public Person findById(long id) {
